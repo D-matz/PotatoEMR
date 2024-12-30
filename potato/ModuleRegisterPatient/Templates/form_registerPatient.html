@@ -1,0 +1,25 @@
+<form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <fieldset>
+        <legend>Patient Information</legend>
+        <div>{{ form.gender.label_tag }} {{ form.gender }}</div>
+        <div>{{ form.birth_date.label_tag }} {{ form.birth_date }}</div>
+        <div>{{ form.name_use.label_tag }} {{ form.name_use }}</div>
+        <div>{{ form.given_name.label_tag }} {{ form.given_name }}</div>
+        <div>{{ form.family_name.label_tag }} {{ form.family_name }}</div>
+        <div>{{ form.prefix.label_tag }} {{ form.prefix }}</div>
+        <div>{{ form.suffix.label_tag }} {{ form.suffix }}</div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Address Information</legend>
+        <div>{{ form.address.label_tag }} {{ form.address }}</div>
+        <div>{{ form.city.label_tag }} {{ form.city }}</div>
+        <div>{{ form.state.label_tag }} {{ form.state }}</div>
+        <div>{{ form.zip_code.label_tag }} {{ form.zip_code }}</div>
+    </fieldset>
+
+    <button type="submit">Submit</button>
+</form>
