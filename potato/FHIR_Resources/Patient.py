@@ -35,31 +35,23 @@ class FHIR_Patient(models.Model):
     )
 
     def __str__(self):
-        patient_names = [name.name.text for name in self.patient_names.all() if name.name.text]
+        patient_names = [name.text for name in self.patient_names.all() if name.text]
         return ', '.join(patient_names) if patient_names else "Unnamed Patient"
     def clean(self):
         pass
         #could also check if death DateTime then > birth date
 
-class FHIR_Patient_Identifier(models.Model):
-    identifier = models.OneToOneField(FHIR_GP_Identifier, related_name="patient_identifier", null=True, on_delete=models.SET_NULL)
+class FHIR_Patient_Identifier(FHIR_GP_Identifier):
     patient = models.ForeignKey(FHIR_Patient, related_name="patient_identifiers", on_delete=models.CASCADE)
-class FHIR_Patient_Name(models.Model):
-    name = models.OneToOneField(FHIR_GP_HumanName, related_name="patient_name", null=False, on_delete=models.CASCADE)
+class FHIR_Patient_Name(FHIR_GP_HumanName):
     patient = models.ForeignKey(FHIR_Patient, related_name="patient_names", on_delete=models.CASCADE)
-    def __str__(self):
-        if self.name.text:
-            return self.name.text
-        return "Unnamed patient"
-class FHIR_Patient_Telecom(models.Model):
-    telecom = models.OneToOneField(FHIR_GP_ContactPoint, related_name="patient_telecom", null=True, on_delete=models.SET_NULL)
+class FHIR_Patient_Telecom(FHIR_GP_ContactPoint):
     patient = models.ForeignKey(FHIR_Patient, related_name="patient_telecoms", on_delete=models.CASCADE)
-class FHIR_Patient_Address(models.Model):
-    address = models.OneToOneField(FHIR_GP_Address, related_name="patient_address", null=True, on_delete=models.SET_NULL)
+class FHIR_Patient_Address(FHIR_GP_Address):
     patient = models.ForeignKey(FHIR_Patient, related_name="patient_addresses", on_delete=models.CASCADE)
-class FHIR_Patient_Photo(models.Model):
-    photo = models.OneToOneField(FHIR_GP_Attachment, related_name="patient_photo", null=True, on_delete=models.SET_NULL)
+class FHIR_Patient_Photo(FHIR_GP_Attachment):
     patient = models.ForeignKey(FHIR_Patient, related_name="patient_photos", on_delete=models.CASCADE)
+
 class FHIR_Patient_Contact(models.Model):
     #relationship ForeignKey to this
     name = models.OneToOneField(FHIR_GP_HumanName, related_name="patient_contact_name", null=True, on_delete=models.SET_NULL)
@@ -70,12 +62,12 @@ class FHIR_Patient_Contact(models.Model):
     organization_foreigkey = models.ForeignKey(FHIR_Organization, on_delete=models.CASCADE, related_name="patient_contact_organization")
     period = models.OneToOneField(FHIR_GP_Period, null=True, blank=True, on_delete=models.CASCADE)
     patient = models.ForeignKey(FHIR_Patient, related_name="patient_contacts", on_delete=models.CASCADE)
-class FHIR_Patient_Contact_Relationship(models.Model):
-    relationship = models.OneToOneField(FHIR_GP_CodeableConcept, related_name="patient_contact_relationship", null=True, on_delete=models.SET_NULL)
+class FHIR_Patient_Contact_Relationship(FHIR_GP_CodeableConcept):
     patient_contact = models.ForeignKey(FHIR_Patient_Contact, related_name="patient_contact_relationships", on_delete=models.CASCADE)
-class FHIR_Patient_Contact_Telecom(models.Model):
-    telecom = models.OneToOneField(FHIR_GP_ContactPoint, related_name="patient_conctact_telecom", null=True, on_delete=models.SET_NULL)
+class FHIR_Patient_Contact_Telecom(FHIR_GP_ContactPoint):
     patient_contact = models.ForeignKey(FHIR_Patient_Contact, related_name="patient_contact_telecoms", on_delete=models.CASCADE)
+
+
 class FHIR_Patient_Communication(models.Model):
     language = models.OneToOneField(FHIR_GP_CodeableConcept, null=False, on_delete=models.CASCADE)
     preferred = FHIR_primitive_BooleanField()
