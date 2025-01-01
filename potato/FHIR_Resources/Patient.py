@@ -6,30 +6,40 @@ from .Organization import *
 from .RelatedPerson import *
 
 class FHIR_Patient(models.Model):
-    #Identifier ForeignKey to this
+    #Identifier ForeignKey to this, related_name=patient_identifiers
     active = FHIR_primitive_BooleanField(null=True, help_text="Whether this patient's record is in active use")
-    #name ForeignKey to this
-    #telecom ForeignKey to this
+    #name ForeignKey to this, related_name=patient_names
+    #telecom ForeignKey to this, related_name=patient_telecoms
     class GenderChoices(models.TextChoices): MALE = 'male', 'Male'; FEMALE = 'female', 'Female'; OTHER = 'other', 'Other'; UNKNOWN = 'unknown', 'Unknown'
     gender = FHIR_primitive_CodeField(max_length=10, choices=GenderChoices.choices, null=True, help_text="male | female | other | unknown")
     birth_date = models.OneToOneField(FHIR_primitive_DateField, on_delete=models.CASCADE, null=False, related_name="patient_birthDate")
     deceased_boolean = FHIR_primitive_BooleanField(null=True, help_text="Indicates if the individual is deceased")
     deceased_date_time = FHIR_primitive_DateTimeField() #help_text="DateTime of death if applicable"
-    #address foreign key to this
+    #address foreign key to this, related_name=patient_addresses
     class MaritalStatus(models.TextChoices): ANNULLED = 'A', 'Annulled'; DIVORCED = 'D', 'Divorced'; INTERLOCUTORY = 'I', 'Interlocutory'; LEGALLY_SEPARATED = 'L', 'Legally Separated'; MARRIED = 'M', 'Married'; COMMON_LAW = 'C', 'Common Law'; POLYGAMOUS = 'P', 'Polygamous'; DOMESTIC_PARTNER = 'T', 'Domestic Partner'; UNMARRIED = 'U', 'Unmarried'; NEVER_MARRIED = 'S', 'Never Married'; WIDOWED = 'W', 'Widowed'; UNKNOWN = 'UNK', 'Unknown'
     marital_status = FHIR_primitive_CodeField(max_length=50, choices=MaritalStatus.choices, null=True, help_text="Marital (civil) status of a patient")
     multiple_birth_boolean = FHIR_primitive_BooleanField(null=True, help_text="Whether patient is part of a multiple birth")
     multiple_birth_integer = FHIR_primitive_PositiveIntField(null=True, blank=True, help_text="Order in the multiple birth")
-    #photo foreign key to this
-    #contact (backbone with multiple fields) foreign key to this
-    #communication (backbone with multiple fields) foreign key to this
-    #generalPactitioner foreign key to this
-    managing_organization_reference = models.OneToOneField(FHIR_SP_Reference, on_delete=models.CASCADE, null=True, blank=True, related_name="patient_managingOrganization")
+    #photo foreign key to this, patient_photos
+    #contact (backbone with multiple fields) foreign key to this, related_name=patient_contacts
+    #communication (backbone with multiple fields) foreign key to this, related_name=patient_communications
+    generalPractitioners_organization = models.ManyToManyField(FHIR_Organization, related_name="patient_generalPractitioner_organization")
+    generalPractitioners_practitioner = models.ManyToManyField(FHIR_Practitioner, related_name="patient_generalPractitioner_practitioner")
+    generalPractitioners_practitionerRole = models.ManyToManyField(FHIR_PractitionerRole, related_name="patient_generalPractitioner_practitionerRole")
     managing_organization_foreignKey = models.ForeignKey(FHIR_Organization, on_delete=models.CASCADE, null=True, blank=True, related_name="patient_managingOrganization_organization")
-    #link (backbone with multiple fields) foreign key to this
+    link = models.ManyToManyField(
+        'self',
+        through='FHIR_Patient_Link',
+        symmetrical=False,
+        related_name='patient_links',
+    )
+
     def __str__(self):
         patient_names = [name.name.text for name in self.patient_names.all() if name.name.text]
         return ', '.join(patient_names) if patient_names else "Unnamed Patient"
+    def clean(self):
+        pass
+        #could also check if death DateTime then > birth date
 
 class FHIR_Patient_Identifier(models.Model):
     identifier = models.OneToOneField(FHIR_GP_Identifier, related_name="patient_identifier", null=True, on_delete=models.SET_NULL)
@@ -57,7 +67,6 @@ class FHIR_Patient_Contact(models.Model):
     address = models.OneToOneField(FHIR_GP_Address, related_name="patient_contact_address", null=True, on_delete=models.SET_NULL)
     class Gender(models.TextChoices): MALE = 'male', 'Male'; FEMALE = 'female', 'Female'; OTHER = 'other', 'Other'; UNKNOWN = 'unknown', 'Unknown'
     gender = FHIR_primitive_CodeField(max_length=10, choices=Gender.choices, null=True, help_text="male | female | other | unknown")
-    organization_reference = models.OneToOneField(FHIR_Organization, on_delete=models.CASCADE, null=True, blank=True)
     organization_foreigkey = models.ForeignKey(FHIR_Organization, on_delete=models.CASCADE, related_name="patient_contact_organization")
     period = models.OneToOneField(FHIR_GP_Period, null=True, blank=True, on_delete=models.CASCADE)
     patient = models.ForeignKey(FHIR_Patient, related_name="patient_contacts", on_delete=models.CASCADE)
@@ -71,14 +80,10 @@ class FHIR_Patient_Communication(models.Model):
     language = models.OneToOneField(FHIR_GP_CodeableConcept, null=False, on_delete=models.CASCADE)
     preferred = FHIR_primitive_BooleanField()
     patient = models.ForeignKey(FHIR_Patient, related_name="patient_communications", on_delete=models.CASCADE)
-class FHIR_Patient_GeneralPractitioner(models.Model):
-    general_practitioner_reference = models.OneToOneField(FHIR_SP_Reference, on_delete=models.CASCADE, null=True, blank=True, related_name="patient_generalPractitioner")
-    general_practitioner_practitioner = models.ForeignKey(FHIR_Practitioner, blank=True, related_name="patient_generalPractitioner_practitioner", on_delete=models.CASCADE)
-    general_practitioner_practitionerRole = models.ForeignKey(FHIR_PractitionerRole, blank=True, related_name="patient_generalPractitioner_practitionerRole", on_delete=models.CASCADE)
-    general_practitioner_organization = models.ForeignKey(FHIR_Organization, blank=True, related_name="patient_generalPractitioner_organization", on_delete=models.CASCADE)
+
 class FHIR_Patient_Link(models.Model):
     class LinkType(models.TextChoices):REPLACED_BY = 'replaced-by', 'Replaced by'; REPLACES = 'replaces', 'Replaces'; REFER = 'refer', 'Refer'; SEEALSO = 'seealso', 'See also'
     link_type = FHIR_primitive_CodeField(max_length=20, choices=LinkType.choices, null=False)
-    other_reference = models.OneToOneField(FHIR_SP_Reference, on_delete=models.CASCADE, null=True, blank=True, related_name="link_other")
-    other_patient_foreignKey = models.ForeignKey(FHIR_Patient, on_delete=models.CASCADE, related_name="link_other_patient")
-    other_relatedPerson_foreignKey = models.ForeignKey(FHIR_RelatedPerson, on_delete=models.CASCADE, related_name="link_other_relatedPerson")
+    from_patient = models.ForeignKey('FHIR_Patient', on_delete=models.CASCADE, related_name="from_patient_links")
+    to_patient = models.ForeignKey('FHIR_Patient', on_delete=models.CASCADE, related_name="to_patient_links")
+    other_related_person = models.ForeignKey('FHIR_RelatedPerson', on_delete=models.CASCADE, related_name="link_other_relatedPerson", null=True, blank=True)

@@ -62,7 +62,7 @@ class FHIR_primitive_DateTimeField(models.Model):
         help_text="Precision can be YYYY, YYYY-MM, YYYY-MM-DD, YYYY-MM-DD-hh:mm:ss+zz:zz"
     )
     def __str__(self):
-        return self.datetime + " Precision " + self.get_precision_display()
+        return str(self.datetime)
 
 class FHIR_primitive_DecimalField(models.DecimalField):
     def __init__(self, *args, **kwargs):

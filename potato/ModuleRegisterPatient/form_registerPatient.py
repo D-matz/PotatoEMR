@@ -18,3 +18,7 @@ class RegisterPatientForm(forms.Form):
     city = forms.CharField(max_length=255, required=True, label="City")
     state = forms.CharField(max_length=255, required=True, label="State")
     zip_code = forms.CharField(max_length=20, required=True, label="Zip")
+
+    #patient contact
+    contact_use = forms.ChoiceField(choices=FHIR_GP_ContactPoint.Use.choices, required=False, label="Contact Use", initial=FHIR_GP_ContactPoint.Use.MOBILE)
+    contact_value = forms.CharField(max_length=255, required=False, label="Phone Number")

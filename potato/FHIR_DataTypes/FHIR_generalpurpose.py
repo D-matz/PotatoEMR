@@ -190,7 +190,7 @@ class FHIR_GP_Identifier(models.Model):
     system = FHIR_primitive_URIField(max_length=1024, null=True, blank=True)
     value = FHIR_primitive_StringField(max_length=1024, null=True, blank=True)
     period = models.OneToOneField(FHIR_GP_Period, on_delete=models.CASCADE, related_name="identifier_period", null=True, blank=True)
-    assigner_reference = models.OneToOneField(FHIR_SP_Reference, on_delete=models.CASCADE, null=True, blank=True)
+#    assigner_reference = models.OneToOneField(FHIR_SP_Reference, on_delete=models.CASCADE, null=True, blank=True)
     assigner_foreignKey = models.ForeignKey(FHIR_Organization, on_delete=models.CASCADE, related_name="identifier_assigner")
     def clean(self):
         if not self.value:
@@ -286,14 +286,16 @@ class FHIR_GP_Signature(models.Model):
     type = models.ManyToManyField(FHIR_GP_Coding, related_name="types", blank=True)
     when = FHIR_primitive_InstantField(max_length=99999, null=True, blank=True)  # When the signature was created
     #who reference and ForeignKey to Practitioner | PractitionerRole | RelatedPerson | Patient | Device | Organization
-    who_reference = models.OneToOneField(FHIR_SP_Reference, on_delete=models.CASCADE, null=True, blank=True, related_name="who_reference")
+    #who_reference = models.OneToOneField(FHIR_SP_Reference, on_delete=models.CASCADE, null=True, blank=True, related_name="who_reference")
+    #who signed
     who_practitioner_foreignKey = models.ForeignKey('FHIR_Practitioner', null=True, on_delete=models.SET_NULL, related_name="who_practitioner")
     who_relatedPerson_foreignKey = models.ForeignKey('FHIR_RelatedPerson', null=True, on_delete=models.SET_NULL, related_name="who_relatedPerson")
     who_patient_foreignKey = models.ForeignKey('FHIR_Patient', null=True, on_delete=models.SET_NULL, related_name="who_patient")
     who_device_foreignKey = models.ForeignKey('FHIR_Device', null=True, on_delete=models.SET_NULL, related_name="who_device")
     who_organization_foreignKey = models.ForeignKey('FHIR_Organization', null=True, on_delete=models.SET_NULL, related_name="who_organization")
     #onBehalfOf reference and ForeignKey to Practitioner | PractitionerRole | RelatedPerson | Patient | Device | Organization)
-    onBehalfOf_reference = models.OneToOneField(FHIR_SP_Reference, on_delete=models.CASCADE, null=True, blank=True, related_name="onBehalfOf_reference")
+    #onBehalfOf_reference = models.OneToOneField(FHIR_SP_Reference, on_delete=models.CASCADE, null=True, blank=True, related_name="onBehalfOf_reference")
+    #the party represented
     onBehalfOf_practitioner_foreignKey = models.ForeignKey('FHIR_Practitioner', null=True, on_delete=models.SET_NULL, related_name="onBehalfOf_practitioner")
     onBehalfOf_relatedPerson_foreignKey = models.ForeignKey('FHIR_RelatedPerson', null=True, on_delete=models.SET_NULL, related_name="onBehalfOf_relatedPerson")
     onBehalfOf_patient_foreignKey = models.ForeignKey('FHIR_Patient', null=True, on_delete=models.SET_NULL, related_name="onBehalfOf_patient")
@@ -308,7 +310,8 @@ class FHIR_GP_Signature(models.Model):
 
 
 class FHIR_GP_Annotation(models.Model):
-    author_reference = models.ForeignKey(FHIR_SP_Reference, null=True, blank=True, on_delete=models.SET_NULL, related_name="author_reference")
+    #author_reference = models.ForeignKey(FHIR_SP_Reference, null=True, blank=True, on_delete=models.SET_NULL, related_name="author_reference")
+    #individual responsible for the annotations
     author_practitioner_foreignKey = models.ForeignKey('FHIR_Practitioner', null=True, on_delete=models.SET_NULL, related_name="author_practitioner")
     author_practitionerRole_foreignKey = models.ForeignKey('FHIR_PractitionerRole', null=True, on_delete=models.SET_NULL, related_name="author_practitionerRole")
     author_patient_foreignKey = models.ForeignKey('FHIR_Patient', null=True, on_delete=models.SET_NULL, related_name="author_patient")

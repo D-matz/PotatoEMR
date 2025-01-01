@@ -13,15 +13,16 @@ from .FHIR_primitive import *
 #as the Resource model that uses FHIR_SP_Reference knows what resource type it references
 #For our database, the Resource can get its target with the ForeignKey
 #For FHIR API users, the Resource has a Reference with info for getting its target
-class FHIR_SP_Reference(models.Model):
-    reference = FHIR_primitive_StringField(max_length=99999) #Literal reference, Relative, internal or absolute URL
-    type = FHIR_primitive_URIField(max_length=500)  #  Type the reference refers to (e.g. "Patient")
-    # must be a resource in resources , Binding: https://www.hl7.org/fhir/valueset-resource-types.html (Extensible)
-    identifier = models.OneToOneField('FHIR_GP_Identifier', on_delete=models.CASCADE, related_name="ref_identifier", null=True, blank=True)
-    display = FHIR_primitive_StringField(max_length=8000) #Text alternative for the resource
-    def clean(self):
-        if not (self.reference or self.identifier or self.display):
-            raise ValidationError("One of reference, identifier, or display must exist.")
+
+#class FHIR_SP_Reference(models.Model):
+#    reference = FHIR_primitive_StringField(max_length=99999) #Literal reference, Relative, internal or absolute URL
+#    type = FHIR_primitive_URIField(max_length=500)  #  Type the reference refers to (e.g. "Patient")
+#    # must be a resource in resources , Binding: https://www.hl7.org/fhir/valueset-resource-types.html (Extensible)
+#    identifier = models.OneToOneField('FHIR_GP_Identifier', on_delete=models.CASCADE, related_name="ref_identifier", null=True, blank=True)
+#    display = FHIR_primitive_StringField(max_length=8000) #Text alternative for the resource
+#    def clean(self):
+#        if not (self.reference or self.identifier or self.display):
+#            raise ValidationError("One of reference, identifier, or display must exist.")
 
 class FHIR_SP_Meta(models.Model):
     version_id = FHIR_primitive_IdField(max_length=64, blank=True, null=True)
