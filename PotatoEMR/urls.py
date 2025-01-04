@@ -17,9 +17,12 @@ from django.contrib import admin
 from django.urls import include, path
 
 from potato.ModuleRegisterPatient import view_registerPatient
-
+from potato.ModulePatientOverview import view_patientOverview
+from potato.ModuleAddAllergy import view_allergyIntolerance
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("patient-registration", view_registerPatient.create_patient, name="register_patient"),
+    path("patient/<int:id>/", view_patientOverview.patient_overview, name="patient_overview"),
+    path("patient/<int:id>/allergy-intolerance", view_allergyIntolerance.allergy_intolerance, name="allergy_intolerance"),
 ]

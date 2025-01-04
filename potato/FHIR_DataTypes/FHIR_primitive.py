@@ -35,34 +35,33 @@ CODE_ERROR = "Invalid token format. It must have no leading/trailing whitespace 
 class FHIR_primitive_CodeField(models.CharField):
     def clean(self, value, model_instance): return apply_regex(value, CODE_REGEX, CODE_ERROR)
 
-class FHIR_primitive_DateField(models.Model):
-    class Precision(models.TextChoices):
-        YEAR = 'year', 'Year'
-        MONTH = 'month', 'Month'
-        DAY = 'day', 'Day'
-    date = models.DateField()
-    precision = models.CharField(
-        max_length=5,
-        choices=Precision.choices,
-        help_text="Precision can be YYYY, YYYY-MM, YYYY-MM-DD"
-    )
-    def __str__(self):
-        return str(self.date)
+class FHIR_primitive_DateField(models.DateField):
+    pass
 
-class FHIR_primitive_DateTimeField(models.Model):
+class FHIR_primitive_DateField_Precision(models.CharField):
     class Precision(models.TextChoices):
         YEAR = 'year', 'Year'
         MONTH = 'month', 'Month'
         DAY = 'day', 'Day'
-        SECONDS = 'time', 'Time'
-    datetime = models.DateTimeField()
-    precision = models.CharField(
-        max_length=5,
-        choices=Precision.choices,
-        help_text="Precision can be YYYY, YYYY-MM, YYYY-MM-DD, YYYY-MM-DD-hh:mm:ss+zz:zz"
-    )
-    def __str__(self):
-        return str(self.datetime)
+    def __init__(self, *args, **kwargs):
+        kwargs['choices'] = self.Precision.choices
+        kwargs['max_length'] = 5
+        super().__init__(*args, **kwargs)
+
+class FHIR_primitive_DateTimeField(models.DateTimeField):
+    pass
+
+class FHIR_primitive_DateTimeField_Precision(models.CharField):
+    class Precision(models.TextChoices):
+        YEAR = 'year', 'Year'
+        MONTH = 'month', 'Month'
+        DAY = 'day', 'Day'
+        SECONDS = 'seconds', 'Seconds'
+    def __init__(self, *args, **kwargs):
+        kwargs['choices'] = self.Precision.choices
+        kwargs['max_length'] = 7
+        super().__init__(*args, **kwargs)
+
 
 class FHIR_primitive_DecimalField(models.DecimalField):
     def __init__(self, *args, **kwargs):

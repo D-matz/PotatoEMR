@@ -1,0 +1,16 @@
+<h2>Add Allergy/Intolerance for {{ patient }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <h3>Basic Information</h3>
+    {{ allergy_form.as_p }}
+    
+    <h3>Reaction Details</h3>
+    {{ reaction_form.as_p }}
+    
+    <h3>Notes</h3>
+    {{ note_form.as_p }}
+    
+    <input type="submit" value="Save">
+</form>

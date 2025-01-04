@@ -12,9 +12,10 @@ class FHIR_Patient(models.Model):
     #telecom ForeignKey to this, related_name=patient_telecoms
     class GenderChoices(models.TextChoices): MALE = 'male', 'Male'; FEMALE = 'female', 'Female'; OTHER = 'other', 'Other'; UNKNOWN = 'unknown', 'Unknown'
     gender = FHIR_primitive_CodeField(max_length=10, choices=GenderChoices.choices, null=True, help_text="male | female | other | unknown")
-    birth_date = models.OneToOneField(FHIR_primitive_DateField, on_delete=models.CASCADE, null=False, related_name="patient_birthDate")
+    birthDate_date = FHIR_primitive_DateField(null=True, blank=True)
+    birthDate_date_precision = FHIR_primitive_DateField_Precision(null=True, blank=True, default=FHIR_primitive_DateTimeField_Precision.Precision.DAY)
     deceased_boolean = FHIR_primitive_BooleanField(null=True, help_text="Indicates if the individual is deceased")
-    deceased_date_time = FHIR_primitive_DateTimeField() #help_text="DateTime of death if applicable"
+    deceased_date_time = FHIR_primitive_DateTimeField(null=True) #help_text="DateTime of death if applicable"
     #address foreign key to this, related_name=patient_addresses
     class MaritalStatus(models.TextChoices): ANNULLED = 'A', 'Annulled'; DIVORCED = 'D', 'Divorced'; INTERLOCUTORY = 'I', 'Interlocutory'; LEGALLY_SEPARATED = 'L', 'Legally Separated'; MARRIED = 'M', 'Married'; COMMON_LAW = 'C', 'Common Law'; POLYGAMOUS = 'P', 'Polygamous'; DOMESTIC_PARTNER = 'T', 'Domestic Partner'; UNMARRIED = 'U', 'Unmarried'; NEVER_MARRIED = 'S', 'Never Married'; WIDOWED = 'W', 'Widowed'; UNKNOWN = 'UNK', 'Unknown'
     marital_status = FHIR_primitive_CodeField(max_length=50, choices=MaritalStatus.choices, null=True, help_text="Marital (civil) status of a patient")

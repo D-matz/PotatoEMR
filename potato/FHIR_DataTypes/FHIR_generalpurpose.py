@@ -1,6 +1,10 @@
 #https://www.hl7.org/fhir/datatypes.html#complex
 #FHIR_primitive_CodeField etc from FHIR_primitive.py
 #FHIR_SP_Reference etc from FHIR_specialpurpose.py
+#Ratio, Period, Range RatioRange, Attachment, Identifier, Annotation, HumanName,
+#CodeableConcept, Coding, ContactPoint, Timing, RelativeTime, Money, Signature, Address,
+#SampledData, Quantity, Age, Distance, Duration, Count, MoneyQuantity, SimpleQuantity
+#for 0..* or 1..* fields, create a model inherting from the appropriate FHIR_GP_model, with a foreign key to the parent model
 
 from .FHIR_primitive import *
 from .FHIR_specialpurpose import *
@@ -14,7 +18,8 @@ class FHIR_GP_Attachment(models.Model):
     size = FHIR_primitive_SignedInt64Field()  # Number of bytes of content (if URL is provided)
     hash = FHIR_primitive_Base64BinaryField()  # Hash of the data (SHA-1, base64-encoded)
     title = FHIR_primitive_StringField(max_length=256)  # Label to display in place of the data
-    creation = FHIR_primitive_DateTimeField()  # Date the attachment was first created
+    time_datetime = FHIR_primitive_DateTimeField(null=True, blank=True)  # Date the attachment was first created
+    time_datetime_precision = FHIR_primitive_DateTimeField_Precision(null=True, blank=True, default=FHIR_primitive_DateTimeField_Precision.Precision.DAY)  # Date the attachment was first created
     height = FHIR_primitive_PositiveIntField(null=True, blank=True)  # Height of the image in pixels (photo/video)
     width = FHIR_primitive_PositiveIntField(null=True, blank=True)  # Width of the image in pixels (photo/video)
     frames = FHIR_primitive_PositiveIntField(null=True, blank=True)  # Number of frames if > 1 (photo)
@@ -77,6 +82,17 @@ class FHIR_GP_Quantity_Count(FHIR_GP_Quantity):
             raise ValidationError("If a system is present, it must be UCUM (http://unitsofmeasure.org).")
         if self.value is not None and self.value % 1 != 0:
                 raise ValidationError("If present, the value must be a whole number.")
+
+class FHIR_GP_Quantity_Age(FHIR_GP_Quantity):
+    def clean(self):
+        super().clean()
+        if self.value is not None and not self.code:
+            raise ValidationError("A code must exist if there is a value")
+        if self.system and self.system.lower() != 'http://unitsofmeasure.org':
+            raise ValidationError("If a system is present, it must be UCUM (http://unitsofmeasure.org)")
+        if self.value is not None and self.value <= 0:
+            raise ValidationError("If value is present, it must be positive")
+
 
 class FHIR_GP_Quantity_Duration(FHIR_GP_Quantity):
     def clean(self):
@@ -146,8 +162,10 @@ class FHIR_GP_RatioRange(models.Model):
         return "(" + self.numerator + " to " + self.denominator + ")/" + self.denominator
 
 class FHIR_GP_Period(models.Model):
-    start = models.OneToOneField(FHIR_primitive_DateTimeField, on_delete=models.CASCADE, related_name="period_start", null=True, blank=True)
-    end = models.OneToOneField(FHIR_primitive_DateTimeField, on_delete=models.CASCADE, related_name="period_end", null=True, blank=True)
+    start_datetime = FHIR_primitive_DateTimeField(null=True, blank=True)
+    start_datetime_precision = FHIR_primitive_DateTimeField_Precision(null=True, blank=True, default=FHIR_primitive_DateTimeField_Precision.Precision.DAY)
+    end_datetime = FHIR_primitive_DateTimeField(null=True, blank=True)
+    end_datetime_precision = FHIR_primitive_DateTimeField_Precision(null=True, blank=True, default=FHIR_primitive_DateTimeField_Precision.Precision.DAY)
     def clean(self):
         if self.start and self.end:
             if self.start.datetime and self.end.datetime:
@@ -210,13 +228,13 @@ class FHIR_GP_HumanName(models.Model):
         return f"{self.text}"
     #given, prefix, suffix - can have 0 to many, so defined separately with foreign keys
 class FHIR_GP_HumanName_Given(models.Model):
-    value = FHIR_primitive_StringField(max_length=255)
+    name_given = FHIR_primitive_StringField(max_length=255)
     human_name = models.ForeignKey(FHIR_GP_HumanName, related_name="given_names", on_delete=models.CASCADE)
 class FHIR_GP_HumanName_Prefix(models.Model):
-    value = FHIR_primitive_StringField(max_length=255)
+    name_prefix = FHIR_primitive_StringField(max_length=255)
     human_name = models.ForeignKey(FHIR_GP_HumanName, related_name="prefixes", on_delete=models.CASCADE)
 class FHIR_GP_HumanName_Suffix(models.Model):
-    value = FHIR_primitive_StringField(max_length=255)
+    name_suffix = FHIR_primitive_StringField(max_length=255)
     human_name = models.ForeignKey(FHIR_GP_HumanName, related_name="suffixes", on_delete=models.CASCADE)
 
 
@@ -252,35 +270,6 @@ class FHIR_GP_ContactPoint(models.Model):
             raise ValidationError("A 'system' is required if a 'value' is provided.")
     def __str__(self):
         return f"{self.value}"
-
-
-class FHIR_GP_Event(models.Model):
-    class DurationUnitChoices(models.TextChoices): SECONDS = 's', 'Seconds'; MINUTES = 'min', 'Minutes'; HOURS = 'h', 'Hours'; DAYS = 'd', 'Days'; WEEKS = 'wk', 'Weeks'; MONTHS = 'mo', 'Months'; YEARS = 'a', 'Years'  # I s | min | h | d | wk | mo | a - unit of time (UCUM)
-    class PeriodUnitChoices(models.TextChoices): SECONDS = 's', 'Seconds'; MINUTES = 'min', 'Minutes'; HOURS = 'h', 'Hours'; DAYS = 'd', 'Days'; WEEKS = 'wk', 'Weeks'; MONTHS = 'mo', 'Months'; YEARS = 'a', 'Years'  # I s | min | h | d | wk | mo | a - unit of time (UCUM)
-    class DayOfWeekChoices(models.TextChoices): MON = 'mon', 'Monday'; TUE = 'tue', 'Tuesday'; WED = 'wed', 'Wednesday'; THU = 'thu', 'Thursday'; FRI = 'fri', 'Friday'; SAT = 'sat', 'Saturday'; SUN = 'sun', 'Sunday'  # mon | tue | wed | thu | fri | sat | sun
-    event = models.JSONField(null=True, blank=True)  # When the event occurs
-    boundsDuration = models.OneToOneField(FHIR_GP_Quantity_Duration, null=True, blank=True, on_delete=models.CASCADE)  # Length/Range of lengths
-    boundsRange = models.OneToOneField(FHIR_GP_Range, null=True, blank=True, on_delete=models.CASCADE)  # Start and/or end limits
-    boundsPeriod = models.OneToOneField(FHIR_GP_Period, null=True, blank=True, on_delete=models.CASCADE)  # Start and/or end limits
-    count = models.PositiveIntegerField(null=True, blank=True)  # I Number of times to repeat
-    countMax = models.PositiveIntegerField(null=True, blank=True)  # I Maximum number of times to repeat
-    duration = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)  # I How long when it happens
-    durationMax = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)  # I How long when it happens (Max)
-    durationUnit = models.CharField(max_length=10, choices=DurationUnitChoices.choices, null=True, blank=True)  # I s | min | h | d | wk | mo | a - unit of time (UCUM)
-    frequency = models.PositiveIntegerField(null=True, blank=True)  # Indicates the number of repetitions that should occur within a period. I.e., Event occurs frequency times per period
-    frequencyMax = models.PositiveIntegerField(null=True, blank=True)  # Event occurs up to frequencyMax times per period
-    period = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)  # I The duration to which the frequency applies. I.e., Event occurs frequency times per period
-    periodMax = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)  # I Upper limit of period (3-4 hours)
-    periodUnit = models.CharField(max_length=10, choices=PeriodUnitChoices.choices, null=True, blank=True)  # I s | min | h | d | wk | mo | a - unit of time (UCUM)
-    dayOfWeek = models.CharField(max_length=10, choices=DayOfWeekChoices.choices, null=True, blank=True)  # mon | tue | wed | thu | fri | sat | sun
-    timeOfDay = models.JSONField(null=True, blank=True)  # I Time of day for action
-    when = models.JSONField(null=True, blank=True)  # I Code for time period of occurrence
-    offset = models.PositiveIntegerField(null=True, blank=True)  # I Minutes from event (before or after)
-    code = models.OneToOneField(FHIR_GP_CodeableConcept, null=True, blank=True, on_delete=models.CASCADE)  # C | BID | TID | QID | AM | PM | QD | QOD | +
-    def __str__(self):
-        return f"FHIR_GP_Event: {self.event}"
-    def clean(self):
-        raise ValidationError("idk todo")
 
 class FHIR_GP_Signature(models.Model):
     type = models.ManyToManyField(FHIR_GP_Coding, related_name="types", blank=True)
@@ -318,7 +307,8 @@ class FHIR_GP_Annotation(models.Model):
     author_relatedPerson_foreignKey = models.ForeignKey('FHIR_RelatedPerson', null=True, on_delete=models.SET_NULL, related_name="author_relatedPerson")
     author_organization_foreignKey = models.ForeignKey('FHIR_Organization', null=True, on_delete=models.SET_NULL, related_name="author_organization")
     author_string = FHIR_primitive_StringField(max_length=255, null=True, blank=True)
-    time = FHIR_primitive_DateTimeField()
+    time_datetime = FHIR_primitive_DateTimeField(null=True, blank=True)
+    time_datetime_precision = FHIR_primitive_DateTimeField_Precision(null=True, blank=True, default=FHIR_primitive_DateTimeField_Precision.Precision.DAY)
     text = FHIR_primitive_MarkdownField(max_length=99999)
     class AuthorType(models.TextChoices): REFERENCE = "authorReference", "Reference"; STRING = "authorString", "String"
     author_type = FHIR_primitive_CodeField(max_length=20, choices=AuthorType.choices, null=True, blank=True)

@@ -1,16 +1,59 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.db import transaction
 from .form_registerPatient import RegisterPatientForm
-from ..models import FHIR_Patient
 from ..FHIR_DataTypes.FHIR_generalpurpose import *
+from ..FHIR_Resources.Patient import *
 
 def create_patient(request):
     if request.method == "POST":
         form = RegisterPatientForm(request.POST)
-        if form.is_valid():
+        if not form.is_valid():
+            return render(request, 'form_registerPatient.html', {'form': form, 'error': "invalid form"})
+        else:
             try:
-                save_patient(form.cleaned_data)
-                print("success")
-                return render(request, 'form_registerPatient.html', {'form': RegisterPatientForm(), 'success': True})
+                with transaction.atomic():
+                    form_data = form.cleaned_data
+                    patient_model = FHIR_Patient.objects.create(
+                        gender=form_data['gender'],
+                        birthDate_date=form_data['birth_date'],
+                    )
+
+                    patient_name = FHIR_Patient_Name.objects.create(
+                        patient=patient_model,
+                        text=f"{form_data['prefix']} {form_data['given_name']} {form_data['family_name']} {form_data['suffix']}".strip(),
+                        use=form_data.get('name_use', FHIR_GP_HumanName.NameUseChoices.OFFICIAL),
+                    )
+
+                    fcity = form_data.get('city')
+                    fstate = form_data.get('state')
+                    fpostalCode = form_data.get('zip_code')
+                    ftext = form_data.get('address') + ", " + fcity + ", " + fstate + ", " + fpostalCode
+                    patient_address = FHIR_Patient_Address.objects.create(
+                        patient=patient_model,
+                        use=form_data.get('address_use', FHIR_GP_Address.AddressUse.HOME),
+                        type=form_data.get('address_type', FHIR_GP_Address.AddressType.POSTAL),
+                        city=fcity,
+                        state=fstate,
+                        postalCode=fpostalCode,
+                        text=ftext,
+                        country=form_data.get('country', None),  # Add country if available
+                    )
+
+                    if form_data.get('phone_number'):
+                        patient_telecom_phone = FHIR_Patient_Telecom.objects.create(
+                            patient=patient_model,
+                            system=FHIR_GP_ContactPoint.System.PHONE,
+                            use=form_data.get('phone_use'),
+                            value=form_data.get('phone_number')
+                        )
+                    if form_data.get('email_addr'):
+                        patient_telecom_email = FHIR_Patient_Telecom.objects.create(
+                            patient=patient_model,
+                            system=FHIR_GP_ContactPoint.System.EMAIL,
+                            value=form_data.get('email_addr')
+                        )
+
+                    return redirect("patient_overview", id=patient_model.id)
             except Exception as e:
                 print("error", e)
                 return render(request, 'form_registerPatient.html', {'form': form, 'error': str(e)})
@@ -21,35 +64,3 @@ def create_patient(request):
 
 #if this was to be repeated you could put it in the RegisterPatientForm
 #but it's probably only used in this one view/template
-def save_patient(clean_patient_data):
-    print(clean_patient_data)
-    patient = FHIR_Patient()
-    patient.gender=clean_patient_data['gender']
-    birth_date_model = FHIR_primitive_DateField()
-    birth_date_model.date = clean_patient_data['birth_date']
-    birth_date_model.precision = FHIR_primitive_DateField.Precision.DAY
-    birth_date_model.save()
-    patient.birth_date = birth_date_model
-
-    human_name_model = FHIR_GP_HumanName.objects.create(
-        use=clean_patient_data['name_use'],
-        family=clean_patient_data['family_name'],
-        text=f"{clean_patient_data.get('prefix', '')} {clean_patient_data['family_name']} {clean_patient_data.get('suffix', '')}".strip()
-    )
-    for name in (clean_patient_data['given_name']).split(','):
-        FHIR_GP_HumanName_Given.objects.create(value=name.strip(), human_name=human_name_model)
-    if clean_patient_data.get('prefix'):
-        FHIR_GP_HumanName_Prefix.objects.create(value=clean_patient_data['prefix'], human_name=human_name_model)
-    if clean_patient_data.get('suffix'):
-        FHIR_GP_HumanName_Suffix.objects.create(value=clean_patient_data['suffix'], human_name=human_name_model)
-    patient.name = human_name_model
-    patient.save()
-
-    address = FHIR_GP_Address(
-        use=cleaned_patient_data.get("address_use"),
-        text=cleaned_patient_data.get("address"),
-        city=cleaned_patient_data.get("city"),
-        state=cleaned_patient_data.get("state"),
-        postalCode=cleaned_patient_data.get("zip_code"),
-    )
-    
