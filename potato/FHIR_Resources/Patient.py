@@ -17,8 +17,8 @@ class FHIR_Patient(models.Model):
     deceased_boolean = FHIR_primitive_BooleanField(null=True, help_text="Indicates if the individual is deceased")
     deceased_date_time = FHIR_primitive_DateTimeField(null=True) #help_text="DateTime of death if applicable"
     #address foreign key to this, related_name=patient_addresses
-    class MaritalStatus(models.TextChoices): ANNULLED = 'A', 'Annulled'; DIVORCED = 'D', 'Divorced'; INTERLOCUTORY = 'I', 'Interlocutory'; LEGALLY_SEPARATED = 'L', 'Legally Separated'; MARRIED = 'M', 'Married'; COMMON_LAW = 'C', 'Common Law'; POLYGAMOUS = 'P', 'Polygamous'; DOMESTIC_PARTNER = 'T', 'Domestic Partner'; UNMARRIED = 'U', 'Unmarried'; NEVER_MARRIED = 'S', 'Never Married'; WIDOWED = 'W', 'Widowed'; UNKNOWN = 'UNK', 'Unknown'
-    marital_status = FHIR_primitive_CodeField(max_length=50, choices=MaritalStatus.choices, null=True, help_text="Marital (civil) status of a patient")
+    marital_status = models.OneToOneField(FHIR_GP_CodeableConcept, on_delete=models.SET_NULL, null=True, blank=True, related_name='patient_maritalstatus')
+    marital_status.Binding = ["http://terminology.hl7.org/CodeSystem/v3-MaritalStatus", "http://terminology.hl7.org/CodeSystem/v3-NullFlavor"] 
     multiple_birth_boolean = FHIR_primitive_BooleanField(null=True, help_text="Whether patient is part of a multiple birth")
     multiple_birth_integer = FHIR_primitive_PositiveIntField(null=True, blank=True, help_text="Order in the multiple birth")
     #photo foreign key to this, patient_photos
@@ -64,6 +64,7 @@ class FHIR_Patient_Contact(models.Model):
     period = models.OneToOneField(FHIR_GP_Period, null=True, blank=True, on_delete=models.CASCADE)
     patient = models.ForeignKey(FHIR_Patient, related_name="patient_contacts", on_delete=models.CASCADE)
 class FHIR_Patient_Contact_Relationship(FHIR_GP_CodeableConcept):
+    Binding = ["http://terminology.hl7.org/CodeSystem/v2-0131"]
     patient_contact = models.ForeignKey(FHIR_Patient_Contact, related_name="patient_contact_relationships", on_delete=models.CASCADE)
 class FHIR_Patient_Contact_Telecom(FHIR_GP_ContactPoint):
     patient_contact = models.ForeignKey(FHIR_Patient_Contact, related_name="patient_contact_telecoms", on_delete=models.CASCADE)
@@ -71,6 +72,7 @@ class FHIR_Patient_Contact_Telecom(FHIR_GP_ContactPoint):
 
 class FHIR_Patient_Communication(models.Model):
     language = models.OneToOneField(FHIR_GP_CodeableConcept, null=False, on_delete=models.CASCADE)
+    language.Binding = ["http://terminology.hl7.org/5.1.0/CodeSystem-v3-ietf3066.html"]
     preferred = FHIR_primitive_BooleanField()
     patient = models.ForeignKey(FHIR_Patient, related_name="patient_communications", on_delete=models.CASCADE)
 

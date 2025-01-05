@@ -34,18 +34,53 @@ class FHIR_GP_Attachment(models.Model):
         else:
             return "unknown_file" + str(self.id)
 
-class FHIR_GP_Coding(models.Model):
+
+#a codeableconcept can have multiple codings, all should mean the same thing but come from different systems
+#the problem is a codeableconcept for a resource must limit codings to the systems/choices defined in the resource
+#to prevent a codeableconcept from having codings from whatever random system:
+#define a meta class for each codeableconcept that defines the set of codings for that codeableconcept as the Binding array
+#To save CodeableConcept with Coding(s), the Coding must have one of these Binding array elements as the Coding's system field
+
+class FHIR_GP_Coding(models.Model):     
     system = FHIR_primitive_URIField(max_length=1024)  # Identity of the terminology system (URI)
     version = FHIR_primitive_StringField(max_length=256, null=True, blank=True)  # Version of the system (optional)
     code = FHIR_primitive_CodeField(max_length=256, null=True, blank=True)  # Symbol in syntax defined by the system
     display = FHIR_primitive_StringField(max_length=256, null=True, blank=True)  # Representation defined by the system (optional)
     userSelected = FHIR_primitive_BooleanField()  # If this coding was chosen directly by the user
 
+#note the whole relationship is code -> coding -> codeableconcept
+#where code is just a string, coding is a string in a system, and codeableconcept is one concept reprsented by different codings (different systems)
+
 class FHIR_GP_CodeableConcept(models.Model):
     coding = models.ManyToManyField(FHIR_GP_Coding, blank=True)  # Code(s) defined by a terminology system
     text = FHIR_primitive_StringField(max_length=1024, null=True, blank=True)  # Plain text representation(s) of the concept
+    
+    # Array of valid system URIs that codings can use
+    Binding = []  # Subclasses should override this with their valid 
+    
+    #SNOMED CT concepts are in a tree, concepts can be nodes with parent concepts and child concepts
+    #for some Coding sets they all need to be children or sub children of the same SNOMED CT concept
+    Binding_SNOMED_CT_Parent_Concept = ""
+    #if this codeableconcept has a coding with system "http://snomed.info/sct" then it must be a child of this concept
+ 
+    def save(self, *args, **kwargs):
+        if not self.Binding:
+            raise ValidationError("CodeableConcept subclass must define Binding array of valid system URIs for its codings")            
+        for coding in self.coding.all():
+            if coding.system not in self.Binding:
+                raise ValidationError(f"Invalid system URI '{coding.system}'. Must be one of: {', '.join(self.Binding)}")
+            if coding.system == "http://snomed.info/sct":
+                if False:
+                    #TODO: check if the coding is a child of the SNOMED_CT_Concept
+                    raise ValidationError("CodeableConcept must have a SNOMED_CT_Concept if it has a coding with system 'http://snomed.info/sct'")
+        super().save(*args, **kwargs)
+    
     def __str__(self):
         return self.text
+    
+#optimizations that are premature for now:
+#instead of each resource creating a codeableconcept, create one codeableconcept for the conceept that resources referenc with foreign key
+#maybe something for models that directly access a primitive code field
 
 class FHIR_GP_Quantity(models.Model):
     class Comparator(models.TextChoices):
@@ -205,10 +240,10 @@ class FHIR_GP_Identifier(models.Model):
     class IdentifierUse(models.TextChoices): USUAL = "usual", "Usual"; OFFICIAL = "official", "Official"; TEMP = "temp", "Temporary"; SECONDARY = "secondary", "Secondary"; OLD = "old", "Old"
     use = FHIR_primitive_CodeField(max_length=16, choices=IdentifierUse.choices, null=True, blank=True)
     type = models.OneToOneField(FHIR_GP_CodeableConcept, on_delete=models.CASCADE, related_name="identifier_type", null=True, blank=True)
+    type.Binding = ["http://terminology.hl7.org/CodeSystem/v2-0203"]
     system = FHIR_primitive_URIField(max_length=1024, null=True, blank=True)
     value = FHIR_primitive_StringField(max_length=1024, null=True, blank=True)
     period = models.OneToOneField(FHIR_GP_Period, on_delete=models.CASCADE, related_name="identifier_period", null=True, blank=True)
-#    assigner_reference = models.OneToOneField(FHIR_SP_Reference, on_delete=models.CASCADE, null=True, blank=True)
     assigner_foreignKey = models.ForeignKey(FHIR_Organization, on_delete=models.CASCADE, related_name="identifier_assigner")
     def clean(self):
         if not self.value:
