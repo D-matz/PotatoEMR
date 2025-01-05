@@ -14,6 +14,7 @@ class Command(BaseCommand):
                 codingfile = importlib.import_module(f"potato.FHIR_Codings.{module_name}")
                 
                 numCreated = 0
+                print(codingfile.system, len(codingfile.coding))
                 for coding_data in codingfile.coding:
                     coding, created = FHIR_GP_Coding.objects.get_or_create(
                         system=codingfile.system,
