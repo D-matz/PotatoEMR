@@ -23,6 +23,7 @@ def create_patient(request):
                         text=f"{form_data['prefix']} {form_data['given_name']} {form_data['family_name']} {form_data['suffix']}".strip(),
                         use=form_data.get('name_use', FHIR_GP_HumanName.NameUseChoices.OFFICIAL),
                     )
+                    #todo create given, prefix, suffix, maybe use modelform instead
 
                     fcity = form_data.get('city')
                     fstate = form_data.get('state')

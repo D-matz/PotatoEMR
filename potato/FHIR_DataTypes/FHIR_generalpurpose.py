@@ -35,11 +35,19 @@ class FHIR_GP_Attachment(models.Model):
             return "unknown_file" + str(self.id)
 
 
-#a codeableconcept can have multiple codings, all should mean the same thing but come from different systems
-#the problem is a codeableconcept for a resource must limit codings to the systems/choices defined in the resource
-#to prevent a codeableconcept from having codings from whatever random system:
-#define a meta class for each codeableconcept that defines the set of codings for that codeableconcept as the Binding array
-#To save CodeableConcept with Coding(s), the Coding must have one of these Binding array elements as the Coding's system field
+#a CodeableConcept can have multiple codings, all should mean the same thing but may come from different systems
+#the whole relationship is code -> coding -> codeableconcept
+#where code is just a string, coding is a string in a system, and codeableconcept is one concept reprsented by different codings (different systems)
+
+#however, a CodeableConcept for a resource can only have codings from its Binding set
+#the binding might be just a link to a coding uri, but it might also have a rule
+#for example, http://snomed.info/sct but also only children of 284009009 route of administration
+
+class FHIR_GP_Binding(models.Model):
+    binding_rule = models.CharField(max_length=5678, null=True, blank=True)
+    def __str__(self):
+        return self.binding_rule
+
 
 class FHIR_GP_Coding(models.Model):     
     system = FHIR_primitive_URIField(max_length=1024)  # Identity of the terminology system (URI)
@@ -47,40 +55,12 @@ class FHIR_GP_Coding(models.Model):
     code = FHIR_primitive_CodeField(max_length=256, null=True, blank=True)  # Symbol in syntax defined by the system
     display = FHIR_primitive_StringField(max_length=256, null=True, blank=True)  # Representation defined by the system (optional)
     userSelected = FHIR_primitive_BooleanField()  # If this coding was chosen directly by the user
-
-#note the whole relationship is code -> coding -> codeableconcept
-#where code is just a string, coding is a string in a system, and codeableconcept is one concept reprsented by different codings (different systems)
-
-class FHIR_GP_CodeableConcept(models.Model):
-    coding = models.ManyToManyField(FHIR_GP_Coding, blank=True)  # Code(s) defined by a terminology system
-    text = FHIR_primitive_StringField(max_length=1024, null=True, blank=True)  # Plain text representation(s) of the concept
-    
-    # Array of valid system URIs that codings can use
-    Binding = []  # Subclasses should override this with their valid 
-    
-    #SNOMED CT concepts are in a tree, concepts can be nodes with parent concepts and child concepts
-    #for some Coding sets they all need to be children or sub children of the same SNOMED CT concept
-    Binding_SNOMED_CT_Parent_Concept = ""
-    #if this codeableconcept has a coding with system "http://snomed.info/sct" then it must be a child of this concept
- 
-    def save(self, *args, **kwargs):
-        if not self.Binding:
-            raise ValidationError("CodeableConcept subclass must define Binding array of valid system URIs for its codings")            
-        for coding in self.coding.all():
-            if coding.system not in self.Binding:
-                raise ValidationError(f"Invalid system URI '{coding.system}'. Must be one of: {', '.join(self.Binding)}")
-            if coding.system == "http://snomed.info/sct":
-                if False:
-                    #TODO: check if the coding is a child of the SNOMED_CT_Concept
-                    raise ValidationError("CodeableConcept must have a SNOMED_CT_Concept if it has a coding with system 'http://snomed.info/sct'")
-        super().save(*args, **kwargs)
-    
+    binding = models.ManyToManyField(FHIR_GP_Binding, related_name="bindings")
     def __str__(self):
-        return self.text
-    
-#optimizations that are premature for now:
-#instead of each resource creating a codeableconcept, create one codeableconcept for the conceept that resources referenc with foreign key
-#maybe something for models that directly access a primitive code field
+        if self.display:
+            return self.display
+        else:
+            return self.code
 
 class FHIR_GP_Quantity(models.Model):
     class Comparator(models.TextChoices):
@@ -239,8 +219,9 @@ class FHIR_GP_SampledData(models.Model):
 class FHIR_GP_Identifier(models.Model):
     class IdentifierUse(models.TextChoices): USUAL = "usual", "Usual"; OFFICIAL = "official", "Official"; TEMP = "temp", "Temporary"; SECONDARY = "secondary", "Secondary"; OLD = "old", "Old"
     use = FHIR_primitive_CodeField(max_length=16, choices=IdentifierUse.choices, null=True, blank=True)
-    type = models.OneToOneField(FHIR_GP_CodeableConcept, on_delete=models.CASCADE, related_name="identifier_type", null=True, blank=True)
-    type.Binding = ["http://terminology.hl7.org/CodeSystem/v2-0203"]
+    type = models.ManyToManyField(FHIR_GP_Coding, related_name="identifier_type",
+                                  limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-identifier-type.html'})
+    type_cctext = FHIR_primitive_StringField(max_length=255, null=True, blank=True)
     system = FHIR_primitive_URIField(max_length=1024, null=True, blank=True)
     value = FHIR_primitive_StringField(max_length=1024, null=True, blank=True)
     period = models.OneToOneField(FHIR_GP_Period, on_delete=models.CASCADE, related_name="identifier_period", null=True, blank=True)
@@ -336,6 +317,7 @@ class FHIR_GP_Signature(models.Model):
 class FHIR_GP_Annotation(models.Model):
     #author_reference = models.ForeignKey(FHIR_SP_Reference, null=True, blank=True, on_delete=models.SET_NULL, related_name="author_reference")
     #individual responsible for the annotations
+    #note - author can be a string or a reference, better to get author from reference name instead of storing here as string
     author_practitioner_foreignKey = models.ForeignKey('FHIR_Practitioner', null=True, on_delete=models.SET_NULL, related_name="author_practitioner")
     author_practitionerRole_foreignKey = models.ForeignKey('FHIR_PractitionerRole', null=True, on_delete=models.SET_NULL, related_name="author_practitionerRole")
     author_patient_foreignKey = models.ForeignKey('FHIR_Patient', null=True, on_delete=models.SET_NULL, related_name="author_patient")
@@ -344,6 +326,8 @@ class FHIR_GP_Annotation(models.Model):
     author_string = FHIR_primitive_StringField(max_length=255, null=True, blank=True)
     time_datetime = FHIR_primitive_DateTimeField(null=True, blank=True)
     time_datetime_precision = FHIR_primitive_DateTimeField_Precision(null=True, blank=True, default=FHIR_primitive_DateTimeField_Precision.Precision.DAY)
-    text = FHIR_primitive_MarkdownField(max_length=99999)
-    class AuthorType(models.TextChoices): REFERENCE = "authorReference", "Reference"; STRING = "authorString", "String"
-    author_type = FHIR_primitive_CodeField(max_length=20, choices=AuthorType.choices, null=True, blank=True)
+    text = FHIR_primitive_MarkdownField(max_length=99999, null=False)
+    def __str__(self):
+        return self.text
+    #class AuthorType(models.TextChoices): REFERENCE = "authorReference", "Reference"; STRING = "authorString", "String"
+    #author_type = FHIR_primitive_CodeField(max_length=20, choices=AuthorType.choices, null=True, blank=True)

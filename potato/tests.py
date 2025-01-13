@@ -4,13 +4,8 @@ from datetime import date, datetime
 
 class FHIRPatientTest(TestCase):
     def test_patient_name_value(self):
-        birth_date_instance = FHIR_primitive_DateField.objects.create(
-            date=date(1990, 5, 15),
-            precision='day',
-        )
-        p = FHIR_Patient.objects.create(
-            birth_date=birth_date_instance,
-        )
+        birth_date_instance = FHIR_primitive_DateField.objects.create(date=date(1990, 5, 15))
+        p = FHIR_Patient.objects.create(birth_date=birth_date_instance)
         p.save()
         self.assertEqual(str(p), "Unnamed Patient")
 

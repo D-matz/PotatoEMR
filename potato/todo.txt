@@ -1,0 +1,7 @@
+snomed is-a subsets should come from snomed instead of fhir page
+(manifestation, exposure route, substance, maybe others)
+
+maybe make CodeableConcept model with a binding and coding set
+the point of the extra model would be to have that exact ManyToManyField coding only once
+
+patient form with modelform

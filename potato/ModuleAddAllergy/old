@@ -1,0 +1,51 @@
+class AddAllergyIntoleranceForm(forms.Form):
+    clinical_status = forms.ChoiceField(choices=[(c['code'], c['display']) for c in terminology_hl7_org_CodeSystem_allergyintolerance_clinical.coding])
+    verification_status = forms.ChoiceField(choices=[(c['code'], c['display']) for c in terminology_hl7_org_CodeSystem_allergyintolerance_verification.coding])
+    type = forms.ChoiceField(choices=[(c['code'], c['display']) for c in hl7_org_fhir_allergy_intolerance_type.coding], required=False)
+    category = forms.MultipleChoiceField(
+        choices=[(c['code'], c['display']) for c in hl7_org_fhir_allergy_intolerance_category.coding],
+        widget=forms.CheckboxSelectMultiple(),
+        required=False
+    )
+    criticality = forms.ChoiceField(choices=[(c['code'], c['display']) for c in hl7_org_fhir_allergy_intolerance_criticality.coding], required=False)
+    code = forms.ChoiceField(choices=[(c['code'], c['display']) for c in snomed_info_sct_subset_allergyintolerance.coding])
+    onset_dateTime = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}), required=False)
+    recordedDate = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}), required=False)
+    lastOccurrence = forms.DateTimeField(required=False, widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
+    onset = forms.DateTimeField(required=False, widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
+
+    participantRoleType = forms.ChoiceField(choices=[(c['code'], c['display']) for c in terminology_hl7_org_CodeSystem_provenance_participant_type.coding])
+    participant = forms.CharField(max_length=100)
+
+    lastOccurrence = forms.DateTimeField(required=False, widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
+    note = forms.CharField(required=False)
+
+    substance = forms.ChoiceField(choices=[(c['code'], c['display']) for c in snomed_info_sct_subset_substance.coding])
+    manifestation = forms.ChoiceField(choices=[(c['code'], c['display']) for c in snomed_info_sct_subset_clinicalfinding.coding])
+    description = forms.CharField(required=False)
+    severity = forms.ChoiceField(choices=[(c['code'], c['display']) for c in hl7_org_fhir_reaction_event_severity.coding])
+    exposureRoute = forms.ChoiceField(choices=[(c['code'], c['display']) for c in snomed_info_sct_route.coding])
+    note = forms.CharField(required=False)
+
+    def save(self, patient_id):
+        clinical_status = FHIR_GP_CodeableConcept.objects.create()
+        clinical_status.Binding = [terminology_hl7_org_CodeSystem_allergyintolerance_clinical.system]
+        clinical_status.coding.add(FHIR_GP_Coding.objects.get(system=terminology_hl7_org_CodeSystem_allergyintolerance_clinical.system, code=self.cleaned_data['clinical_status']))
+        clinical_status.save()
+
+        verification_status = FHIR_GP_CodeableConcept.objects.create()
+        verification_status.Binding = [terminology_hl7_org_CodeSystem_allergyintolerance_verification.system]
+        verification_status.coding.add(FHIR_GP_Coding.objects.get(system=terminology_hl7_org_CodeSystem_allergyintolerance_verification.system, code=self.cleaned_data['verification_status']))
+        verification_status.save()
+
+        allergy = FHIR_AllergyIntolerance.objects.create(
+            clinical_status=clinical_status,
+            verification_status=verification_status,
+            patient_id=patient_id,
+            onset_dateTime=self.cleaned_data['onset_dateTime'],
+            recordedDate=self.cleaned_data['recordedDate'],
+            lastOccurrence=self.cleaned_data['lastOccurrence']
+        )
+
+        return allergy
+

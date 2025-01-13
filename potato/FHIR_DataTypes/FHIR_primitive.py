@@ -5,6 +5,7 @@ import re
 from django.core.exceptions import ValidationError
 from django.db import models
 from decimal import Decimal, ROUND_HALF_UP
+from django import forms
 
 
 
@@ -36,7 +37,10 @@ class FHIR_primitive_CodeField(models.CharField):
     def clean(self, value, model_instance): return apply_regex(value, CODE_REGEX, CODE_ERROR)
 
 class FHIR_primitive_DateField(models.DateField):
-    pass
+    def formfield(self, **kwargs):
+        defaults = {'widget': forms.DateInput(attrs={'type': 'date'})}
+        defaults.update(kwargs)
+        return super().formfield(**defaults)
 
 class FHIR_primitive_DateField_Precision(models.CharField):
     class Precision(models.TextChoices):
@@ -49,7 +53,10 @@ class FHIR_primitive_DateField_Precision(models.CharField):
         super().__init__(*args, **kwargs)
 
 class FHIR_primitive_DateTimeField(models.DateTimeField):
-    pass
+    def formfield(self, **kwargs):
+        defaults = {'widget': forms.DateTimeInput(attrs={'type': 'datetime-local'})}
+        defaults.update(kwargs)
+        return super().formfield(**defaults)
 
 class FHIR_primitive_DateTimeField_Precision(models.CharField):
     class Precision(models.TextChoices):
