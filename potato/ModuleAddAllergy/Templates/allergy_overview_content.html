@@ -1,4 +1,6 @@
 <h1>Allergies</h1>
+
+{% if allergy_list.count > 0 %}
 <table id="allergy_list">
     <tr>
         <th>Code</th>
@@ -15,5 +17,8 @@
         {% include "allergy_listItem.html" %}
     {% endfor %}
 </table>
+{% else %}
+<p>No allergies recorded yet</p>
+{% endif %}
 
 {% include "allergy_form.html" %}
