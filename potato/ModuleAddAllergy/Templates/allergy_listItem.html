@@ -1,0 +1,13 @@
+<tr>
+    <td>{{ allergy.code_cc.first }}</td>
+    <td>{{ allergy.clinical_status_cc }}</td>
+    <td>{{ allergy.verification_status_cc.first }}</td>
+    <td>{{ allergy.category_codes.first }}</td>
+    <td>{{ allergy.type_cc.first }}</td>
+    <td>{{ allergy.criticality_code }}</td>
+    <td>{{ allergy.onset_dateTime }}</td>
+    <td>{{ allergy.recordedDate }}</td>
+    <td>{{ allergy.lastOccurrence }}</td>
+    <td><button hx-get="{% url 'allergy_intolerance_reactionDetail' allergy_id=allergy.id %}" hx-target="#a{{ allergy.id }}">Details</button></td>
+</tr>
+<tr id="a{{allergy.id}}"></tr>

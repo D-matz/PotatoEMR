@@ -1,0 +1,58 @@
+<h2 class="text-4xl">Add Allergy or Intolerance for {{ patient }}</h2>
+
+<form id="myForm" hx-post="{% url 'allergy_intolerance' id=patient.id %}" hx-target="#commonBasePageContent" hx-ext="json-data-nested">
+    {% csrf_token %}
+    <fieldset data-nested="allergy" class="m-4 p-4 border-4 border-gray-800 bg-red-200">
+        <legend class="m-4 p-1 bg-gray-800 text-gray-200">Allergy</legend>
+        
+        <div class="flex flex-wrap">
+            {% for field in allergyFormAndChildren.allergy_form %}
+                {% include "allergy_field.html" %}
+            {% endfor %}
+        </div>
+
+        {% for note in allergyFormAndChildren.note_list %}
+            {% include "allergy_form_note.html" %}
+        {% endfor %}
+        <button class="ml-4 px-6 py-2 bg-blue-200 hover:bg-blue-100 font-semibold rounded-lg shadow-md focus:outline-none"
+        type="button" onclick="addForm(this, 'example_note')">Add Another Note</button>
+
+        {% for reaction in allergyFormAndChildren.reaction_list %}
+            {% include "allergy_form_reaction.html" %}
+        {% endfor %} 
+        <button class="ml-4 px-6 py-2 bg-yellow-200 hover:bg-yellow-100 font-semibold rounded-lg shadow-md focus:outline-none" 
+        type="button" onclick="addForm(this, 'example_reaction')">Add Another Reaction</button>
+
+        <br>
+        <br>
+
+        <input type="submit" value="Save Allergy" class="px-8 py-4 bg-gray-800 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 focus:outline-none">
+    </fieldset>
+</form>
+
+<span hidden id="example_note">
+    {% include "allergy_form_note.html" with note=example_allergyFormAndChildren.note_list.0 %}
+</span>
+
+<span hidden id="example_reaction">
+    {% include "allergy_form_reaction.html" with reaction=example_allergyFormAndChildren.reaction_list.0 %}
+</span>
+
+<span hidden id="example_reaction_note">
+    {% include "allergy_form_reaction_note.html" with reactionNote=example_allergyFormAndChildren.reaction_list.0.reactionNote_list.0 %}
+</span>
+
+<span hidden id="example_manifestation">
+    {% include "allergy_form_reaction_manifestation.html" with manifestation=example_allergyFormAndChildren.reaction_list.0.manifestation_list.0 %}
+</span>
+
+
+<script>
+function addForm(callingButton, addHiddenElementId) {
+    const fieldset_copy = document.getElementById(addHiddenElementId).firstElementChild.cloneNode(true);
+    callingButton.parentElement.insertBefore(fieldset_copy, callingButton);
+}
+</script>
+
+
+

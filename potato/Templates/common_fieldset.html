@@ -1,0 +1,26 @@
+<!-- links each field in this subpart of form to the form's json data -->
+<fieldset>
+    {% for field in formArgument %}
+    <div>
+        <span x-text="item + ' ' + index"></span>
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        <div>
+            {% if field.field.widget.input_type == 'select' %}
+                <select x-model="item.{{field.name}}" id="{{ field.id_for_label }}" name="{{ field.name }}">
+                    {% for option in field.field.choices %}
+                        <option value="{{ option.0 }}" {% if option.0 == field.value %}selected{% endif %}>{{ option.1 }}</option>
+                    {% endfor %}
+                </select>
+            {% else %}
+                <input
+                    x-model="item.{{field.name}}"
+                    :id="index"
+                    name="{{ field.name }}"
+                    type="{{ field.field.widget.input_type }}"
+                    {% if field.value %} value="{{ field.value }}" {% endif %}
+                />
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</fieldset>

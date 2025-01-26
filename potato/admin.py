@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .FHIR_Resources.AllergyIntolerance import FHIR_AllergyIntolerance
+
+class AllergyIntoleranceAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(FHIR_AllergyIntolerance, AllergyIntoleranceAdmin)

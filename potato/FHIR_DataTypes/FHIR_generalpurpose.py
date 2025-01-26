@@ -52,7 +52,7 @@ class FHIR_GP_Binding(models.Model):
 class FHIR_GP_Coding(models.Model):     
     system = FHIR_primitive_URIField(max_length=1024)  # Identity of the terminology system (URI)
     version = FHIR_primitive_StringField(max_length=256, null=True, blank=True)  # Version of the system (optional)
-    code = FHIR_primitive_CodeField(max_length=256, null=True, blank=True)  # Symbol in syntax defined by the system
+    code = FHIR_primitive_CodeField(max_length=1024, null=True, blank=True)  # Symbol in syntax defined by the system
     display = FHIR_primitive_StringField(max_length=256, null=True, blank=True)  # Representation defined by the system (optional)
     userSelected = FHIR_primitive_BooleanField()  # If this coding was chosen directly by the user
     binding = models.ManyToManyField(FHIR_GP_Binding, related_name="bindings")
@@ -331,3 +331,75 @@ class FHIR_GP_Annotation(models.Model):
         return self.text
     #class AuthorType(models.TextChoices): REFERENCE = "authorReference", "Reference"; STRING = "authorString", "String"
     #author_type = FHIR_primitive_CodeField(max_length=20, choices=AuthorType.choices, null=True, blank=True)
+
+class FHIR_GP_Timing(models.Model):
+    code_cc = models.ManyToManyField(FHIR_GP_Coding, related_name="timing_code_cc", blank=True,
+                                     limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-timing-abbreviation.html'})
+    code_text = FHIR_primitive_StringField(max_length=50, null=True, blank=True)
+
+    repeat_bounds_duration = models.OneToOneField(FHIR_GP_Quantity_Duration, null=True, blank=True, on_delete=models.CASCADE)
+    repeat_bounds_range = models.OneToOneField(FHIR_GP_Range, null=True, blank=True, on_delete=models.CASCADE)
+    repeat_bounds_period = models.OneToOneField(FHIR_GP_Period, null=True, blank=True, on_delete=models.CASCADE)
+
+    repeat_count = FHIR_primitive_PositiveIntField(null=True, blank=True)  # Number of times to repeat
+    repeat_countMax = FHIR_primitive_PositiveIntField(null=True, blank=True)  # Maximum number of times to repeat
+    repeat_duration = FHIR_primitive_DecimalField(null=True, blank=True)  # How long when it happens
+    repeat_durationMax = FHIR_primitive_DecimalField(null=True, blank=True)  # Maximum duration
+
+    class UnitOfTime(models.TextChoices):
+        S = 's', 'Second'; MIN = 'min', 'Minute'; H = 'h', 'Hour'; D = 'd', 'Day'; WK = 'wk', 'Week'; MO = 'mo', 'Month'
+
+    repeat_duration_unit = FHIR_primitive_CodeField(max_length=20, choices=UnitOfTime.choices, null=True, blank=True)  # Unit of time
+
+    repeat_frequency = FHIR_primitive_PositiveIntField(null=True, blank=True)  # Frequency of occurrence
+    repeat_frequencyMmax = FHIR_primitive_PositiveIntField(null=True, blank=True)  # Maximum frequency
+    repeat_period = FHIR_primitive_DecimalField(null=True, blank=True)  # Duration to which the frequency applies
+    repeat_periodMax = FHIR_primitive_DecimalField(null=True, blank=True)  # Upper limit of period
+    repeat_periodUnit = FHIR_primitive_CodeField(max_length=20, choices=UnitOfTime.choices, null=True, blank=True)  # Unit of time for the period
+    #dayOfWeek, timeOfDay, when foreign key to this
+    repeat_offset = FHIR_primitive_UnsignedIntField(null=True, blank=True)  # Offset for timing
+
+class FHIR_GP_Timing_Event(models.Model):
+    timing = models.ForeignKey(FHIR_GP_Timing, on_delete=models.CASCADE, related_name="events")
+    event = FHIR_primitive_DateTimeField(null=True, blank=True)
+
+class FHIR_GP_Timing_repeat_dayOfWeek(models.Model):
+    class DayOfWeek(models.TextChoices):
+        SUNDAY = 'sun', 'Sunday'; MONDAY = 'mon', 'Monday'; TUESDAY = 'tue', 'Tuesday'; WEDNESDAY = 'wed', 'Wednesday'; THURSDAY = 'thu', 'Thursday'; FRIDAY = 'fri', 'Friday'; SATURDAY = 'sat', 'Saturday'
+    dayOfWeek = FHIR_primitive_CodeField(max_length=20, choices=DayOfWeek.choices, null=True, blank=True)
+    timing = models.ForeignKey(FHIR_GP_Timing, on_delete=models.CASCADE, related_name="repeat_dayOfWeek")
+class FHIR_GP_Timing_repeat_timeOfDay(models.Model):
+    timeOfDay = FHIR_primitive_TimeField(null=True, blank=True)
+    timing = models.ForeignKey(FHIR_GP_Timing, on_delete=models.CASCADE, related_name="repeat_timeOfDay")
+class FHIR_GP_Timing_repeat_when(models.Model):
+    class WhenChoices(models.TextChoices):
+        MORN = 'MORN', 'Morning'
+        MORN_EARLY = 'MORN.early', 'Early Morning'
+        MORN_LATE = 'MORN.late', 'Late Morning'
+        NOON = 'NOON', 'Noon'
+        AFT = 'AFT', 'Afternoon'
+        AFT_EARLY = 'AFT.early', 'Early Afternoon'
+        AFT_LATE = 'AFT.late', 'Late Afternoon'
+        EVE = 'EVE', 'Evening'
+        EVE_EARLY = 'EVE.early', 'Early Evening'
+        EVE_LATE = 'EVE.late', 'Late Evening'
+        NIGHT = 'NIGHT', 'Night'
+        PHS = 'PHS', 'After Sleep'
+        IMD = 'IMD', 'Immediate'
+        HS = 'HS', 'Prior to Sleep'
+        WAKE = 'WAKE', 'Upon Waking'
+        C = 'C', 'Meal'
+        CM = 'CM', 'Breakfast'
+        CD = 'CD', 'Lunch'
+        CV = 'CV', 'Dinner'
+        AC = 'AC', 'Before Meal'
+        ACM = 'ACM', 'Before Breakfast'
+        ACD = 'ACD', 'Before Lunch'
+        ACV = 'ACV', 'Before Dinner'
+        PC = 'PC', 'After Meal'
+        PCM = 'PCM', 'After Breakfast'
+        PCD = 'PCD', 'After Lunch'
+        PCV = 'PCV', 'After Dinner'
+    when = FHIR_primitive_CodeField(max_length=20, choices=WhenChoices.choices, null=True, blank=True)
+    timing = models.ForeignKey(FHIR_GP_Timing, on_delete=models.CASCADE, related_name="repeat_when")
+

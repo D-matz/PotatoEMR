@@ -3,8 +3,8 @@ from ..FHIR_DataTypes.FHIR_generalpurpose import *
 
 class FHIR_AllergyIntolerance(models.Model):
     #identifier foreign key to this
-    clinical_status_cc = models.ManyToManyField('FHIR_GP_Coding', related_name='allergyintolerance_clinicalstatus', blank=True,
-        limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-allergyintolerance-clinical.html'})#    clinical_status = models.OneToOneField(FHIR_GP_CodeableConcept, on_delete=models.SET_NULL, null=True, blank=True, related_name='allergyintolerance_clinicalstatus')
+    clinical_status_cc = models.ForeignKey('FHIR_GP_Coding', on_delete=models.SET_NULL, related_name='allergyintolerance_clinicalstatus', null=True, blank=True,
+        limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-allergyintolerance-clinical.html'})
     clinical_status_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     verification_status_cc = models.ManyToManyField('FHIR_GP_Coding', related_name='allergyintolerance_verificationstatus', blank=True,
         limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-allergyintolerance-verification.html'})
@@ -17,6 +17,7 @@ class FHIR_AllergyIntolerance(models.Model):
         limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-allergy-intolerance-criticality.html'})
     code_cc = models.ManyToManyField('FHIR_GP_Coding', related_name='allergyintolerance_code', blank=True,
         limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-allergyintolerance-code.html'})
+    code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     patient = models.ForeignKey('FHIR_Patient', on_delete=models.CASCADE, null=False)
     encounter = models.ForeignKey('FHIR_Encounter', on_delete=models.SET_NULL, null=True, blank=True)
     onset_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True)
@@ -27,6 +28,9 @@ class FHIR_AllergyIntolerance(models.Model):
     recordedDate = FHIR_primitive_DateTimeField(null=True, blank=True)
     lastOccurrence = FHIR_primitive_DateTimeField(null=True, blank=True)
     #could add precision to onset_dateTime, recordedDate, lastOccurrence
+
+    def __str__(self):
+        return str(self.code_cc.first())
 
 class FHIR_AllergyIntolerance_Identifier(FHIR_GP_Identifier):
     allergy_intolerance = models.ForeignKey(FHIR_AllergyIntolerance, on_delete=models.CASCADE, related_name='identifiers')
@@ -64,6 +68,14 @@ class FHIR_AllergyIntolerance_Reaction(models.Model):
     exposureRoute_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     #todo binding rule for exposureRoute: snomed ct code that is a 105590001 (Substance)
     #when changing binding remember to remove old one
+# @receiver(m2m_changed, sender=FHIR_AllergyIntolerance_Reaction.substance_cc.through)
+# def update_substance_cctext(sender, instance, **kwargs):
+#     substances = instance.substance_cc.all()
+#     if len(substances) == 1:
+#         substance = substances[0]
+#         instance.substance_cctext = substance.display if substance.display else substance.code
+#         instance.save()
+    
 class FHIR_AllergyIntolerance_Reaction_Manifestation(models.Model):
     reaction = models.ForeignKey(FHIR_AllergyIntolerance_Reaction, on_delete=models.CASCADE, related_name='manifestations')
     manifestation_ref = models.ForeignKey('FHIR_Observation', on_delete=models.SET_NULL, null=True, blank=True)
@@ -71,6 +83,14 @@ class FHIR_AllergyIntolerance_Reaction_Manifestation(models.Model):
         limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-clinical-findings.html'})
     manifestation_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     #todo change to snomed ct code - is a clinical finding
+# @receiver(m2m_changed, sender=FHIR_AllergyIntolerance_Reaction_Manifestation.manifestation_cc.through)
+# def update_substance_cctext(sender, instance, **kwargs):
+#     ccs = instance.manifestation_cc.all()
+#     print("using ccs", ccs)
+#     if len(ccs) == 1:
+#         cc = ccs[0]
+#         instance.manifestation_cctext = cc.display if cc.display else cc.code
+#         instance.save()
 
 class FHIR_AllergyIntolerance_Reaction_Note(FHIR_GP_Annotation):
     reaction = models.ForeignKey(FHIR_AllergyIntolerance_Reaction, on_delete=models.CASCADE, related_name='reaction_notes')

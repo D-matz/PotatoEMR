@@ -5,3 +5,13 @@ maybe make CodeableConcept model with a binding and coding set
 the point of the extra model would be to have that exact ManyToManyField coding only once
 
 patient form with modelform
+
+observation Focus field should reference any FHIR resource
+
+add bindings for observation
+
+
+
+clinician preferences:
+allergy vs intolerance? seperate or filter? https://www.reddit.com/r/medicine/comments/1i4hle2/what_is_the_most_ridiculous_allergy_youve_seen_a/m7v9tyo/
+

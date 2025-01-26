@@ -25,4 +25,5 @@ urlpatterns = [
     path("patient-registration", view_registerPatient.create_patient, name="register_patient"),
     path("patient/<int:id>/", view_patientOverview.patient_overview, name="patient_overview"),
     path("patient/<int:id>/allergy-intolerance", view_allergyIntolerance.allergy_intolerance, name="allergy_intolerance"),
+    path("patient/allergy-intolerance-reactionDetail/<int:allergy_id>", view_allergyIntolerance.allergy_intolerance_reactionDetail, name="allergy_intolerance_reactionDetail"),
 ]

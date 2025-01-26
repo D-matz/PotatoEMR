@@ -1,0 +1,19 @@
+<h1>Allergies</h1>
+<table id="allergy_list">
+    <tr>
+        <th>Code</th>
+        <th>Clinical Status</th>
+        <th>Verification Status</th>
+        <th>Category</th>
+        <th>Type</th>
+        <th>Criticality</th>
+        <th>Onset</th>
+        <th>Recorded</th>
+        <th>Last Occurrence</th>
+    </tr>
+    {% for allergy in allergy_list %}
+        {% include "allergy_listItem.html" %}
+    {% endfor %}
+</table>
+
+{% include "allergy_form.html" %}

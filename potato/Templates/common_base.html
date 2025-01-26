@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PotatoEMR{% endblock %}</title>
+    <script src="https://unpkg.com/htmx.org@1.9.3"></script>
+    <script src="https://cdn.jsdelivr.net/gh/D-matz/json-data-nested/json-data-nested.js"></script>
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav>link1, link2, link3</nav>
+    <div id="commonBasePageContent" class="m-4 max-w-6xl w-full mx-auto">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

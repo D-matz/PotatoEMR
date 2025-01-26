@@ -4,6 +4,7 @@ from .FHIR_DataTypes.FHIR_generalpurpose import *
 #keeping resources in separate files repeats some import boilerplate
 #but maybe easier to manage when there are a lot of resources (nicer git history?)
 from .FHIR_Resources.AllergyIntolerance import *
+from .FHIR_Resources.BiologicallyDerivedProduct import *
 from .FHIR_Resources.CarePlan import *
 from .FHIR_Resources.CareTeam import *
 from .FHIR_Resources.Device import *
@@ -11,15 +12,18 @@ from .FHIR_Resources.DeviceRequest import *
 from .FHIR_Resources.Encounter import *
 from .FHIR_Resources.Event import *
 from .FHIR_Resources.GenomicStudy import *
+from .FHIR_Resources.Group import *
 from .FHIR_Resources.ImagingStudy import *
 from .FHIR_Resources.Immunization import *
 from .FHIR_Resources.ImmunizationRecommendation import *
+from .FHIR_Resources.Location import *
 from .FHIR_Resources.Medication import *
 from .FHIR_Resources.MedicationAdministration import *
 from .FHIR_Resources.MedicationDispense import *
 from .FHIR_Resources.MedicationRequest import *
 from .FHIR_Resources.MedicationStatement import *
 from .FHIR_Resources.NutritionOrder import *
+from .FHIR_Resources.NutritionProduct import *
 from .FHIR_Resources.Observation import *
 from .FHIR_Resources.ObservationDefinition import *
 from .FHIR_Resources.Organization import *
@@ -29,3 +33,4 @@ from .FHIR_Resources.PractitionerRole import *
 from .FHIR_Resources.Procedure import *
 from .FHIR_Resources.RelatedPerson import *
 from .FHIR_Resources.ServiceRequest import *
+from .FHIR_Resources.Substance import *
