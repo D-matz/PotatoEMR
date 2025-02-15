@@ -1,0 +1,35 @@
+<div class="flex items-center justify-between mb-4">
+    <h1 class="text-2xl font-bold">Allergies</h1>
+    <button 
+        hx-get="{% url 'allergy_form_get_new' patient.id %}" 
+        hx-target="#allergy_tbody" 
+        hx-swap="afterbegin"
+        class="w-64 bg-blue-500 text-white py-2 m-2 px-4 rounded hover:bg-blue-600">
+        Add New Allergy/Intolerance
+    </button>
+</div>
+
+{% if allergy_list.count > 0 %}
+<div class="w-full overflow-x-auto">
+    <table class="w-full min-w-full table-fixed divide-y divide-gray-700">
+        <thead class="bg-gray-300">
+            <tr>
+                <th class="w-1/7 px-4 py-2 text-left text-sm font-medium text-gray-700">Allergen</th>
+                <th class="w-1/7 px-4 py-2 text-left text-sm font-medium text-gray-700">Severity</th>
+                <th class="w-1/7 px-4 py-2 text-left text-sm font-medium text-gray-700">Clinical Status</th>
+                <th class="w-1/7 px-4 py-2 text-left text-sm font-medium text-gray-700">Verification</th>
+                <th class="w-1/7 px-4 py-2 text-left text-sm font-medium text-gray-700">Allergy or Intolerance</th>
+                <th class="w-1/7 px-4 py-2 text-left text-sm font-medium text-gray-700">Category</th>
+                <th class="w-1/7 px-4 py-2 text-left text-sm font-medium text-gray-700">Date Recorded</th>
+            </tr>
+        </thead>
+        <tbody id="allergy_tbody" class="bg-white divide-y divide-gray-700">
+            {% for allergy in allergy_list %}
+                {% include "allergy_table_row.html" %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="text-gray-500 text-sm">No allergies recorded yet</p>
+{% endif %}

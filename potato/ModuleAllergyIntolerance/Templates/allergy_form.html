@@ -1,0 +1,72 @@
+<tr class="bg-gray-400 pt-1 pb-2">
+<td colspan="7">
+    <div class="absolute">
+        {{ saveResult|safe }}
+    </div>
+    <div class="mb-2 p-2 clearfix">
+        {% if allergy_id %}
+        <button type="button" hx-get="{% url 'allergy_form_allergy_row' allergy_id %}" hx-target="closest tr" hx-swap="outerHTML" class="float-right bg-red-700 text-white w-6 h-6 rounded hover:bg-red-800 font-bold flex items-center justify-center">&times;</button>
+        {% else %}
+        <button type="button" hx-get="{% url 'empty' %}" hx-target="closest tr" hx-swap="outerHTML" class="float-right bg-red-700 text-white w-6 h-6 rounded hover:bg-red-800 font-bold flex items-center justify-center">&times;</button>
+        {% endif %}
+        <span class="font-bold text-lg">{{ allergy_name }}</span>
+    </div>
+{% if allergy_id %}
+    <form hx-post="{% url 'allergy_form_save_existing' allergy_id %}" hx-target="closest tr" hx-swap="outerHTML">
+{% else %}
+    <form hx-post="{% url 'allergy_form_save_new' patient_id %}" hx-target="closest tr" hx-swap="outerHTML">
+{% endif %}
+    {% csrf_token %}
+    <div class="flex font-semibold">
+        <div class="w-1/2">
+            <div class="grid grid-cols-12 gap-2 items-start p-2">
+
+                <label class="col-span-3">{{ allergy_form.code_cc.label_tag }}</label>
+                <div class="col-span-9">
+                    <div>{{ allergy_form.code_cc }} </div>
+                    <div class="text-red-700">{{ allergy_form.code_cc.errors }}</div>
+                </div>
+            
+                <label class="col-span-3 ">Reactions:</label>
+                <div class="col-span-3 overflow-hidden">
+                    <div class="border border-gray-400">{{ manifestation_form1.manifestation_cc }}</div>
+                    <div class="text-red-700">{{ manifestation_form1.manifestation_cc.errors }}</div>
+                    <div class="border border-gray-400">{{ manifestation_form2.manifestation_cc }}</div>
+                    <div class="text-red-700">{{ manifestation_form2.manifestation_cc.errors }}</div>
+                    <div class="border border-gray-400">{{ manifestation_form3.manifestation_cc }}</div>
+                    <div class="text-red-700">{{ manifestation_form3.manifestation_cc.errors }}</div>
+                </div>
+            
+                <label class="col-span-2">{{ allergy_form.criticality_code.label_tag }}</label>
+                <div class="col-span-4">
+                    <p>{{ allergy_form.criticality_code }}</p>
+                    <div class="text-red-700">{{ allergy_form.criticality_code.errors }}</div>
+                </div>
+            
+                <label class="col-span-3">{{ allergy_form.type_cc.label_tag }}</label>
+                <div class="col-span-3 overflow-hidden">
+                    {{ allergy_form.type_cc }}
+                    <div class="text-red-700">{{ allergy_form.type_cc.errors }}</div>
+                </div>
+            
+                <label class="col-span-2">{{ allergy_form.onset_dateTime.label_tag }}</label>
+                <div class="col-span-4 overflow-hidden">
+                    {{ allergy_form.onset_dateTime }}
+                    <div class="text-red-700">{{ allergy_form.onset_dateTime.errors }}</div>
+                </div>
+            </div>
+            
+        </div>
+        <div class="w-1/2 h-48">
+            <div class="w-full pl-2 pr-2">
+                <div>{{ note_form.text.label_tag }}</div>
+                <div>{{ note_form.text }}</div>
+                <div class="text-red-700">{{ note_form.text.errors }}</div>
+            </div>
+        </div>
+
+    </div>
+    <div>
+        <button type="submit" class="w-64 bg-blue-500 text-white py-2 m-2 px-4 rounded hover:bg-blue-600">Save</button>
+    </div>
+</form>

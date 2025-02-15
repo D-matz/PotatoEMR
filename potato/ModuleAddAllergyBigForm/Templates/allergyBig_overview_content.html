@@ -14,11 +14,11 @@
         <th>Last Occurrence</th>
     </tr>
     {% for allergy in allergy_list %}
-        {% include "allergy_listItem.html" %}
+        {% include "allergyBig_listItem.html" %}
     {% endfor %}
 </table>
 {% else %}
 <p>No allergies recorded yet</p>
 {% endif %}
 
-{% include "allergy_form.html" %}
+{% include "allergyBig_form.html" %}

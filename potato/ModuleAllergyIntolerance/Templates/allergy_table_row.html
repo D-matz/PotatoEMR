@@ -1,0 +1,37 @@
+<tr class="group hover:bg-blue-300 cursor-pointer">
+    <td class="w-1/7 h-12">
+        <a hx-get="{% url 'allergy_form_get_existing' allergy.id %}" hx-target="closest tr" hx-swap="outerHTML" class="h-full w-full block text-sm text-gray-900 group-hover:text-blue-600 overflow-hidden whitespace-nowrap text-ellipsis">
+            {{ allergy.code_cc.first }}
+        </a>
+    </td>
+    <td class="w-1/7 h-12">
+        <a hx-get="{% url 'allergy_form_get_existing' allergy.id %}" hx-target="closest tr" hx-swap="outerHTML" class="h-full w-full block text-sm text-gray-900 group-hover:text-blue-600 overflow-hidden whitespace-nowrap text-ellipsis">
+            {{ allergy.criticality_code }}
+        </a>
+    </td>
+    <td class="w-1/7 h-12">
+        <a hx-get="{% url 'allergy_form_get_existing' allergy.id %}" hx-target="closest tr" hx-swap="outerHTML" class="h-full w-full block text-sm text-gray-900 group-hover:text-blue-600 overflow-hidden whitespace-nowrap text-ellipsis">
+            {{ allergy.clinical_status_cc.first }}
+        </a>
+    </td>
+    <td class="w-1/7 h-12">
+        <a hx-get="{% url 'allergy_form_get_existing' allergy.id %}" hx-target="closest tr" hx-swap="outerHTML" class="h-full w-full block text-sm text-gray-900 group-hover:text-blue-600 overflow-hidden whitespace-nowrap text-ellipsis">
+            {{ allergy.verification_status_cc.first }}
+        </a>
+    </td>
+    <td class="w-1/7 h-12">
+        <a hx-get="{% url 'allergy_form_get_existing' allergy.id %}" hx-target="closest tr" hx-swap="outerHTML" class="h-full w-full block text-sm text-gray-900 group-hover:text-blue-600 overflow-hidden whitespace-nowrap text-ellipsis">
+            {{ allergy.type_cc.first }}
+        </a>
+    </td>
+    <td class="w-1/7 h-12">
+        <a hx-get="{% url 'allergy_form_get_existing' allergy.id %}" hx-target="closest tr" hx-swap="outerHTML" class="h-full w-full block text-sm text-gray-900 group-hover:text-blue-600 overflow-hidden whitespace-nowrap text-ellipsis">
+            {{ allergy.category_codes.first }}
+        </a>
+    </td>
+    <td class="w-1/7 h-12">
+        <a hx-get="{% url 'allergy_form_get_existing' allergy.id %}" hx-target="closest tr" hx-swap="outerHTML" class="h-full w-full block text-sm text-gray-900 group-hover:text-blue-600 overflow-hidden whitespace-nowrap text-ellipsis">
+            {{ allergy.recordedDate }}
+        </a>
+    </td>
+</tr>

@@ -15,3 +15,6 @@ add bindings for observation
 clinician preferences:
 allergy vs intolerance? seperate or filter? https://www.reddit.com/r/medicine/comments/1i4hle2/what_is_the_most_ridiculous_allergy_youve_seen_a/m7v9tyo/
 
+
+autocomplete on type
+fill out all fields

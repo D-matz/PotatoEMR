@@ -1,12 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from ..FHIR_DataTypes.FHIR_generalpurpose import *
 from ..FHIR_Resources.Patient import FHIR_Patient
 from ..FHIR_Resources.AllergyIntolerance import FHIR_AllergyIntolerance, FHIR_AllergyIntolerance_Reaction, FHIR_AllergyIntolerance_Reaction_Manifestation, FHIR_AllergyIntolerance_Reaction_Note
-from .form_addAllergyIntolerance import AllergyIntoleranceForm, ReactionForm, ManifestationForm, NoteForm, ReactionNoteForm
+from .form_AllergyBig import AllergyIntoleranceForm, ReactionForm, ManifestationForm, NoteForm, ReactionNoteForm
 from django.http import HttpResponse
-from django.db import transaction
-from django.utils import timezone
-from django.forms import inlineformset_factory
 import json
 from django.http import QueryDict
 
@@ -71,10 +68,10 @@ def formatForTemplate(boundFormAndChildren, thisFormType, formTypes):
             return_BoundFormAndChildren[childListName] = [child_BoundFormAndChildren]
     return return_BoundFormAndChildren
 
-def allergy_intolerance(request, id):
+def allergy_intolerance_bigForm(request, id):
     patient_model = FHIR_Patient.objects.filter(id=id).first()
     if not patient_model:
-        return HttpResponse("patient not found " + id)
+        return HttpResponse("patient not found " + str(id))
 
     #example with one form each
     #populates template starting data on get
@@ -105,7 +102,7 @@ def allergy_intolerance(request, id):
 
     #GET request just looks up patient allergy page
     if request.method == 'GET':
-        return render(request, 'allergy_overview.html', context)
+        return render(request, 'allergyBig_overview.html', context)
     else:
         #POST
         #to respond to POST send just page allergy_overview_content, don't need to refresh nav bar as well
@@ -128,8 +125,11 @@ def allergy_intolerance(request, id):
         boundFormAndChildren = jsonToForms(formTypes=allergyFormTypes, formData=allergyPostJSON)
         boundFormsTemplateFormat = formatForTemplate(boundFormAndChildren=boundFormAndChildren, thisFormType="allergy", formTypes=allergyFormTypes)
         is_valid = boundFormAndChildren["valid"]
+        print("not valid?", boundFormAndChildren)
         
         allergy_codes = [boundFormsTemplateFormat['allergy_form'].cleaned_data.get('code_cc')] #[] because manyToMany field but single select form input
+
+        #patient can't have more than one of each allergy code
         if FHIR_AllergyIntolerance.objects.filter(
             patient=patient_model,
             code_cc__in=allergy_codes
@@ -137,6 +137,7 @@ def allergy_intolerance(request, id):
             is_valid = False
             boundFormsTemplateFormat['allergy_form'].add_error('code_cc', "Error: Allergy " + allergy_codes[0].display + " already exists for " + str(patient_model))
 
+        #each reaction note in a manifestation must mention a reaction by name
         for reaction in boundFormsTemplateFormat["reaction_list"]:
             manifestation_displays = []
             for manifestation in reaction['manifestation_list']:
@@ -156,18 +157,19 @@ def allergy_intolerance(request, id):
                         reaction_note['reactionNote_form'].add_error('text', "Error: The reaction note must mention a manifestation from this reaction. This reaction currently has no manifestations selected.")
                     else:
                         reaction_note['reactionNote_form'].add_error('text', "Error: The reaction note must mention a manifestation from this reaction: " + str(manifestation_displays))
+        
         if not is_valid:
             #return bound form with errors
             context["allergyFormAndChildren"] = boundFormsTemplateFormat
-            return render(request, 'allergy_overview_content.html', context)
+            return render(request, 'allergyBig_overview_content.html', context)
 
         #form validated, save models and return page with new allergy
         saved_models = saveAllModels(boundFormAndChildren, patient_model)
         #actually seems like we don't need to get objects again for new allergy object, maybe since evaluated lazily, but here for clarity
         context["allergy_list"] = FHIR_AllergyIntolerance.objects.filter(patient=patient_model)
-        return render(request, 'allergy_overview_content.html', context)
-    
-def allergy_intolerance_reactionDetail(request, allergy_id):
+        return render(request, 'allergyBig_overview_content.html', context)
+
+def allergy_intolerance_bigForm_reactionDetail(request, allergy_id):
     allergy = FHIR_AllergyIntolerance.objects.get(id=allergy_id)
     print("allergy", allergy)
-    return render(request, 'allergy_listItem_reactionInfo.html', {'allergy': allergy})
+    return render(request, 'allergyBig_listItem_reactionInfo.html', {'allergy': allergy})

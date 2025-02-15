@@ -1,0 +1,27 @@
+<div x-data="{
+    options: {{ choice_values }},
+    selected: '',
+    open: false,
+    filter: ''
+}" class="w-full">
+    <input type="hidden" name="code_cc" x-model="selected">
+    <div @click="open = !open" class="p-3 rounded-lg flex gap-2 border border-neutral-300 cursor-pointer truncate h-12 bg-white">
+        <span x-text="selected || '{{ initial_value }}'"></span>
+    </div>
+    <div class="p-1 rounded-lg flex gap-1 {{ field_width }} shadow-lg absolute flex-col bg-white mt-3" 
+        x-show="open" x-trap="open" @click.outside="open = false" @keydown.escape.window="open = false" 
+        x-transition>
+        <input x-model="filter" placeholder="filter" class="border-b outline-none p-3 -mx-3 pt-0" type="text">
+        <div class="overflow-y-auto max-h-48 h-48 flex flex-col">
+            <p x-show="! $el.parentNode.innerText.toLowerCase().includes(filter.toLowerCase())" class="text-neutral-400 text-center font-bold text-2xl">
+                –
+            </p>
+            <template x-for="option in options.filter(o => o.toLowerCase().includes(filter.toLowerCase()))">
+                <div @click="selected = option; open = false"
+                class="flex items-center hover:bg-gray-200 focus:bg-gray-200 p-2">
+                    <span x-text="option" class="ml-2 text-sm font-medium text-gray-900 flex-grow"></span>
+                </div>    
+            </template>
+        </div>
+    </div>
+</div>

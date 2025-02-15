@@ -3,18 +3,18 @@
 
     <div class="flex flex-wrap">
     {% for field in reaction.reaction_form %}
-        {% include "allergy_field.html" %}
+        {% include "allergyBig_field.html" %}
     {% endfor %}
     </div>
 
     {% for manifestation in reaction.manifestation_list %} 
-        {% include "allergy_form_reaction_manifestation.html" %}
+        {% include "allergyBig_form_reaction_manifestation.html" %}
     {% endfor %}
     <button class="ml-4 px-6 py-2 bg-teal-200 hover:bg-teal-100 font-semibold rounded-lg shadow-md focus:outline-none" 
     type="button" onclick="addForm(this, 'example_manifestation')">Add Another Manifestation</button>
 
     {% for reactionNote in reaction.reactionNote_list %}
-        {% include "allergy_form_reaction_note.html" %}
+        {% include "allergyBig_form_reaction_note.html" %}
     {% endfor %}
     <button class="ml-4 px-6 py-2 bg-green-300 hover:bg-green-200 font-semibold rounded-lg shadow-md focus:outline-none" 
      type="button" onclick="addForm(this, 'example_reaction_note')">Add Another Reaction Note</button>

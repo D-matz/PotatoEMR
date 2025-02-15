@@ -5,14 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}PotatoEMR{% endblock %}</title>
     <script src="https://unpkg.com/htmx.org@1.9.3"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/remove-me.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/D-matz/json-data-nested/json-data-nested.js"></script>
+    <script src="https://unpkg.com/htmx-ext-preload@2.1.0/preload.js"></script>
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <script defer src="https://unpkg.com/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+
+        .fade-me-out.htmx-swapping {
+          opacity: 0;
+          transition: opacity 3s ease-out 2s;
+        }
+        </style>
 </head>
-<body>
-    <nav>link1, link2, link3</nav>
+<body hx-ext="preload">
+    <nav>potato emr</nav>
     <div id="commonBasePageContent" class="m-4 max-w-6xl w-full mx-auto">
         {% block content %}
         {% endblock %}
     </div>
 </body>
+{% block scripts %}
+{% endblock %}
 </html>

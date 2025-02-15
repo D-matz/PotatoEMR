@@ -2,24 +2,32 @@ from django.db import models
 from ..FHIR_DataTypes.FHIR_generalpurpose import *
 
 class FHIR_AllergyIntolerance(models.Model):
+
     #identifier foreign key to this
-    clinical_status_cc = models.ForeignKey('FHIR_GP_Coding', on_delete=models.SET_NULL, related_name='allergyintolerance_clinicalstatus', null=True, blank=True,
-        limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-allergyintolerance-clinical.html'})
+    BINDING_RULE_CLINICAL_STATUS = 'https://www.hl7.org/fhir/valueset-allergyintolerance-clinical.html'
+    clinical_status_cc = models.ManyToManyField('FHIR_GP_Coding', related_name='allergyintolerance_clinicalstatus', blank=True, limit_choices_to={'binding__binding_rule': BINDING_RULE_CLINICAL_STATUS})
     clinical_status_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    verification_status_cc = models.ManyToManyField('FHIR_GP_Coding', related_name='allergyintolerance_verificationstatus', blank=True,
-        limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-allergyintolerance-verification.html'})
+
+    BINDING_RULE_VERIFICATION = 'https://www.hl7.org/fhir/valueset-allergyintolerance-verification.html'
+    verification_status_cc = models.ManyToManyField('FHIR_GP_Coding', related_name='allergyintolerance_verificationstatus', blank=True, limit_choices_to={'binding__binding_rule': BINDING_RULE_VERIFICATION})
     verification_status_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    type_cc = models.ManyToManyField('FHIR_GP_Coding', related_name='allergyintolerance_type', blank=True,
-        limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-allergy-intolerance-type.html'})
-    category_codes = models.ManyToManyField('FHIR_GP_Coding', related_name='allergyintolerance_category', blank=True,
-        limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-allergy-intolerance-category.html'})
-    criticality_code = models.ForeignKey('FHIR_GP_Coding', on_delete=models.SET_NULL, null=True, blank=True,
-        limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-allergy-intolerance-criticality.html'})
-    code_cc = models.ManyToManyField('FHIR_GP_Coding', related_name='allergyintolerance_code', blank=True,
-        limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-allergyintolerance-code.html'})
+
+    BINDING_RULE_TYPE = 'https://www.hl7.org/fhir/valueset-allergy-intolerance-type.html'
+    type_cc = models.ManyToManyField('FHIR_GP_Coding', related_name='allergyintolerance_type', blank=True, limit_choices_to={'binding__binding_rule': BINDING_RULE_TYPE})
+
+    BINDING_RULE_CATEGORY = 'https://www.hl7.org/fhir/valueset-allergy-intolerance-category.html'
+    category_codes = models.ManyToManyField('FHIR_GP_Coding', related_name='allergyintolerance_category', blank=True, limit_choices_to={'binding__binding_rule': BINDING_RULE_CATEGORY})
+
+    BINDING_RULE_CRITICALITY = 'https://www.hl7.org/fhir/valueset-allergy-intolerance-criticality.html'
+    criticality_code = models.ForeignKey('FHIR_GP_Coding', related_name='allergyintolerance_criticality', on_delete=models.SET_NULL, null=True, blank=True, limit_choices_to={'binding__binding_rule': BINDING_RULE_CRITICALITY})
+
+    BINDING_RULE_CODE = 'https://www.hl7.org/fhir/valueset-allergyintolerance-code.html'
+    code_cc = models.ManyToManyField('FHIR_GP_Coding', related_name='allergyintolerance_code', blank=True, limit_choices_to={'binding__binding_rule': BINDING_RULE_CODE})   
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+
     patient = models.ForeignKey('FHIR_Patient', on_delete=models.CASCADE, null=False)
     encounter = models.ForeignKey('FHIR_Encounter', on_delete=models.SET_NULL, null=True, blank=True)
+
     onset_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True)
     onset_age = models.OneToOneField(FHIR_GP_Quantity_Age, on_delete=models.SET_NULL, null=True, blank=True)
     onset_period = models.OneToOneField(FHIR_GP_Period, on_delete=models.SET_NULL, null=True, blank=True)

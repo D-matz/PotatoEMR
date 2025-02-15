@@ -101,6 +101,8 @@ class AllergyIntoleranceForm(forms.ModelForm):
         allergy_model.type_cc.add(self.cleaned_data.get('type_cc'))
         allergy_model.category_codes.add(self.cleaned_data.get('category_codes'))
         allergy_model.code_cc.add(self.cleaned_data.get('code_cc'))
+        allergy_model.clinical_status_cc.add(self.cleaned_data.get('clinical_status'))
+        allergy_model.criticality_code.add(self.cleaned_data.get('criticality_code'))
         allergy_model.save()
         return allergy_model
 
@@ -208,10 +210,12 @@ class ManifestationForm(forms.ModelForm):
         model = FHIR_AllergyIntolerance_Reaction_Manifestation
         fields = [
             'manifestation_cc',
-        ]    
+        ]
     def save(self, parent):
         manifestation = super().save(commit=False)
+        print("HELLO", self.cleaned_data.get('manifestation_cc'))
         manifestation.reaction = parent
         manifestation.save()
-        manifestation.manifestation_cc.add(self.cleaned_data.get('manifestation_cc'))
+        if self.cleaned_data.get('manifestation_cc'):
+            manifestation.manifestation_cc.set([self.cleaned_data['manifestation_cc']])
         return manifestation
