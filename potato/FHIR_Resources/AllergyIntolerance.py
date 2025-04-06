@@ -69,8 +69,9 @@ class FHIR_AllergyIntolerance_Reaction(models.Model):
     #manifestation foreign key to this
     description = FHIR_primitive_StringField(max_length=10000, null=True, blank=True)
     onset = FHIR_primitive_DateTimeField(null=True, blank=True)
+    BINDING_RULE_SEVERITY = 'https://www.hl7.org/fhir/valueset-reaction-event-severity.html'
     severity = models.ForeignKey('FHIR_GP_Coding', related_name='allergyintolerance_reaction_severity', on_delete=models.SET_NULL, null=True, blank=True,
-        limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-reaction-event-severity.html'})
+        limit_choices_to={'binding__binding_rule': BINDING_RULE_SEVERITY})
     exposureRoute_cc = models.ManyToManyField('FHIR_GP_Coding', related_name='allergyintolerance_reaction_exposureroute', blank=True,
         limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-route-codes.html'})
     exposureRoute_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
@@ -87,8 +88,9 @@ class FHIR_AllergyIntolerance_Reaction(models.Model):
 class FHIR_AllergyIntolerance_Reaction_Manifestation(models.Model):
     reaction = models.ForeignKey(FHIR_AllergyIntolerance_Reaction, on_delete=models.CASCADE, related_name='manifestations')
     manifestation_ref = models.ForeignKey('FHIR_Observation', on_delete=models.SET_NULL, null=True, blank=True)
+    BINDING_RULE_MANIFESTATION = 'https://www.hl7.org/fhir/valueset-clinical-findings.html'
     manifestation_cc = models.ManyToManyField('FHIR_GP_Coding', related_name='allergyintolerance_reaction_manifestation_cc', blank=True,
-        limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-clinical-findings.html'})
+        limit_choices_to={'binding__binding_rule': BINDING_RULE_MANIFESTATION})
     manifestation_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     #todo change to snomed ct code - is a clinical finding
 # @receiver(m2m_changed, sender=FHIR_AllergyIntolerance_Reaction_Manifestation.manifestation_cc.through)
