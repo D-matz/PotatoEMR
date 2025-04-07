@@ -29,8 +29,17 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('empty', common_views.empty_view, name="empty"),
     path('', CommonHomePage_view.home_page, name="CommonHomePage_index"),
-    path('login', CommonLogin_view.login_page, name="CommonLogin_index"),
-    path('login/', CommonLogin_view.login_page, name="CommonLogin_index"),
+#    path('login', CommonLogin_view.login_view, name="CommonLogin_index"),
+#    path('login/', CommonLogin_view.login_view, name="CommonLogin_index"),
+    path("login", CommonLogin_view.CustomLoginView.as_view(), name="CommonLogin_loginIndex"),
+    path("login/", CommonLogin_view.CustomLoginView.as_view(), name="CommonLogin_loginIndex"),
+    path("login_partial", CommonLogin_view.CustomLoginViewPartial.as_view(), name="CommonLogin_loginPartial"),
+    path("signup", CommonLogin_view.CustomSignupView.as_view(), name="CommonSignup_signupIndex"),
+    path("signup/", CommonLogin_view.CustomSignupView.as_view(), name="CommonSignup_signupIndex"),
+    path("signup_partial", CommonLogin_view.CustomSignupViewPartial.as_view(), name="CommonSignup_signupPartial"),
+    path('logout', CommonLogin_view.logout_view, name="CommonLogout_index"),
+    path('logout/', CommonLogin_view.logout_view, name="CommonLogout_index"),
+    path('accounts/', include('allauth.urls')),
 
     path("patient-registration", view_registerPatient.create_patient, name="register_patient"),
     path("patient/<int:id>/", view_patientOverview.patient_overview, name="patient_overview"),
@@ -38,7 +47,7 @@ urlpatterns = [
     # #allergy/intolerance, one big form
     # path("patient/<int:id>/allergy-intolerance-bigForm", view_AllergyBig.allergy_intolerance_bigForm, name="allergy_intolerance_bigForm"),
     # path("patient/allergy-intolerance-bigForm-reactionDetail/<int:allergy_id>", view_AllergyBig.allergy_intolerance_bigForm_reactionDetail, name="allergy_intolerance_bigForm_reactionDetail"),
- 
+
     # #allergy/intolerance test
     # path("patient/<int:id>/test-allergy-intolerance", view_allergyIntoleranceTest.allergy_intolerance, name="allergy_intolerance"),
     # path("patient/<int:allergy_id>/test-allergy-form-allergy-row", view_allergyIntoleranceTest.allergy_form_allergy_row, name="allergy_form_allergy_row"),

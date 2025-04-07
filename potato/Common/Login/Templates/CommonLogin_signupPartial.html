@@ -1,0 +1,42 @@
+  <form method="post" class="w-100">
+    {% csrf_token %}
+
+    {% if form.errors %}
+      {% for error in form.non_field_errors %}
+        <p class="text-danger small mt-0 mb-3">{{ error }}</p>
+      {% endfor %}
+    {% endif %}
+
+    <input style="background-color: #f8f9fa;" type="email" name="email" id="id_email" class="form-control mb-2" value="{{ form.email.value }}" placeholder="Email" required>
+    {% for error in form.email.errors %}
+      <p class="text-danger small mt-0 mb-3">{{ error }}</p>
+    {% endfor %}
+
+    <input style="background-color: #f8f9fa;" type="text" name="username" id="id_username" class="form-control mb-2" value="{{ form.username.value }}" placeholder="Username" required>
+    {% for error in form.username.errors %}
+      <p class="text-danger small mt-0 mb-3">{{ error }}</p>
+    {% endfor %}
+
+    <input style="background-color: #f8f9fa;" type="password" name="password1" id="id_password1" class="form-control mb-2" value="{{ form.password1.value }}" placeholder="Password" required>
+    {% for error in form.password1.errors %}
+      <p class="text-danger small mt-0 mb-3">{{ error }}</p>
+    {% endfor %}
+
+    <input style="background-color: #f8f9fa;" type="password" name="password2" id="id_password2" class="form-control mb-2" value="{{ form.password2.value }}" placeholder="Confirm Password" required>
+    {% for error in form.password2.errors %}
+      <p class="text-danger small mt-0 mb-3">{{ error }}</p>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-link p-0">Sign Up</button>
+  </form>
+
+
+ <div class="d-flex justify-content-start w-100">
+   <a hx-get="{% url 'CommonLogin_loginPartial' %}" hx-target="#login_box" hx-swap="innerHTML" hx-push-url="/login">
+     <button class="btn btn-link p-0">
+       <br>
+       <p class="mb-0" style="text-align: left;">Have an account already?</p>
+       <p class="mt-0" style="text-align: left;">Return to Login</p>
+     </button>
+   </a>
+ </div>
