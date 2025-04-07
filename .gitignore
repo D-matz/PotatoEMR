@@ -26,4 +26,4 @@ venv/
 # MacOS-specific
 .DS_Store
 
-PotatoEMR/env_secrets.py
+PotatoEMR/settings_secrets.py

@@ -166,6 +166,11 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-ACCOUNT_EMAIL_VERIFICATION = "none"
-SOCIALACCOUNT_LOGIN_ON_GET = True
-SOCIALACCOUNT_PROVIDERS = envsecret_SOCIALACCOUNT_PROVIDERS
+try:
+    ACCOUNT_EMAIL_VERIFICATION = "none"
+    SOCIALACCOUNT_LOGIN_ON_GET = True
+    SOCIALACCOUNT_PROVIDERS = settings_secrets_SOCIALACCOUNT_PROVIDERS
+    SOCIALACCOUNT_ENABLED = True
+except:
+    print("settings_secrets_SOCIALACCOUNT_PROVIDERS not defined in settings_secrets.py so social login is disabled")
+    SOCIALACCOUNT_ENABLED = False
