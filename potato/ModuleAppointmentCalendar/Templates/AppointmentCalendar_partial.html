@@ -1,0 +1,24 @@
+<div class="container mt-4">
+    <div class="row">
+        <!-- Left Column: Date Picker -->
+        <div class="col-md-4">
+          <label for="date-picker" class="form-label">Choose date:</label>
+          <input
+              type="date"
+              id="date-picker"
+              name="selected_date"
+              class="form-control"
+              value="{{ today|date:'Y-m-d' }}"
+              hx-get="{% url 'home_calendarDateAppointmentList_partial' %}"
+              hx-trigger="change"
+              hx-target="#date-results">
+              <div>department chooser</div>
+              <div>department filter</div>
+        </div>
+
+        <!-- Right Column: Calendar Results -->
+        <div class="col-md-8">
+          {% include "AppointmentCalendar_DateAppointmentTable_partial.html" with seeDate=today %}
+        </div>
+    </div>
+</div>

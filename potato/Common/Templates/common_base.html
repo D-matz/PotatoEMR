@@ -125,12 +125,13 @@
     </svg>
 
     <nav class="navbar navbar-expand-lg bg-body-tertiary w-100" style="background-color: rebeccapurple !important;">
-        <a class="navbar-brand px-0 px-lg-3" href="{% url 'CommonHomePage_index' %}" style="color: white !important;">🥔 PotatoEMR</a>
+        <a class="navbar-brand px-0 px-sm-3" href="{% url 'CommonHomePage_index' %}" style="color: white !important;">🥔 PotatoEMR</a>
 
         <div class="ms-auto d-flex align-items-center">
-          <a href="{% url 'CommonLogout_index' %}" class="px-0 px-lg-3"style="color: white !important;">Logout</a>
+          <a href="/" class="px-0 px-sm-3"style="color: white !important;">{{ user.get_username }}</a>
+          <a href="{% url 'CommonLogout_index' %}" class="px-0 px-sm-3"style="color: white !important;">Logout</a>
           <div>
-              <button class="btn btn-link nav-link px-0 px-lg-3 py-2 dropdown-toggle d-flex align-items-center"
+              <button class="btn btn-link nav-link px-0 px-sm-3 py-2 dropdown-toggle d-flex align-items-center"
                       id="bd-theme"
                       type="button"
                       aria-expanded="false"
@@ -167,7 +168,7 @@
           </div>
         </div>
     </nav>
-    <div id="commonBasePageContent" class="m-4 max-w-6xl w-full mx-auto">
+    <div id="commonBasePageContent">
         {% block content %}
         {% endblock %}
     </div>
