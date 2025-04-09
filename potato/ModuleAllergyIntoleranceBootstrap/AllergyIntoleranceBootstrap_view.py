@@ -86,6 +86,7 @@ def allergy_intolerance_existing(request, patient_id, allergy_id):
             allergy_form.save()
         else:
             context['save_result'] = "Save_Failed"
+            print("save failed 1")
         print("allergy_model saved", allergy_model, allergy_model.id, allergy_model.code_cc.all(), "type", allergy_model.type_cc.all())
         context['allergy_form'] = allergy_form
         note_form = AllergyIntoleranceNoteForm(instance=allergy_model.notes.first(), data=request.POST)
@@ -93,12 +94,14 @@ def allergy_intolerance_existing(request, patient_id, allergy_id):
             note_form.save()
         else:
             context['save_result'] = "Save_Failed"
+            print("save failed 2")
         context['note_form'] = note_form
         reaction_form = AllergyIntoleranceReactionForm(instance=allergy_model.reactions.first(), data=request.POST)
         if reaction_form.is_valid():
             reaction_form.save()
         else:
             context['save_result'] = "Save_Failed"
+            print("save failed 3", reaction_form.errors)
         context['reaction_form'] = reaction_form
 
         manifestation_forms = []
@@ -121,6 +124,7 @@ def allergy_intolerance_existing(request, patient_id, allergy_id):
                     manifestation_form.save()
                 else:
                     context['save_result'] = "Save_Failed"
+                    print("save failed 4")
 
                 manifestation_forms.append(manifestation_form)
         context['manifestation_forms'] = manifestation_forms

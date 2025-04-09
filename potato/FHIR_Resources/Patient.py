@@ -17,8 +17,8 @@ class FHIR_Patient(models.Model):
     deceased_boolean = FHIR_primitive_BooleanField(null=True, help_text="Indicates if the individual is deceased")
     deceased_date_time = FHIR_primitive_DateTimeField(null=True) #help_text="DateTime of death if applicable"
     #address foreign key to this, related_name=patient_addresses
-    marital_status_cc = models.ManyToManyField(FHIR_GP_Coding, related_name="patient_maritalstatus",
-                                            limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-marital-status.html'})
+    # marital_status_cc = models.ManyToManyField(FHIR_GP_Coding, related_name="patient_maritalstatus",
+    #                                         limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-marital-status.html'})
     marital_status_cctext = FHIR_primitive_StringField(max_length=255, null=True, blank=True)
     multiple_birth_boolean = FHIR_primitive_BooleanField(null=True) #Whether patient is part of a multiple birth
     multiple_birth_integer = FHIR_primitive_PositiveIntField(null=True, blank=True) #Order in a multiple birth
@@ -66,16 +66,16 @@ class FHIR_Patient_Contact(models.Model):
     patient = models.ForeignKey(FHIR_Patient, related_name="patient_contacts", on_delete=models.CASCADE)
 class FHIR_Patient_Contact_Relationship(models.Model):
     patient_contact = models.ForeignKey(FHIR_Patient_Contact, related_name="patient_contact_relationships", on_delete=models.CASCADE)
-    relationship_cc = models.ManyToManyField(FHIR_GP_Coding, related_name="patient_contact_relationship_cc",
-                                            limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-patient-contactrelationship.html'})
+    # relationship_cc = models.ManyToManyField(FHIR_GP_Coding, related_name="patient_contact_relationship_cc",
+    #                                         limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-patient-contactrelationship.html'})
 class FHIR_Patient_Contact_Telecom(FHIR_GP_ContactPoint):
     patient_contact = models.ForeignKey(FHIR_Patient_Contact, related_name="patient_contact_telecoms", on_delete=models.CASCADE)
 
 
 class FHIR_Patient_Communication(models.Model):
-    language_cc = models.ManyToManyField(FHIR_GP_Coding, related_name="patient_communication_language",
-                                            limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-languages.html'})
-    language_cctext = FHIR_primitive_StringField(max_length=255, null=True, blank=True)
+    # language_cc = models.ManyToManyField(FHIR_GP_Coding, related_name="patient_communication_language",
+    #                                         limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-languages.html'})
+    # language_cctext = FHIR_primitive_StringField(max_length=255, null=True, blank=True)
     preferred = FHIR_primitive_BooleanField()
     patient = models.ForeignKey(FHIR_Patient, related_name="patient_communications", on_delete=models.CASCADE)
 

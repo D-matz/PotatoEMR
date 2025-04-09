@@ -62,10 +62,10 @@ class TriggeredByThrough(models.Model):
         ('unknown', 'Unknown'),
     ], null=False, blank=False, default='unknown')
 
-    category = models.ManyToManyField('FHIR_GP_Coding', related_name="observation_category", blank=True,
-        limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-observation-category.html'})
-    code = models.ManyToManyField('FHIR_GP_Coding', related_name="observation_code", blank=True,
-        limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-observation-codes.html'})
+    # category = models.ManyToManyField('FHIR_GP_Coding', related_name="observation_category", blank=True,
+    #     limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-observation-category.html'})
+    # code = models.ManyToManyField('FHIR_GP_Coding', related_name="observation_code", blank=True,
+    #     limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-observation-codes.html'})
     
     subject_patient = models.ForeignKey('FHIR_Patient', related_name="observation_subject_patient", on_delete=models.SET_NULL, null=True, blank=True)
     subject_group = models.ForeignKey('FHIR_Group', related_name="observation_subject_group", on_delete=models.SET_NULL, null=True, blank=True)

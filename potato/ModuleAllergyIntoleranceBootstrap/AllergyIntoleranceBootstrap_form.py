@@ -12,7 +12,7 @@ from potato.FHIR_Resources.AllergyIntolerance import (
 
 class AllergyIntoleranceForm(forms.ModelForm):
     code_cc = forms.ModelChoiceField(
-        queryset=FHIR_GP_Coding.objects.filter(binding__binding_rule=FHIR_AllergyIntolerance.BINDING_RULE_CODE).order_by('display', 'code'),
+        queryset=FHIR_GP_Coding.objects.filter(codings__binding_rule=FHIR_AllergyIntolerance.BINDING_RULE_CODE).order_by('display', 'code'),
         widget=forms.Select(attrs={
             'class': 'form-select tomselect',
             'data-plugins': 'remove_button',
@@ -21,7 +21,7 @@ class AllergyIntoleranceForm(forms.ModelForm):
         })
     )
     type_cc = forms.ModelChoiceField(
-        queryset=FHIR_GP_Coding.objects.filter(binding__binding_rule=FHIR_AllergyIntolerance.BINDING_RULE_TYPE).order_by('display', 'code'),
+        queryset=FHIR_GP_Coding.objects.filter(codings__binding_rule=FHIR_AllergyIntolerance.BINDING_RULE_TYPE).order_by('display', 'code'),
         widget=forms.Select(attrs={'class': 'form-control form-control-sm'})
     )
     
@@ -64,7 +64,8 @@ class AllergyIntoleranceReactionForm(forms.ModelForm):
 class AllergyIntoleranceReactionManifestationForm(forms.ModelForm):
     manifestation_cc = forms.ModelChoiceField(
         required=False,
-        queryset=FHIR_GP_Coding.objects.filter(binding__binding_rule=FHIR_AllergyIntolerance_Reaction_Manifestation.BINDING_RULE_MANIFESTATION).order_by('display', 'code'),
+        queryset=FHIR_GP_Coding.objects.filter(codings__binding_rule=FHIR_AllergyIntolerance_Reaction_Manifestation.BINDING_RULE_MANIFESTATION).order_by('display', 'code'),
+#        queryset=FHIR_GP_Coding.objects.filter(binding__binding_rule=FHIR_AllergyIntolerance_Reaction_Manifestation.BINDING_RULE_MANIFESTATION).order_by('display', 'code'),
         widget=forms.Select(attrs={'class': 'form-select tomselect', 'data-plugins': 'remove_button', 'autocomplete': 'off', 'data-allow-empty': 'true'})
     )
     

@@ -43,11 +43,7 @@ class FHIR_GP_Attachment(models.Model):
 #the binding might be just a link to a coding uri, but it might also have a rule
 #for example, http://snomed.info/sct but also only children of 284009009 route of administration
 
-class FHIR_GP_Binding(models.Model):
-    binding_rule = models.CharField(max_length=5678, null=True, blank=True)
-    def __str__(self):
-        return self.binding_rule
-
+#a binding has a set of codings
 
 class FHIR_GP_Coding(models.Model):     
     system = FHIR_primitive_URIField(max_length=1024)  # Identity of the terminology system (URI)
@@ -55,12 +51,18 @@ class FHIR_GP_Coding(models.Model):
     code = FHIR_primitive_CodeField(max_length=1024, null=True, blank=True)  # Symbol in syntax defined by the system
     display = FHIR_primitive_StringField(max_length=256, null=True, blank=True)  # Representation defined by the system (optional)
     userSelected = FHIR_primitive_BooleanField()  # If this coding was chosen directly by the user
-    binding = models.ManyToManyField(FHIR_GP_Binding, related_name="bindings")
     def __str__(self):
         if self.display:
             return self.display
         else:
             return self.code
+
+class FHIR_GP_Binding(models.Model):
+    binding_rule = models.CharField(max_length=5678, null=True, blank=True)
+    binding_codings = models.ManyToManyField(FHIR_GP_Coding, related_name="codings")
+    def __str__(self):
+        return self.binding_rule
+
 
 class FHIR_GP_Quantity(models.Model):
     class Comparator(models.TextChoices):
@@ -219,8 +221,14 @@ class FHIR_GP_SampledData(models.Model):
 class FHIR_GP_Identifier(models.Model):
     class IdentifierUse(models.TextChoices): USUAL = "usual", "Usual"; OFFICIAL = "official", "Official"; TEMP = "temp", "Temporary"; SECONDARY = "secondary", "Secondary"; OLD = "old", "Old"
     use = FHIR_primitive_CodeField(max_length=16, choices=IdentifierUse.choices, null=True, blank=True)
-    type = models.ManyToManyField(FHIR_GP_Coding, related_name="identifier_type",
-                                  limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-identifier-type.html'})
+    # type = models.ManyToManyField(FHIR_GP_Coding, related_name="identifier_type",
+    #                               limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-identifier-type.html'})
+
+    type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={'codings__binding_rule': "https://www.hl7.org/fhir/valueset-identifier-type.html"})
+    type_cctext = FHIR_primitive_StringField(max_length=250, null=True, blank=True)
+
+
+
     type_cctext = FHIR_primitive_StringField(max_length=255, null=True, blank=True)
     system = FHIR_primitive_URIField(max_length=1024, null=True, blank=True)
     value = FHIR_primitive_StringField(max_length=1024, null=True, blank=True)
@@ -333,8 +341,10 @@ class FHIR_GP_Annotation(models.Model):
     #author_type = FHIR_primitive_CodeField(max_length=20, choices=AuthorType.choices, null=True, blank=True)
 
 class FHIR_GP_Timing(models.Model):
-    code_cc = models.ManyToManyField(FHIR_GP_Coding, related_name="timing_code_cc", blank=True,
-                                     limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-timing-abbreviation.html'})
+#    code_cc = models.ManyToManyField(FHIR_GP_Coding, related_name="timing_code_cc", blank=True,
+#                                     limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-timing-abbreviation.html'})
+
+    code_cc = models.ManyToManyField(FHIR_GP_Coding,limit_choices_to={'codings__binding_rule': "https://www.hl7.org/fhir/valueset-timing-abbreviation.html"})
     code_text = FHIR_primitive_StringField(max_length=50, null=True, blank=True)
 
     repeat_bounds_duration = models.OneToOneField(FHIR_GP_Quantity_Duration, null=True, blank=True, on_delete=models.CASCADE)

@@ -92,7 +92,7 @@ class Command(BaseCommand):
                             userSelected=False,
                         )
                         #print(coding_model, binding_model)
-                        coding_model.binding.add(binding_model)
+                        binding_model.binding_codings.add(coding_model)
                         
                         if created:
                             numCodingsCreated += 1                    

@@ -20,14 +20,16 @@
             data-bs-target="#modals-here">
             <td class="text-wrap small">
                 {% if allergy.code_cc.all %}
-                {{ allergy.code_cc.first.display|default:allergy.code_cc.first.code }}
+                    {{ allergy.code_cc.first.display }}
                 {% endif %}
             </td>
             <td class="text-wrap small">
                 {% if allergy.reactions.all %}
                 {% with reaction=allergy.reactions.first %}
                     {% if reaction.manifestations.all %}
-                    {{ reaction.manifestations.first.manifestation_cc.first.display|default:"" }}
+                        {% if reaction.manifestations.first.manifestation_cc.all %}
+                            {{ reaction.manifestations.first.manifestation_cc.first.display }}
+                        {% endif %}
                     {% endif %}
                 {% endwith %}
                 {% endif %}
@@ -36,14 +38,14 @@
                 {% if allergy.reactions.all %}
                 {% with reaction=allergy.reactions.first %}
                     {% if reaction.severity %}
-                    {{ reaction.severity.display|default:reaction.severity.code }}
+                    {{ reaction.severity.display }}
                     {% endif %}
                 {% endwith %}
                 {% endif %}
             </td>
             <td class="text-wrap small">
                 {% if allergy.type_cc.all %}
-                {{ allergy.type_cc.first.display|default:allergy.type_cc.first.code }}
+                {{ allergy.type_cc.first.display }}
                 {% endif %}
             </td>
             <td class="text-wrap small">

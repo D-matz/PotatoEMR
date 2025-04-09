@@ -18,3 +18,8 @@ allergy vs intolerance? seperate or filter? https://www.reddit.com/r/medicine/co
 
 autocomplete on type
 fill out all fields
+
+run SaveCodingsToDB.py when first creating database
+form to add new allergy
+maybe dont save whole allergy unless whole thing validates
+flash on save?
