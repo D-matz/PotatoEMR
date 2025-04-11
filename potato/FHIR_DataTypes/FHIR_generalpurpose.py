@@ -45,7 +45,7 @@ class FHIR_GP_Attachment(models.Model):
 
 #a binding has a set of codings
 
-class FHIR_GP_Coding(models.Model):     
+class FHIR_GP_Coding(models.Model):
     system = FHIR_primitive_URIField(max_length=1024)  # Identity of the terminology system (URI)
     version = FHIR_primitive_StringField(max_length=256, null=True, blank=True)  # Version of the system (optional)
     code = FHIR_primitive_CodeField(max_length=1024, null=True, blank=True)  # Symbol in syntax defined by the system
@@ -244,7 +244,7 @@ class FHIR_GP_Identifier(models.Model):
 
 class FHIR_GP_HumanName(models.Model):
     class NameUseChoices(models.TextChoices): USUAL = 'usual', 'Usual'; OFFICIAL = 'official', 'Official'; TEMP = 'temp', 'Temporary'; NICKNAME = 'nickname', 'Nickname'; ANONYMOUS = 'anonymous', 'Anonymous'; OLD = 'old', 'Old'; MAIDEN = 'maiden', 'Maiden'
-    use = models.CharField(max_length=20, choices=NameUseChoices.choices, null=True, blank=True)
+    use = FHIR_primitive_CodeField(max_length=20, choices=NameUseChoices.choices, null=True, blank=True)
     text = FHIR_primitive_StringField(max_length=255, null=True, blank=True)
     family = FHIR_primitive_StringField(max_length=255, null=True, blank=True)
     period = models.OneToOneField(FHIR_GP_Period, null=True, blank=True, on_delete=models.CASCADE)
@@ -412,4 +412,3 @@ class FHIR_GP_Timing_repeat_when(models.Model):
         PCV = 'PCV', 'After Dinner'
     when = FHIR_primitive_CodeField(max_length=20, choices=WhenChoices.choices, null=True, blank=True)
     timing = models.ForeignKey(FHIR_GP_Timing, on_delete=models.CASCADE, related_name="repeat_when")
-

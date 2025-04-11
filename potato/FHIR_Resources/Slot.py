@@ -1,4 +1,4 @@
 from ..FHIR_DataTypes.FHIR_primitive import *
 
-class FHIR_Substance(models.Model):
+class FHIR_Slot(models.Model):
     pass

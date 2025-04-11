@@ -38,9 +38,8 @@ urlpatterns = [
     path('logout/', CommonLogin_view.logout_view, name="CommonLogout_index"),
     path('accounts/', include('allauth.urls')),
 
-    path('calendar', AppointmentCalendar_view.calendar, name="home_calendar"),
+    path('calendar', AppointmentCalendar_view.calendar_whole, name="home_calendar"),
     path('calendar-partial', AppointmentCalendar_view.calendar_partial, name="home_calendar_partial"),
-    path('calendar-day-partial', AppointmentCalendar_view.dateAppointmentList_partial, name="home_calendarDateAppointmentList_partial"),
 
     path("patient-registration", view_registerPatient.create_patient, name="register_patient"),
     path("patient/<int:id>/", view_patientOverview.patient_overview, name="patient_overview"),
