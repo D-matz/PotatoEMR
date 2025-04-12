@@ -13,7 +13,7 @@
   <div class="p-2">
     <table class="table table-striped table-hover">
       <thead>
-          <tr>
+        <tr>
               <th style="width:150px">Time</th>
               <th style="width:150px">Status</th>
               <th style="width:170px">Patient</th>
@@ -26,7 +26,10 @@
           <tr><td>No appointments scheduled</td></tr>
         {% else %}
           {% for appt in appt_list %}
-            <tr>
+            <tr style="cursor: pointer;"
+                hx-get="{% url 'home_calendar_detail' appt.id %}"
+                hx-target="#apptDetails"
+                hx-trigger="click">
               <td>{{ appt.start }} - {{ appt.end }}</td>
               <td>{{ appt.status }}</td>
               <td>{{ appt.patient }}</td>
@@ -39,7 +42,7 @@
     </table>
   </div>
 
-  <div class="p-2 small" style="max-width: 200px;">
+  <div id="apptDetails" class="p-2 small" style="max-width: 200px;">
     <p>Click appointment once to show, double click to open.</p>
     <p>If no appointments are scheduled, try changing filters.</p>
     <p>If you don't see your name in dropdown, try changing location.</p>

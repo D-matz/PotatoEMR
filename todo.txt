@@ -23,3 +23,4 @@ run SaveCodingsToDB.py when first creating database
 form to add new allergy
 maybe dont save whole allergy unless whole thing validates
 flash on save?
+allergy form doesnt do tom select on save? also not sure validation/saving works with some models not existing

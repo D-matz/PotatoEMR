@@ -12,7 +12,7 @@ def patient_allergies(request, patient_id, return_html):
     patient_model = FHIR_Patient.objects.filter(id=patient_id).first()
     if not patient_model:
         return HttpResponse("patient not found " + str(patient_id))
-    
+
     for allergy in FHIR_AllergyIntolerance.objects.filter(patient=patient_model):
         if allergy.reactions.first():
             ms = allergy.reactions.first().manifestations.all()
@@ -41,7 +41,7 @@ def allergy_intolerance_existing(request, patient_id, allergy_id):
     allergy_model = FHIR_AllergyIntolerance.objects.filter(id=allergy_id).first()
     if not allergy_model:
         return HttpResponse("allergy not found " + str(allergy_id))
-    
+
     context = {
         'allergy': allergy_model,
         'patient_id': patient_id,
@@ -49,19 +49,27 @@ def allergy_intolerance_existing(request, patient_id, allergy_id):
     }
 
     if request.method == 'GET':
+        note_model = allergy_model.notes.first()
+        if not note_model:
+            note_model = allergy_model.notes.create()
+        reaction_model = allergy_model.reactions.first()
+        if not reaction_model:
+            reaction_model = allergy_model.reactions.create()
+        print("!!!", allergy_model.notes.first())
+
         context['save_result'] = "Existing"
         context['allergy_form'] = AllergyIntoleranceForm(instance=allergy_model)
-        context['note_form'] = AllergyIntoleranceNoteForm(instance=allergy_model.notes.first())
-        context['reaction_form'] = AllergyIntoleranceReactionForm(instance=allergy_model.reactions.first())
+        context['note_form'] = AllergyIntoleranceNoteForm(instance=note_model)
+        context['reaction_form'] = AllergyIntoleranceReactionForm(instance=reaction_model)
         context['manifestation_forms'] = []
         manifestation_count = 0
-        
+
         # Go through all reactions until we find at least 3 manifestations
         for reaction in allergy_model.reactions.all():
             for manifestation_model in reaction.manifestations.all():
                 prefix = f"m{manifestation_count}"
                 form = AllergyIntoleranceReactionManifestationForm(
-                    instance=manifestation_model, 
+                    instance=manifestation_model,
                     prefix=prefix
                 )
                 context['manifestation_forms'].append(form)
@@ -89,6 +97,7 @@ def allergy_intolerance_existing(request, patient_id, allergy_id):
             print("save failed 1")
         print("allergy_model saved", allergy_model, allergy_model.id, allergy_model.code_cc.all(), "type", allergy_model.type_cc.all())
         context['allergy_form'] = allergy_form
+        print("save to???", allergy_model.notes.first())
         note_form = AllergyIntoleranceNoteForm(instance=allergy_model.notes.first(), data=request.POST)
         if note_form.is_valid():
             note_form.save()
@@ -108,16 +117,16 @@ def allergy_intolerance_existing(request, patient_id, allergy_id):
         if allergy_form.is_valid():
             reaction = allergy_model.reactions.first() or FHIR_AllergyIntolerance_Reaction.objects.create(allergy_intolerance=allergy_model)
             reaction.save()
-            
+
             # Get existing manifestations or create new ones as needed
             manifestations = list(reaction.manifestations.all())
             while len(manifestations) < 3:
                 manifestations.append(FHIR_AllergyIntolerance_Reaction_Manifestation(reaction=reaction))
-            
+
             for i in range(3):
                 manifestation_form = AllergyIntoleranceReactionManifestationForm(
-                    prefix=f"m{i}", 
-                    instance=manifestations[i], 
+                    prefix=f"m{i}",
+                    instance=manifestations[i],
                     data=request.POST
                 )
                 if manifestation_form.is_valid():

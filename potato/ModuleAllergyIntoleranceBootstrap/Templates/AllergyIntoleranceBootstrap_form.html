@@ -1,13 +1,19 @@
+<style>
+  .fade-me-out.htmx-swapping {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+  }
+</style>
 <form
     id="AllergyIntoleranceBootstrap_form"
     class="container mt-4 p-4 rounded-3 bg-body"
     style="height: 85vh; overflow-y: auto"
-    hx-post="{% url 'AllergyIntoleranceBootstrap_existing' patient_id=patient_id allergy_id=allergy_id %}" 
+    hx-post="{% url 'AllergyIntoleranceBootstrap_existing' patient_id=patient_id allergy_id=allergy_id %}"
     hx-swap="outerHTML"
     hx-target="#AllergyIntoleranceBootstrap_form"
     >
     {% csrf_token %}
-    
+
       <div class="row">
         <div class="col-6">
             <div class="row mb-2">
@@ -64,11 +70,25 @@
       </div>
     <button type="submit" class="btn btn-primary mt-3">Save</button>
     <button type="button" class="btn btn-danger mt-3" data-bs-dismiss="modal">Cancel</button>
-    <div hx-ext="remove-me" class="fade-me-out position-absolute top-0 start-50 translate-middle-x mt-3" style="width: 80%;">
+    <div id="response" class="fade-me-out position-absolute top-0 start-50 translate-middle-x mt-3" style="width: 80%;">
         {% if save_result == "Save_Success" %}
-            <div remove-me="3s" class="fade-me-out alert alert-success py-2 px-3 mb-0 text-center">Saved Successfully</div>
+            <div
+                hx-get="/empty"
+                hx-trigger="load delay:2s"
+                hx-swap="outerHTML swap:3s"
+                hx-target="#response"
+                class="fade-me-out alert alert-success py-2 px-3 mb-0 text-center">
+                Saved Successfully
+            </div>
         {% elif save_result == "Save_Failed" %}
-            <div remove-me="3s" class="alert alert-danger py-2 px-3 mb-0 text-center">Failed to save</div>
+            <div
+                hx-get="/empty"
+                hx-trigger="load delay:2s"
+                hx-swap="outerHTML swap:3s"
+                hx-target="#response"
+                class="alert alert-danger py-2 px-3 mb-0 text-center">
+                Failed to save
+            </div>
         {% endif %}
     </div>
 </form>
@@ -93,22 +113,22 @@
     color: var(--bs-body-color);
     background-color: var(--bs-body-bg);
   }
-  
+
   .ts-dropdown {
     color: var(--bs-body-color);
     background-color: var(--bs-body-bg);
     border-color: var(--bs-border-color);
   }
-  
+
   .ts-dropdown .option.active {
     background-color: var(--bs-primary);
     color: var(--bs-primary-bg-subtle);
   }
-  
+
   .ts-dropdown .option:hover {
     background-color: var(--bs-primary-bg-subtle);
   }
-  
+
   .ts-control {
     border-color: var(--bs-border-color);
   }

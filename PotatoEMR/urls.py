@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.http import HttpResponse
 
 from potato.Common import common_views
 from potato.Common.HomePage import CommonHomePage_view
@@ -40,6 +41,7 @@ urlpatterns = [
 
     path('calendar', AppointmentCalendar_view.calendar_whole, name="home_calendar"),
     path('calendar-partial', AppointmentCalendar_view.calendar_partial, name="home_calendar_partial"),
+    path('calendar-appt-detail/<int:appt_id>', AppointmentCalendar_view.calendar_detail, name="home_calendar_detail"),
 
     path("patient-registration", view_registerPatient.create_patient, name="register_patient"),
     path("patient/<int:id>/", view_patientOverview.patient_overview, name="patient_overview"),

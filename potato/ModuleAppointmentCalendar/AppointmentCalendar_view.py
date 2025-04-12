@@ -29,17 +29,17 @@ def calendar(request, template, apptInfo):
 
     appt_list = []
     for appt_model in sorted_appts:
-        calendar_entry = {}
+        calendar_entry = {
+            'id': appt_model.id,
+            'patient': str(appt_model.subject_patient),
+            'status': str(appt_model.status),
+            'notes': str(appt_model.notes.first()),
+            'start': datetime.fromisoformat(appt_model.start).strftime("%H:%M"),
+            'end': datetime.fromisoformat(appt_model.end).strftime("%H:%M"),
+        }
         for participant in appt_model.appointment_participant.all():
             practitioner = participant.actor_practitioner
             if practitioner: calendar_entry['provider'] = str(practitioner)
-        calendar_entry['patient'] = str(appt_model.subject_patient)
-        calendar_entry['status'] = str(appt_model.status)
-        calendar_entry['notes'] = str(appt_model.notes.first())
-        start_dt = datetime.fromisoformat(appt_model.start)
-        calendar_entry['start'] = start_dt.strftime("%H:%M")
-        end_dt = datetime.fromisoformat(appt_model.end)
-        calendar_entry['end'] = end_dt.strftime("%H:%M")
         appt_list.append(calendar_entry)
 
     print(appt_list)
@@ -76,3 +76,6 @@ def calendar_partial(request):
         'Practitioner': chosen_practitioner_id
     } #apptInfo is copy of request but we might change their practitioner
     return calendar(request, "AppointmentCalendar_partial.html", apptInfo)
+
+def calendar_detail(request, appt_id):
+    return render(request, "AppointmentCalendar_detail.html")
