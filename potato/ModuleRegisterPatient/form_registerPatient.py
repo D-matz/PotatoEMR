@@ -1,6 +1,6 @@
 from django import forms
 from ..models import FHIR_Patient
-from ..FHIR_DataTypes.FHIR_generalpurpose import *
+from ..models_dir.FHIR_DataTypes.FHIR_generalpurpose import *
 
 class RegisterPatientForm(forms.Form):
     #patient's demographics

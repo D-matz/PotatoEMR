@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from ..FHIR_DataTypes.FHIR_generalpurpose import *
-from ..FHIR_Resources.Patient import FHIR_Patient
-from ..FHIR_Resources.AllergyIntolerance import FHIR_AllergyIntolerance, FHIR_AllergyIntolerance_Note, FHIR_AllergyIntolerance_Reaction, FHIR_AllergyIntolerance_Reaction_Manifestation, FHIR_AllergyIntolerance_Reaction_Note
+from ..models_dir.FHIR_DataTypes.FHIR_generalpurpose import *
+from ..models_dir.FHIR_Resources.Patient import FHIR_Patient
+from ..models_dir.FHIR_Resources.AllergyIntolerance import FHIR_AllergyIntolerance, FHIR_AllergyIntolerance_Note, FHIR_AllergyIntolerance_Reaction, FHIR_AllergyIntolerance_Reaction_Manifestation, FHIR_AllergyIntolerance_Reaction_Note
 from django.http import HttpResponse
 from django.urls import reverse
 from .AllergyIntoleranceBootstrap_form import AllergyIntoleranceForm, AllergyIntoleranceReactionForm, AllergyIntoleranceReactionManifestationForm, AllergyIntoleranceNoteForm

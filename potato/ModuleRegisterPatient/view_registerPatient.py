@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.db import transaction
 from .form_registerPatient import RegisterPatientForm
-from ..FHIR_DataTypes.FHIR_generalpurpose import *
-from ..FHIR_Resources.Patient import *
+from ..models_dir.FHIR_DataTypes.FHIR_generalpurpose import *
+from ..models_dir.FHIR_Resources.Patient import *
 
 def create_patient(request):
     if request.method == "POST":

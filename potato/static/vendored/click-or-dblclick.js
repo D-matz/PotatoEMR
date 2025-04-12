@@ -1,17 +1,30 @@
-
+var setTargetTo = null;
 htmx.defineExtension('click-or-dblclick', {
-  onEvent: function(name, evt) {
+  onEvent : function(name, evt) {
     if (name === 'htmx:configRequest') {
-      let dblclickUrl = evt.detail.elt.getAttribute('dblclick-url');
-     if (!dblclickUrl){
-         console.log("error: click-or-dblclick extension but no dblclick-url attribute");
-      return;
-         }
+      if(evt && evt.detail && evt.detail.triggeringEvent)
+      {
+        if(evt.detail.triggeringEvent.type === 'dblclick')
+        {
+          let targetSource = evt.detail.elt.closest('[dblclick-target]');
+          let urlSource = evt.detail.elt.closest('[dblclick-url]');
 
-      let triggeringEvent = evt.detail.triggeringEvent;
-      if (triggeringEvent && triggeringEvent.type === 'dblclick') {
-        evt.detail.path = dblclickUrl;
+          if (urlSource) {
+            evt.detail.path = urlSource.getAttribute('dblclick-url');
+          }
+          if (targetSource) {
+            setTargetTo = document.querySelector(targetSource.getAttribute('dblclick-target'));
+          }
+        }
+        else
+        {
+          setTargetTo = evt.detail.target;
+        }
       }
+    }
+    if(evt && evt.detail && setTargetTo)
+    {
+      evt.detail.target = setTargetTo;
     }
   }
 });

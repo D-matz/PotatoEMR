@@ -27,9 +27,11 @@
         {% else %}
           {% for appt in appt_list %}
             <tr style="cursor: pointer;"
-                hx-get="{% url 'home_calendar_detail' appt.id %}"
                 hx-target="#apptDetails"
-                hx-trigger="click">
+                hx-get="{% url 'home_calendar_peek' appt.id %}"
+                hx-ext="click-or-dblclick" dblclick-url="{% url 'patient_overview' appt.patient_id %}" dblclick-target="#commonBasePageContent"
+                hx-trigger="click delay:0.3s, dblclick"
+                >
               <td>{{ appt.start }} - {{ appt.end }}</td>
               <td>{{ appt.status }}</td>
               <td>{{ appt.patient }}</td>

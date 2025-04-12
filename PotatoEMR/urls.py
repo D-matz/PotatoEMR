@@ -41,7 +41,7 @@ urlpatterns = [
 
     path('calendar', AppointmentCalendar_view.calendar_whole, name="home_calendar"),
     path('calendar-partial', AppointmentCalendar_view.calendar_partial, name="home_calendar_partial"),
-    path('calendar-appt-detail/<int:appt_id>', AppointmentCalendar_view.calendar_detail, name="home_calendar_detail"),
+    path('calendar-appt-peek/<int:appt_id>', AppointmentCalendar_view.calendar_peek, name="home_calendar_peek"),
 
     path("patient-registration", view_registerPatient.create_patient, name="register_patient"),
     path("patient/<int:id>/", view_patientOverview.patient_overview, name="patient_overview"),
@@ -50,4 +50,5 @@ urlpatterns = [
     path("patient/<int:patient_id>/allergy-intolerance-table", AllergyIntoleranceBootstrap_view.allergy_intolerance_table, name="AllergyIntoleranceBootstrap_table"),
     path("patient/<int:patient_id>/allergy-intolerance-existing/<int:allergy_id>", AllergyIntoleranceBootstrap_view.allergy_intolerance_existing, name="AllergyIntoleranceBootstrap_existing"),
     path("patient/<int:patient_id>/allergy-intolerance-new", AllergyIntoleranceBootstrap_view.allergy_intolerance_new, name="AllergyIntoleranceBootstrap_new"),
+
 ]

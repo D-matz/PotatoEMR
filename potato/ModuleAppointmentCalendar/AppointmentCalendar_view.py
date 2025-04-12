@@ -32,6 +32,7 @@ def calendar(request, template, apptInfo):
         calendar_entry = {
             'id': appt_model.id,
             'patient': str(appt_model.subject_patient),
+            'patient_id': appt_model.subject_patient.id,
             'status': str(appt_model.status),
             'notes': str(appt_model.notes.first()),
             'start': datetime.fromisoformat(appt_model.start).strftime("%H:%M"),
@@ -77,5 +78,5 @@ def calendar_partial(request):
     } #apptInfo is copy of request but we might change their practitioner
     return calendar(request, "AppointmentCalendar_partial.html", apptInfo)
 
-def calendar_detail(request, appt_id):
-    return render(request, "AppointmentCalendar_detail.html")
+def calendar_peek(request, appt_id):
+    return render(request, "AppointmentCalendar_peek.html")

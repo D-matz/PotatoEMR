@@ -1,8 +1,8 @@
 from django import forms
 from django.forms.widgets import Select
 from django.utils.safestring import mark_safe
-from ..FHIR_DataTypes.FHIR_generalpurpose import FHIR_GP_Coding
-from potato.FHIR_Resources.AllergyIntolerance import (
+from ..models_dir.FHIR_DataTypes.FHIR_generalpurpose import FHIR_GP_Coding
+from potato.models_dir.FHIR_Resources.AllergyIntolerance import (
     FHIR_AllergyIntolerance,
     FHIR_AllergyIntolerance_Reaction,
     FHIR_AllergyIntolerance_Reaction_Manifestation,
