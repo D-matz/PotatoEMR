@@ -79,4 +79,7 @@ def calendar_partial(request):
     return calendar(request, "AppointmentCalendar_partial.html", apptInfo)
 
 def calendar_peek(request, appt_id):
-    return render(request, "AppointmentCalendar_peek.html")
+    appt_model = FHIR_Appointment.objects.get(id=appt_id)
+    if not appt_model:
+        return HttpResponse("Error appointment not found")
+    return render(request, "AppointmentCalendar_peek.html", {"appt": appt_model})

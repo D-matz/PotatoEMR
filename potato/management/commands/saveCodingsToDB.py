@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from ...FHIR_DataTypes.FHIR_generalpurpose import FHIR_GP_Coding, FHIR_GP_Binding
+from potato.models import *
 import os, importlib
 
 import requests
@@ -23,7 +23,7 @@ def getCodingsFromFHIRValueSet(binding_url):
             cols = row.find_all('td')
             item = {}
             coding_in_system = "error system not found"
-            
+
             for i, header in enumerate(headers):
                 if header == "Code":
                     item['code'] = cols[i].get_text(strip=True)
@@ -93,9 +93,8 @@ class Command(BaseCommand):
                         )
                         #print(coding_model, binding_model)
                         binding_model.binding_codings.add(coding_model)
-                        
+
                         if created:
-                            numCodingsCreated += 1                    
+                            numCodingsCreated += 1
 
                 print(f"Created {numCodingsCreated} codings for {module_name}")
-
