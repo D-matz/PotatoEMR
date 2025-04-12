@@ -18,8 +18,8 @@ from django.urls import include, path
 from django.http import HttpResponse
 
 from potato.Common import common_views
-from potato.Common.HomePage import CommonHomePage_view
 from potato.Common.Login import CommonLogin_view
+from potato.ModuleHomePage import CommonHomePage_view
 from potato.ModuleRegisterPatient import view_registerPatient
 from potato.ModulePatientOverview import view_patientOverview
 from potato.ModuleAllergyIntoleranceBootstrap import AllergyIntoleranceBootstrap_view
@@ -44,7 +44,9 @@ urlpatterns = [
     path('calendar-appt-peek/<int:appt_id>', AppointmentCalendar_view.calendar_peek, name="home_calendar_peek"),
 
     path("patient-registration", view_registerPatient.create_patient, name="register_patient"),
-    path("patient/<int:id>/", view_patientOverview.patient_overview, name="patient_overview"),
+
+    path("patient/<int:id>/", view_patientOverview.patient_overview, name="PatientOverview"),
+    path("patient-partial/<int:id>/", view_patientOverview.patient_overview_partial, name="PatientOverview_partial"),
 
     path("patient/<int:patient_id>/allergy-intolerance", AllergyIntoleranceBootstrap_view.allergy_intolerance_overview, name="AllergyIntoleranceBootstrap_overview"),
     path("patient/<int:patient_id>/allergy-intolerance-table", AllergyIntoleranceBootstrap_view.allergy_intolerance_table, name="AllergyIntoleranceBootstrap_table"),

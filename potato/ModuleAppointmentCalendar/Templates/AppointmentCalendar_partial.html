@@ -29,8 +29,9 @@
             <tr style="cursor: pointer;"
                 hx-target="#apptDetails"
                 hx-get="{% url 'home_calendar_peek' appt.id %}"
-                hx-ext="click-or-dblclick" dblclick-url="{% url 'patient_overview' appt.patient_id %}" dblclick-target="#commonBasePageContent"
+                hx-ext="click-or-dblclick" dblclick-url="{% url 'PatientOverview' appt.patient_id %}" dblclick-target="body" dblclick-push-url="false"
                 hx-trigger="click delay:0.3s, dblclick"
+                hx-swap="morph"
                 >
               <td>{{ appt.start }} - {{ appt.end }}</td>
               <td>{{ appt.status }}</td>
