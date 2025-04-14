@@ -24,6 +24,7 @@ from potato.ModuleRegisterPatient import view_registerPatient
 from potato.ModulePatientOverview import view_patientOverview
 from potato.ModuleAllergyIntoleranceBootstrap import AllergyIntoleranceBootstrap_view
 from potato.ModuleAppointmentCalendar import AppointmentCalendar_view
+from potato.ModulePatientLists import PatientLists_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -52,4 +53,5 @@ urlpatterns = [
     path("patient/<int:patient_id>/allergy-intolerance-existing/<int:allergy_id>", AllergyIntoleranceBootstrap_view.allergy_intolerance_existing, name="AllergyIntoleranceBootstrap_existing"),
     path("patient/<int:patient_id>/allergy-intolerance-new", AllergyIntoleranceBootstrap_view.allergy_intolerance_new, name="AllergyIntoleranceBootstrap_new"),
 
+    path("patient-lists", PatientLists_view.lists, name="home_patient_lists"),
 ]

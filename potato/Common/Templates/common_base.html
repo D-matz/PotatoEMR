@@ -121,9 +121,10 @@
         </symbol>
   </svg>
 
-  <nav id="nav-main" class="navbar navbar-expand-lg bg-body-tertiary w-100">
+  <nav id="nav-main" class="navbar navbar-expand-lg bg-body-tertiary w-100" hx-boost="true">
       <a class="navbar-brand px-0 px-sm-3" href="{% url 'CommonHomePage_index' %}">🥔 PotatoEMR</a>
       <a href="{% url 'home_calendar' %}" class="px-0 px-sm-3">Calendar</a>
+      <a href="{% url 'home_patient_lists' %}" class="px-0 px-sm-3">Patient lists</a>
 
       <div class="ms-auto d-flex align-items-center">
         <a href="/" class="px-0 px-sm-3">{{ user.get_username }}</a>
