@@ -26,6 +26,7 @@
           <tr><td>No appointments scheduled</td></tr>
         {% else %}
           {% for appt in appt_list %}
+          <!--ok this could just morph on body instead of all this dbl click shit-->
             <tr style="cursor: pointer;"
                 hx-target="#apptDetails"
                 hx-get="{% url 'home_calendar_peek' appt.id %}"

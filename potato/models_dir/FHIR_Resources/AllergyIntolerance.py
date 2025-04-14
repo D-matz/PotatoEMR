@@ -35,11 +35,21 @@ class FHIR_AllergyIntolerance(models.Model):
     onset_range = models.OneToOneField(FHIR_GP_Range, on_delete=models.SET_NULL, null=True, blank=True)
     onset_string = FHIR_primitive_StringField(max_length=255, null=True, blank=True)
     recordedDate = FHIR_primitive_DateTimeField(null=True, blank=True)
-    lastOccurrence = FHIR_primitive_DateTimeField(null=True, blank=True)
+
+    recorder_practitioner = models.ForeignKey('FHIR_Practitioner', related_name='recorded_allergies_as_practitioner', on_delete=models.SET_NULL, null=True, blank=True)
+    recorder_practitionerRole = models.ForeignKey('FHIR_PractitionerRole', related_name='recorded_allergies_as_role', on_delete=models.SET_NULL, null=True, blank=True)
+    recorder_patient = models.ForeignKey('FHIR_Patient', related_name='recorded_allergies_as_patient', on_delete=models.SET_NULL, null=True, blank=True)
+    asserter_practitioner = models.ForeignKey('FHIR_Practitioner', related_name='asserted_allergies_as_practitioner', on_delete=models.SET_NULL, null=True, blank=True)
+    asserter_practitionerRole = models.ForeignKey('FHIR_PractitionerRole', related_name='asserted_allergies_as_role', on_delete=models.SET_NULL, null=True, blank=True)
+    asserter_patient = models.ForeignKey('FHIR_Patient', related_name='asserted_allergies_as_patient', on_delete=models.SET_NULL, null=True, blank=True)
+
+
+    lastReactionOccurrence = FHIR_primitive_DateTimeField(null=True, blank=True)
     #could add precision to onset_dateTime, recordedDate, lastOccurrence
 
     def __str__(self):
-        return str(self.code_cc.first())
+        return "test"
+        #return str(self.code_cc.first())
 
 class FHIR_AllergyIntolerance_Identifier(FHIR_GP_Identifier):
     allergy_intolerance = models.ForeignKey(FHIR_AllergyIntolerance, on_delete=models.CASCADE, related_name='identifiers')
@@ -50,7 +60,7 @@ class FHIR_AllergyIntolerance_Participant(models.Model):
     function_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={'codings__binding_rule': BINDING_RULE_FUNCTION})
     function_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     actor_practitioner = models.ForeignKey('FHIR_Practitioner', null=True, on_delete=models.SET_NULL)
-    actor_practitionerRole = models.ForeignKey('FHIR_PractitionerRole', null=True, on_delete=models.SET_NULL) 
+    actor_practitionerRole = models.ForeignKey('FHIR_PractitionerRole', null=True, on_delete=models.SET_NULL)
     actor_patient = models.ForeignKey('FHIR_Patient', null=True, on_delete=models.SET_NULL)
     actor_relatedPerson = models.ForeignKey('FHIR_RelatedPerson', null=True, on_delete=models.SET_NULL)
     actor_device = models.ForeignKey('FHIR_Device', null=True, on_delete=models.SET_NULL)
@@ -78,7 +88,7 @@ class FHIR_AllergyIntolerance_Reaction(models.Model):
     exposureRoute_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     #todo binding rule for exposureRoute: snomed ct code that is a 105590001 (Substance)
     #when changing binding remember to remove old one
-    
+
 class FHIR_AllergyIntolerance_Reaction_Manifestation(models.Model):
     reaction = models.ForeignKey(FHIR_AllergyIntolerance_Reaction, on_delete=models.CASCADE, related_name='manifestations')
     manifestation_ref = models.ForeignKey('FHIR_Observation', on_delete=models.SET_NULL, null=True, blank=True)

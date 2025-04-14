@@ -4,6 +4,7 @@ from .AppointmentCalendar_form import ApptClndrForm
 from potato.models import *
 from django.http import HttpResponse
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 
 def calendar(request, template, apptInfo):
 
@@ -79,7 +80,5 @@ def calendar_partial(request):
     return calendar(request, "AppointmentCalendar_partial.html", apptInfo)
 
 def calendar_peek(request, appt_id):
-    appt_model = FHIR_Appointment.objects.get(id=appt_id)
-    if not appt_model:
-        return HttpResponse("Error appointment not found")
+    appt_model = get_object_or_404(FHIR_Appointment, id=appt_id)
     return render(request, "AppointmentCalendar_peek.html", {"appt": appt_model})

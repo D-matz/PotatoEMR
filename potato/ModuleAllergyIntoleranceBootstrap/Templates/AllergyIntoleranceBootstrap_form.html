@@ -8,7 +8,11 @@
     id="AllergyIntoleranceBootstrap_form"
     class="container mt-4 p-4 rounded-3 bg-body"
     style="height: 85vh; overflow-y: auto"
+    {% if allergy_id %}
     hx-post="{% url 'AllergyIntoleranceBootstrap_existing' patient_id=patient_id allergy_id=allergy_id %}"
+    {% else %}
+    hx-post="{% url 'AllergyIntoleranceBootstrap_new' patient_id=patient_id %}"
+    {% endif %}
     hx-swap="outerHTML"
     hx-target="#AllergyIntoleranceBootstrap_form"
     >
@@ -27,9 +31,9 @@
                     <div class="row mb-2">
                         <label class="col-4 col-form-label-sm p-0">Reactions:</label>
                         <div class="col-8">
-                            {% for manifestation_form in manifestation_forms %}
-                                {{ manifestation_form.manifestation_cc }}
-                            {% endfor %}
+                          {{ allergy_form.manifestation_cc_1 }}
+                          {{ allergy_form.manifestation_cc_2 }}
+                          {{ allergy_form.manifestation_cc_3 }}
                         </div>
                         <label for="{{ allergy_form.type_cc.id_for_label }}" class="col-4 col-form-label-sm p-0">Reaction type:</label>
                         <div class="col-8">
@@ -41,7 +45,7 @@
                     <div class="row mb-2">
                         <label for="{{ reaction_form.severity.id_for_label }}" class="col-4 col-form-label-sm p-0">Severity:</label>
                         <div class="col-8">
-                            {{ reaction_form.severity }}
+                            {{ allergy_form.severity }}
                         </div>
                     </div>
                     <div class="row mb-2">
@@ -64,7 +68,7 @@
             <label for="{{ note_form.text.id_for_label }}" class="form-label small p-0">Comments:</label>
           </div>
           <div>
-            {{ note_form.text }}
+            {{ allergy_form.text }}
           </div>
         </div>
       </div>
@@ -94,14 +98,12 @@
 </form>
 
 <script>
-    var tomSelectIds = ['id_code_cc', 'id_m0-manifestation_cc', 'id_m1-manifestation_cc', 'id_m2-manifestation_cc'];
-    console.log('form loaded');
-    tomSelectIds.forEach(function(id) {
-        if(document.getElementById(id)) {
-            new TomSelect(document.getElementById(id), {});
-        }
+    document.querySelectorAll('.tomselect').forEach(function(el){
+    //  new TomSelect(el, {});
     });
 </script>
+
+
 
 <style>
     .fade-me-out.htmx-swapping {
@@ -109,37 +111,35 @@
     transition: opacity 2s ease-out;
     }
 
-  .ts-wrapper {
-    color: var(--bs-body-color);
-    background-color: var(--bs-body-bg);
-  }
 
-  .ts-dropdown {
-    color: var(--bs-body-color);
-    background-color: var(--bs-body-bg);
-    border-color: var(--bs-border-color);
-  }
+    .ts-dropdown {
+      color: var(--bs-body-color);
+      background-color: var(--bs-body-bg);
+      border-color: var(--bs-border-color);
+    }
 
-  .ts-dropdown .option.active {
-    background-color: var(--bs-primary);
-    color: var(--bs-primary-bg-subtle);
-  }
 
-  .ts-dropdown .option:hover {
-    background-color: var(--bs-primary-bg-subtle);
-  }
+    .ts-dropdown .option.active {
+      background-color: var(--bs-secondary);
+      color: var(--bs-body-color);
+    }
 
-  .ts-control {
-    border-color: var(--bs-border-color);
-  }
+    .ts-control, .ts-wrapper.single.input-active .ts-control, .ts-wrapper{
+      background-color: var(--bs-body-tertiary);
+      color: var(--bs-body-color);
+    }
 
-  .full .ts-control{
-    background-color: var(--bs-body-tertiary);
-    color: var(--bs-body-color);
-  }
+    .ts-control > input{
+      color: var(--bs-body-color);
+    }
 
-  .ts-control, .ts-wrapper.single.input-active .ts-control{
-    background-color: var(--bs-body-tertiary);
-    color: var(--bs-body-color);
-  }
+    .ts-control {
+      border-color: var(--bs-border-color);
+    }
+
+
+    .full .ts-control{
+      background-color: var(--bs-body-tertiary);
+      color: var(--bs-body-color);
+    }
 </style>

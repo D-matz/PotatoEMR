@@ -3,6 +3,7 @@
       hx-get="{% url 'AllergyIntoleranceBootstrap_new' patient.id %}"
       hx-target="#modals-here"
       hx-trigger="click"
+      hx-push-url="false"
       data-bs-toggle="modal"
       data-bs-target="#modals-here">
     + Add New Allergy/Intolerance
@@ -25,6 +26,7 @@
               hx-get="{% url 'AllergyIntoleranceBootstrap_existing' patient.id allergy.id %}"
               hx-target="#modals-here"
               hx-trigger="click"
+              hx-push-url="false"
               data-bs-toggle="modal"
               data-bs-target="#modals-here">
               <td class="text-wrap small">
@@ -73,15 +75,16 @@
   </table>
   </div>
 
-  <!-- Modal container -->
   <div id="modals-here"
       class="modal modal-blur fade"
       style="display: none"
       aria-hidden="false"
       tabindex="-1"
       hx-trigger="hidden.bs.modal"
-      hx-get="{% url 'AllergyIntoleranceBootstrap_table' patient_id=patient.id %}"
-      hx-target="#AllergyIntoleranceBootstrap_table">
+      hx-get="{% url 'AllergyIntoleranceBootstrap_overview' patient_id=patient.id %}"
+      hx-target="body"
+      hx-swap="morph"
+      hx-push-url="false">
       <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
           <div class="modal-content"></div>
       </div>

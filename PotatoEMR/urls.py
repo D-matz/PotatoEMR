@@ -49,7 +49,6 @@ urlpatterns = [
     path("patient-partial/<int:id>/", view_patientOverview.patient_overview_partial, name="PatientOverview_partial"),
 
     path("patient/<int:patient_id>/allergy-intolerance", AllergyIntoleranceBootstrap_view.allergy_intolerance_overview, name="AllergyIntoleranceBootstrap_overview"),
-    path("patient/<int:patient_id>/allergy-intolerance-table", AllergyIntoleranceBootstrap_view.allergy_intolerance_table, name="AllergyIntoleranceBootstrap_table"),
     path("patient/<int:patient_id>/allergy-intolerance-existing/<int:allergy_id>", AllergyIntoleranceBootstrap_view.allergy_intolerance_existing, name="AllergyIntoleranceBootstrap_existing"),
     path("patient/<int:patient_id>/allergy-intolerance-new", AllergyIntoleranceBootstrap_view.allergy_intolerance_new, name="AllergyIntoleranceBootstrap_new"),
 
