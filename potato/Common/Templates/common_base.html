@@ -1,7 +1,7 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100 w-100">
 <head>
     <link rel="icon"href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥔</text></svg>"/>
     <meta charset="UTF-8">
@@ -103,7 +103,7 @@
 
         </style>
 </head>
-<body hx-push-url="true" class="bg-primary-subtle">
+<body hx-push-url="true" class="d-flex flex-column bg-primary-subtle h-100 w-100">
   <!-- Add the SVG icons for the theme switcher -->
   <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
       <symbol id="moon-stars-fill" viewBox="0 0 16 16" fill="currentColor" >
@@ -124,7 +124,11 @@
   <nav id="nav-main" class="navbar navbar-expand-lg bg-body-tertiary w-100">
       <a class="navbar-brand px-0 px-sm-3" href="{% url 'CommonHomePage_index' %}">🥔 PotatoEMR</a>
       <a href="{% url 'home_calendar' %}" class="px-0 px-sm-3">Calendar</a>
-      <a href="{% url 'home_patient_lists' %}" class="px-0 px-sm-3">Patient lists</a>
+      <a href="{% url 'home_patient_lists' %}" class="px-0 px-sm-3">Patient lists todo</a>
+      <a href="{% url 'home_patient_lists' %}" class="px-0 px-sm-3">Register patient todo</a>
+      <a href="{% url 'home_patient_lists' %}" class="px-0 px-sm-3">Search patient todo</a>
+      <a href="{% url 'home_patient_lists' %}" class="px-0 px-sm-3">Schedule appointment todo</a>
+
 
       <div class="ms-auto d-flex align-items-center">
         <a href="/" class="px-0 px-sm-3">{{ user.get_username }}</a>
@@ -169,7 +173,7 @@
         </div>
       </div>
   </nav>
-  <div id="commonBasePageContent">
+  <div id="commonBasePageContent" class="flex-grow-1">
       {% block content %}
       {% endblock %}
   </div>
