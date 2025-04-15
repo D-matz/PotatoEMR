@@ -12,9 +12,12 @@ from .models_dir.FHIR_Resources.Binary import *
 from .models_dir.FHIR_Resources.BiologicallyDerivedProduct import *
 from .models_dir.FHIR_Resources.CarePlan import *
 from .models_dir.FHIR_Resources.CareTeam import *
+from .models_dir.FHIR_Resources.ClaimResponse import *
 from .models_dir.FHIR_Resources.Communication import *
 from .models_dir.FHIR_Resources.Condition import *
+from .models_dir.FHIR_Resources.Coverage import *
 from .models_dir.FHIR_Resources.Device import *
+from .models_dir.FHIR_Resources.DeviceDefinition import *
 from .models_dir.FHIR_Resources.DeviceRequest import *
 from .models_dir.FHIR_Resources.DocumentReference import *
 from .models_dir.FHIR_Resources.DiagnosticReport import *
@@ -42,6 +45,7 @@ from .models_dir.FHIR_Resources.Patient import *
 from .models_dir.FHIR_Resources.Practitioner import *
 from .models_dir.FHIR_Resources.PractitionerRole import *
 from .models_dir.FHIR_Resources.Procedure import *
+from .models_dir.FHIR_Resources.Provenance import *
 from .models_dir.FHIR_Resources.RelatedPerson import *
 from .models_dir.FHIR_Resources.RequestOrchestration import *
 from .models_dir.FHIR_Resources.ServiceRequest import *
