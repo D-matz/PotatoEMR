@@ -1,3 +1,5 @@
-<a href="{% url 'PatientOverview' appt.subject_patient.id %}">{{ appt.subject_patient }}</a>
-
 <p>appt info</p>
+
+<a href="{% url 'AppointmentEncounter_overview' appt.subject_patient.id encounter_id %}">
+    {{ appt.subject_patient }} Encounter
+</a>

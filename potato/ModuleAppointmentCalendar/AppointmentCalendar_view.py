@@ -1,13 +1,43 @@
 from django.shortcuts import render, redirect
 from datetime import date, datetime, timedelta
 from .AppointmentCalendar_form import ApptClndrForm
-from potato.models import *
+from potato.models import FHIR_Appointment, FHIR_Location, FHIR_Practitioner, FHIR_Encounter, FHIR_Encounter_Participant, FHIR_Appointment_Participant
 from django.http import HttpResponse
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
+from django.db import transaction
+
+def getOrCreateApptEncounter(appt_model):
+    # get or create first encounter for appointment
+    encounter_models = FHIR_Encounter.objects.filter(appointment=appt_model)
+    if encounter_models.count() == 0:
+        with transaction.atomic():
+            appt_part_location_model = FHIR_Appointment_Participant.objects.filter(appointment=appt_model, actor_location__isnull=False).first()
+            if appt_part_location_model is None:
+                print("no location found for appointment, not going to create encounter")
+                return None
+            appt_part_practitioner_model = FHIR_Appointment_Participant.objects.filter(appointment=appt_model, actor_practitioner__isnull=False).first()
+            if appt_part_practitioner_model is None:
+                print("no practitioner found for appointment, could technically create an encounter without a practionier but deciding not to")
+                return None
+            new_encounter_model = FHIR_Encounter.objects.create(
+                status=FHIR_Encounter.StatusChoices.PLANNED,
+                location_ref=appt_part_location_model.actor_location,
+                subject_patient=appt_model.subject_patient,
+                subject_group=appt_model.subject_group,
+            )
+            FHIR_Encounter_Participant.objects.create(
+                encounter=new_encounter_model,
+                actor_practitioner=appt_part_practitioner_model.actor_practitioner,
+            )
+            new_encounter_model.appointment.set([appt_model])
+        if new_encounter_model is None:
+            return HttpResponse("error failed to create encounter for appointment")
+        return new_encounter_model
+    else:
+        return encounter_models.first()
 
 def calendar(request, template, apptInfo):
-
     print(apptInfo['Location'], apptInfo['Practitioner'], apptInfo['Date'])
     if isinstance(apptInfo['Date'], str):
         chosenDate = datetime.strptime(apptInfo['Date'], "%Y-%m-%d").date()
@@ -30,6 +60,7 @@ def calendar(request, template, apptInfo):
 
     appt_list = []
     for appt_model in sorted_appts:
+        encounter_model = getOrCreateApptEncounter(appt_model)
         calendar_entry = {
             'id': appt_model.id,
             'patient': str(appt_model.subject_patient),
@@ -38,13 +69,14 @@ def calendar(request, template, apptInfo):
             'notes': str(appt_model.notes.first()),
             'start': datetime.fromisoformat(appt_model.start).strftime("%H:%M"),
             'end': datetime.fromisoformat(appt_model.end).strftime("%H:%M"),
+            'encounter_id': encounter_model.id
         }
         for participant in appt_model.appointment_participant.all():
             practitioner = participant.actor_practitioner
             if practitioner: calendar_entry['provider'] = str(practitioner)
         appt_list.append(calendar_entry)
 
-    print(appt_list)
+    #print(appt_list)
     return render(request, template, {'ApptClndrForm': ApptClndrForm(apptInfo), 'appt_list': appt_list})
 
 def calendar_whole(request):
@@ -81,4 +113,5 @@ def calendar_partial(request):
 
 def calendar_peek(request, appt_id):
     appt_model = get_object_or_404(FHIR_Appointment, id=appt_id)
-    return render(request, "AppointmentCalendar_peek.html", {"appt": appt_model})
+    encounter_model = getOrCreateApptEncounter(appt_model)
+    return render(request, "AppointmentCalendar_peek.html", {"appt": appt_model, "encounter_id": encounter_model.id})

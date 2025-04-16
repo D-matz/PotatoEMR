@@ -39,7 +39,7 @@ class FHIR_PractitionerRole_Specialty(models.Model):
     specialty_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={'codings__binding_rule': BINDING_RULE_SPECIALTY})
     specialty_cctext = FHIR_primitive_StringField(max_length=255, null=True, blank=True)
 
-class FHIR_PractitionerRole_Contact(FHIR_ExtendedContactDetail):
+class FHIR_PractitionerRole_Contact(FHIR_meta_ExtendedContactDetail):
     practitioner_role = models.ForeignKey(FHIR_PractitionerRole, related_name="practitioner_role_contacts", on_delete=models.CASCADE)
 
 class FHIR_PractitionerRole_Characteristic(models.Model):

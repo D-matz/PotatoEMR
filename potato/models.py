@@ -21,6 +21,7 @@ from .models_dir.FHIR_Resources.DeviceDefinition import *
 from .models_dir.FHIR_Resources.DeviceRequest import *
 from .models_dir.FHIR_Resources.DocumentReference import *
 from .models_dir.FHIR_Resources.DiagnosticReport import *
+from .models_dir.FHIR_Resources.EpisodeOfCare import *
 from .models_dir.FHIR_Resources.Encounter import *
 from .models_dir.FHIR_Resources.Endpoint import *
 from .models_dir.FHIR_Resources.Event import *

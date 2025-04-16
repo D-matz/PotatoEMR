@@ -15,6 +15,7 @@ add bindings for observation
 clinician preferences:
 allergy vs intolerance? seperate or filter? https://www.reddit.com/r/medicine/comments/1i4hle2/what_is_the_most_ridiculous_allergy_youve_seen_a/m7v9tyo/
 
+easy to not find FHIR_GP_Quantity_Duration
 
 autocomplete on type
 fill out all fields
@@ -24,3 +25,22 @@ form to add new allergy
 maybe dont save whole allergy unless whole thing validates
 flash on save?
 allergy form doesnt do tom select on save? also not sure validation/saving works with some models not existing
+navbar when resizing...
+
+schedule appts
+register patient
+patient search
+patient lists
+
+order medication
+outpatient medication list
+problem list
+family history
+growth chart
+immunizations
+
+between module dependencies:
+calendar -> appointment, because calendar links to specific encounter
+    the model relation is encounter has many appointments, although we only need one appointment ref
+    so when creating encounter, use appointment and its location/status
+    for now, going to say when you click on an appointment, it either gets first associated encounter or creates new encounter
