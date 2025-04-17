@@ -123,7 +123,10 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 class FHIR_replace_classname(replace_model):
 '''
 
-        print_lines_after = []
+        print_lines_after = '''
+'''
+#for new classes with foreign key to this model
+#these have to come after the current class
 
         for field in element:
             use_id = None
