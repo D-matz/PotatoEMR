@@ -72,15 +72,6 @@ lower_FHIR_to_Model_generalpurpose = {k.lower(): v for k, v in FHIR_to_Model_gen
 #codegen in PotatoEMR/potato/management/commands/codegen_models.py
 #run with: python manage.py codegen_models
 
-print_model_start = '''
-from django.db import models
-from ..FHIR_DataTypes.FHIR_generalpurpose import *
-from ..FHIR_DataTypes.FHIR_specialpurpose import *
-from ..FHIR_DataTypes.FHIR_metadata import *
-from ..FHIR_DataTypes.FHIR_primitive import *
-
-class FHIR_replace_classname(replace_model):
-'''
 
 
 def elementArray_to_ModelString(element_array):
@@ -130,7 +121,7 @@ def elementArray_to_ModelString(element_array):
             if use_type == "backboneelement":
                 related_model_lines += f'''
 class FHIR_{"_".join(id_split)}(models.Model):
-    {field_name} = models.ForeignKey(FHIR_{"_".join(id_split[:-1])}, related_name='{field_name}', null=False, on_delete=models.CASCADE')'''
+    {"_".join(id_split[:-1])} = models.ForeignKey(FHIR_{"_".join(id_split[:-1])}, related_name='{field_name}', null=False, on_delete=models.CASCADE')'''
                 backbone_min_len = len(id_split) + 1
                 backbone_array = []
                 i = i + 1
@@ -143,21 +134,29 @@ class FHIR_{"_".join(id_split)}(models.Model):
                 related_model_lines += all_model_lines_in_backbone
                 continue
             elif use_type in FHIR_to_Model_primitive:
+                code_choices = ""
+                field_options = f'''choices={field_name.capitalize()}Choices.choices, '''
+                if use_type == 'code':
+                    code_list = field['short'].split(' | ')
+                    code_choices = f'''
+    class {field_name.capitalize()}Choices(models.TextChoices): '''
+                    for code in code_list:
+                        code_choices += f"{code.replace('-', '_').upper()} = '{code}', '{code.capitalize()}'; "
                 if use_max == '*':
                     related_model_lines += f'''
 class FHIR_{"_".join(id_split)}(models.Model):
-    {field_name} = models.ForeignKey(FHIR_{"_".join(id_split[:-1])}, related_name='{field_name}', null=False, on_delete=models.CASCADE)
-'''
+    {"_".join(id_split[:-1])} = models.ForeignKey(FHIR_{"_".join(id_split[:-1])}, related_name='{field_name}', null=False, on_delete=models.CASCADE)
+    {code_choices}
+    '''
                 else:
-                    options = ""
-                    this_model_lines += f'''
-    {field_name} = {FHIR_to_Model_primitive[use_type]}({options})'''
+                    this_model_lines += f'''{code_choices}
+    {field_name} = {FHIR_to_Model_primitive[use_type]}({field_options})'''
             elif use_type in FHIR_to_Model_generalpurpose:
                 use_type_model = FHIR_to_Model_generalpurpose[use_type]
                 if use_max == '*':
                     related_model_lines += f'''
 class FHIR_{"_".join(id_split)}({use_type_model}):
-    {field_name} = models.ForeignKey({"_".join(id_split[:-1])}, related_name='{field_name}', null=False, on_delete=models.CASCADE')
+    {"_".join(id_split[:-1])} = models.ForeignKey(FHIR_{"_".join(id_split[:-1])}, related_name='{field_name}', null=False, on_delete=models.CASCADE')
 '''
                 else:
                     this_model_lines += f'''
@@ -172,7 +171,34 @@ class FHIR_{"_".join(id_split)}({use_type_model}):
                     else:
                         this_model_lines += f'''
     {field_name}_{model_target} = models.ForeignKey("FHIR_{model_target}", related_name="{field_name}_{model_target}", null=True, blank=True, on_delete=models.SET_NULL)'''
-
+            elif use_type == "codeableconcept" or use_type == "codeablereference":
+                cc = f'''
+    BINDING_{field_name} = 'TODO'
+    {field_name}_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='{field_name}', limit_choices_to={{"codings__binding_rule": BINDING_{field_name}}})
+    {field_name}_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)'''
+                if use_type == 'codeableconcept':
+                    if use_max == '*':
+                        related_model_lines += f'''
+class FHIR_{"_".join(id_split)}(models.Model):
+    {"_".join(id_split[:-1])} = models.ForeignKey(FHIR_{"_".join(id_split[:-1])}, related_name='{field_name}', null=False, on_delete=models.CASCADE'){cc}
+    '''
+                    else:
+                        this_model_lines += cc
+                elif use_type == "codeablereference":
+                    reference_targets =  field['type'][0]['targetProfile']
+                    reference_list = ""
+                    for ref_target in reference_targets:
+                        model_target = ref_target.replace("http://hl7.org/fhir/StructureDefinition/", "")
+                        reference_list += f'''
+    {field_name}_{model_target}_ref = models.ForeignKey("FHIR_{model_target}", related_name="{field_name}_{model_target}", null=True, blank=True, on_delete=models.SET_NULL)'''
+                    
+                    if use_max == '*':
+                        related_model_lines += f'''
+class FHIR_{"_".join(id_split)}(models.Model):
+    {"_".join(id_split[:-1])} = models.ForeignKey(FHIR_{"_".join(id_split[:-1])}, related_name='{field_name}', null=False, on_delete=models.CASCADE'){cc}''' + reference_list + "\n"
+                    else:
+                        this_model_lines += (cc + reference_list)
+            
         i = i + 1
 
     return this_model_lines + "\n" + related_model_lines
@@ -203,4 +229,11 @@ class Command(BaseCommand):
 
 
         all_model_lines = elementArray_to_ModelString(FHIR_Resource)
-        print("result", all_model_lines)
+        print(f'''
+from django.db import models
+from ..FHIR_DataTypes.FHIR_generalpurpose import *
+from ..FHIR_DataTypes.FHIR_specialpurpose import *
+from ..FHIR_DataTypes.FHIR_metadata import *
+from ..FHIR_DataTypes.FHIR_primitive import *
+
+class FHIR_{FHIR_Resource_name}(models.Model):{all_model_lines}''')
