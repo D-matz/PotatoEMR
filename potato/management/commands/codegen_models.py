@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 import requests
 import json
+import os
 
 FHIR_to_Model_primitive = {
     #primitive types from PotatoEMR\potato\models_dir\FHIR_DataTypes\FHIR_primitive.py
@@ -62,8 +63,6 @@ FHIR_to_Model_generalpurpose = {
     'VirtualServiceDetail' : 'FHIR_meta_VirtualServiceDetail',
 
     #reference to another FHIR resource
-    'Reference' : 'models.ForeignKey(replace_resource, blank=replace_blank, null=replace_null, on_delete=models.replace_delete)',
-
     #codeableconcept and codeablereference
 }
 lower_FHIR_to_Model_primitive = {k.lower(): v for k, v in FHIR_to_Model_primitive.items()}
@@ -94,10 +93,24 @@ def elementArray_to_ModelString(element_array):
             use_max = field['max']
         if 'type' in field:
             field_type = field['type']
+            
+            #in cases like allowed[x] one field can have multiple types
+            #split these into multiple fields
+            if len(field_type) > 1:
+                new_fields = []
+                for a_type in field_type:
+                    new_field = field.copy()
+                    new_field['type'] = [a_type]
+                    new_fields.append(new_field)
+                element_array[i+1:i+1] = new_fields
+                i = i + 1
+                continue
+
             if len(field_type ) > 0:
                 first_type = field_type[0]
                 if 'code' in first_type:
                     use_type = first_type['code'].lower()
+
 
         if use_id == None:
             i = i + 1
@@ -118,10 +131,16 @@ def elementArray_to_ModelString(element_array):
         else:
             #a field we want to use
             field_name = id_split[-1]
+            if field_name.endswith('[x]'):
+                field_name = field_name[:-3]
+                #we already split cases like allowed[x] into multiple fields
+            related_name = use_id.replace('.', '_')
+            if related_name.endswith('[x]'):
+                related_name = related_name[:-3]
             if use_type == "backboneelement":
                 related_model_lines += f'''
 class FHIR_{"_".join(id_split)}(models.Model):
-    {"_".join(id_split[:-1])} = models.ForeignKey(FHIR_{"_".join(id_split[:-1])}, related_name='{field_name}', null=False, on_delete=models.CASCADE')'''
+    {"_".join(id_split[:-1])} = models.ForeignKey(FHIR_{"_".join(id_split[:-1])}, related_name='{related_name}', null=False, on_delete=models.CASCADE)'''
                 backbone_min_len = len(id_split) + 1
                 backbone_array = []
                 i = i + 1
@@ -133,71 +152,100 @@ class FHIR_{"_".join(id_split)}(models.Model):
                 #print("backbone", all_model_lines_in_backbone)
                 related_model_lines += all_model_lines_in_backbone
                 continue
-            elif use_type in FHIR_to_Model_primitive:
+                
+            #primitive types implemented as a single field
+            elif use_type in lower_FHIR_to_Model_primitive:
                 code_choices = ""
-                field_options = f'''choices={field_name.capitalize()}Choices.choices, '''
+                field_options = ""
+                field_null = "null=True, blank=True, "
+                if use_min == '1':
+                    field_null = "null=False, blank=False, "
                 if use_type == 'code':
+                    field_options += f'''choices={field_name.capitalize()}Choices.choices, '''
                     code_list = field['short'].split(' | ')
                     code_choices = f'''
     class {field_name.capitalize()}Choices(models.TextChoices): '''
                     for code in code_list:
-                        code_choices += f"{code.replace('-', '_').upper()} = '{code}', '{code.capitalize()}'; "
+                        code_choices += f"{code.replace('-', '_').replace(' ', '_').replace('(', '').replace(')', '').upper()} = '{code}', '{code.capitalize()}'; "
                 if use_max == '*':
                     related_model_lines += f'''
 class FHIR_{"_".join(id_split)}(models.Model):
-    {"_".join(id_split[:-1])} = models.ForeignKey(FHIR_{"_".join(id_split[:-1])}, related_name='{field_name}', null=False, on_delete=models.CASCADE)
+    {"_".join(id_split[:-1])} = models.ForeignKey(FHIR_{"_".join(id_split[:-1])}, related_name='{related_name}', null=False, on_delete=models.CASCADE)
     {code_choices}
+    {field_name} = {lower_FHIR_to_Model_primitive[use_type]}({field_options}{field_null})
     '''
                 else:
                     this_model_lines += f'''{code_choices}
-    {field_name} = {FHIR_to_Model_primitive[use_type]}({field_options})'''
-            elif use_type in FHIR_to_Model_generalpurpose:
-                use_type_model = FHIR_to_Model_generalpurpose[use_type]
+    {field_name} = {lower_FHIR_to_Model_primitive[use_type]}({field_options}{field_null})'''
+    
+            #general purpose types implemented as a model
+            elif use_type in lower_FHIR_to_Model_generalpurpose:
+                use_type_model = lower_FHIR_to_Model_generalpurpose[use_type]
+                oneToOne_null = "null=True, blank=True, on_delete=models.SET_NULL"
+                if use_min == '1':
+                    oneToOne_null = "null=False, blank=False, on_delete=models.CASCADE"
                 if use_max == '*':
                     related_model_lines += f'''
 class FHIR_{"_".join(id_split)}({use_type_model}):
-    {"_".join(id_split[:-1])} = models.ForeignKey(FHIR_{"_".join(id_split[:-1])}, related_name='{field_name}', null=False, on_delete=models.CASCADE')
+    {"_".join(id_split[:-1])} = models.ForeignKey(FHIR_{"_".join(id_split[:-1])}, related_name='{related_name}', null=False, on_delete=models.CASCADE)
 '''
                 else:
                     this_model_lines += f'''
-    {field_name} = models.OneToOneField({use_type_model}, related_name='{field_name}', null=True, blank=True, on_delete=models.SET_NULL)'''
+    {field_name} = models.OneToOneField("{use_type_model}", related_name='{related_name}', {oneToOne_null})'''
+                    
+            #reference to another model representing a FHIR resource
             elif use_type == "reference":
-                reference_targets =  field['type'][0]['targetProfile']
-                for ref_target in reference_targets:
-                    model_target = ref_target.replace("http://hl7.org/fhir/StructureDefinition/", "")
-                    if use_max == '*':
-                        this_model_lines += f'''
-    {field_name}_{model_target} = models.ManyToManyField("FHIR_{model_target}", related_name="{field_name}_{model_target}", blank=True)'''
-                    else:
-                        this_model_lines += f'''
-    {field_name}_{model_target} = models.ForeignKey("FHIR_{model_target}", related_name="{field_name}_{model_target}", null=True, blank=True, on_delete=models.SET_NULL)'''
-            elif use_type == "codeableconcept" or use_type == "codeablereference":
+                #not going to do anything with Reference(<no target resource here)
+                if 'targetProfile' in field['type'][0]:
+                    reference_targets =  field['type'][0]['targetProfile']
+                    for ref_target in reference_targets:
+                        model_target = ref_target.replace("http://hl7.org/fhir/StructureDefinition/", "")
+                        if model_target == "Resource": continue #skip "Any" fields that can be any fhir resource
+                        ref_field_name = field_name + "_" + model_target #add model target in case field can be actor_Patient, actor_Group, etc
+                        if len(reference_targets) == 1:
+                            ref_field_name = field_name #dumb looking to have actor_Patient if actor can only be Patient, then just actor is good
+                        if use_max == '*':
+                            this_model_lines += f'''
+    {ref_field_name} = models.ManyToManyField("FHIR_{model_target}", related_name="{related_name}", blank=True)'''
+                        else:
+                            this_model_lines += f'''
+    {ref_field_name} = models.ForeignKey("FHIR_{model_target}", related_name="{related_name}", null=True, blank=True, on_delete=models.SET_NULL)'''
+    
+            #codeableconcept has set of codings from its binding set, and a text field
+            #codeablereference has that plus reference(s) to another model representing a FHIR resource
+            elif use_type == "codeableconcept" or use_type == "codeablereference":                
                 cc = f'''
     BINDING_{field_name} = 'TODO'
-    {field_name}_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='{field_name}', limit_choices_to={{"codings__binding_rule": BINDING_{field_name}}})
+    {field_name}_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={{"codings__binding_rule": BINDING_{field_name}}}, related_name='{related_name}', blank=True)
     {field_name}_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)'''
                 if use_type == 'codeableconcept':
                     if use_max == '*':
                         related_model_lines += f'''
 class FHIR_{"_".join(id_split)}(models.Model):
-    {"_".join(id_split[:-1])} = models.ForeignKey(FHIR_{"_".join(id_split[:-1])}, related_name='{field_name}', null=False, on_delete=models.CASCADE'){cc}
+    {"_".join(id_split[:-1])} = models.ForeignKey(FHIR_{"_".join(id_split[:-1])}, related_name='{related_name}', null=False, on_delete=models.CASCADE){cc}
     '''
                     else:
                         this_model_lines += cc
                 elif use_type == "codeablereference":
-                    reference_targets =  field['type'][0]['targetProfile']
-                    reference_list = ""
-                    for ref_target in reference_targets:
-                        model_target = ref_target.replace("http://hl7.org/fhir/StructureDefinition/", "")
-                        reference_list += f'''
-    {field_name}_{model_target}_ref = models.ForeignKey("FHIR_{model_target}", related_name="{field_name}_{model_target}", null=True, blank=True, on_delete=models.SET_NULL)'''
-                    
-                    if use_max == '*':
-                        related_model_lines += f'''
+                    #not going to do anything with Reference(<no target resource here)
+                    if 'targetProfile' in field['type'][0]:
+                        reference_targets =  field['type'][0]['targetProfile']
+                        reference_list = ""
+                        for ref_target in reference_targets:
+                            model_target = ref_target.replace("http://hl7.org/fhir/StructureDefinition/", "")
+                            if model_target == "Resource": continue #skip "Any" fields that can be any fhir resource
+                            reference_list += f'''
+    {field_name}_{model_target}_ref = models.ForeignKey("FHIR_{model_target}", related_name="{related_name}", null=True, blank=True, on_delete=models.SET_NULL)'''
+                        
+                        if use_max == '*':
+                            related_model_lines += f'''
 class FHIR_{"_".join(id_split)}(models.Model):
-    {"_".join(id_split[:-1])} = models.ForeignKey(FHIR_{"_".join(id_split[:-1])}, related_name='{field_name}', null=False, on_delete=models.CASCADE'){cc}''' + reference_list + "\n"
-                    else:
-                        this_model_lines += (cc + reference_list)
+    {"_".join(id_split[:-1])} = models.ForeignKey(FHIR_{"_".join(id_split[:-1])}, related_name='{related_name}', null=False, on_delete=models.CASCADE){cc}''' + reference_list + "\n"
+                        else:
+                            this_model_lines += (cc + reference_list)
+
+            else:
+                print("unknown type", use_type, field_name)
             
         i = i + 1
 
@@ -208,28 +256,28 @@ class Command(BaseCommand):
         print("generating FHIR Resource models")
         # URL of the FHIR MedicationRequest profile JSON
 
-        FHIR_Resource_name = "MedicationRequest"
+        FHIR_resource_list = ['Account', 'ActivityDefinition', 'ActorDefinition', 'AdministrableProductDefinition', 'AdverseEvent', 'AllergyIntolerance', 'Appointment', 'AppointmentResponse', 'ArtifactAssessment', 'AuditEvent', 'Basic', 'Binary', 'BiologicallyDerivedProduct', 'BiologicallyDerivedProductDispense', 'BodyStructure', 'Bundle', 'CapabilityStatement', 'CarePlan', 'CareTeam', 'ChargeItem', 'ChargeItemDefinition', 'Citation', 'Claim', 'ClaimResponse', 'ClinicalAssessment', 'ClinicalUseDefinition', 'CodeSystem', 'Communication', 'CommunicationRequest', 'CompartmentDefinition', 'Composition', 'ConceptMap', 'Condition', 'ConditionDefinition', 'Consent', 'Contract', 'Coverage', 'CoverageEligibilityRequest', 'CoverageEligibilityResponse', 'DetectedIssue', 'Device', 'DeviceAlert', 'DeviceAssociation', 'DeviceDefinition', 'DeviceDispense', 'DeviceMetric', 'DeviceRequest', 'DeviceUsage', 'DiagnosticReport', 'DocumentReference', 'Encounter', 'EncounterHistory', 'Endpoint', 'EnrollmentRequest', 'EnrollmentResponse', 'EpisodeOfCare', 'EventDefinition', 'Evidence', 'EvidenceVariable', 'ExampleScenario', 'ExplanationOfBenefit', 'FamilyMemberHistory', 'Flag', 'FormularyItem', 'GenomicStudy', 'Goal', 'GraphDefinition', 'Group', 'GuidanceResponse', 'HealthcareService', 'ImagingSelection', 'ImagingStudy', 'Immunization', 'ImmunizationEvaluation', 'ImmunizationRecommendation', 'ImplementationGuide', 'Ingredient', 'InsurancePlan', 'InsuranceProduct', 'InventoryItem', 'InventoryReport', 'Invoice', 'Library', 'Linkage', 'List', 'Location', 'ManufacturedItemDefinition', 'Measure', 'MeasureReport', 'Medication', 'MedicationAdministration', 'MedicationDispense', 'MedicationKnowledge', 'MedicationRequest', 'MedicationStatement', 'MedicinalProductDefinition', 'MessageDefinition', 'MessageHeader', 'MolecularDefinition', 'MolecularSequence', 'NamingSystem', 'NutritionIntake', 'NutritionOrder', 'NutritionProduct', 'Observation', 'ObservationDefinition', 'OperationDefinition', 'OperationOutcome', 'Organization', 'OrganizationAffiliation', 'PackagedProductDefinition', 'Parameters', 'Patient', 'PaymentNotice', 'PaymentReconciliation', 'Permission', 'Person', 'PersonalRelationship', 'PlanDefinition', 'Practitioner', 'PractitionerRole', 'Procedure', 'Provenance', 'Questionnaire', 'QuestionnaireResponse', 'RegulatedAuthorization', 'RelatedPerson', 'RequestOrchestration', 'Requirements', 'ResearchStudy', 'ResearchSubject', 'RiskAssessment', 'Schedule', 'SearchParameter', 'ServiceRequest', 'Slot', 'Specimen', 'SpecimenDefinition', 'StructureDefinition', 'StructureMap', 'Subscription', 'SubscriptionStatus', 'SubscriptionTopic', 'Substance', 'SubstanceDefinition', 'SubstanceNucleicAcid', 'SubstancePolymer', 'SubstanceProtein', 'SubstanceReferenceInformation', 'SubstanceSourceMaterial', 'SupplyDelivery', 'SupplyRequest', 'Task', 'TerminologyCapabilities', 'TestPlan', 'TestReport', 'TestScript', 'Transport', 'ValueSet', 'VerificationResult', 'VisionPrescription']
+        for FHIR_Resource_name in FHIR_resource_list:
+            print("codegen: " +FHIR_Resource_name)
 
-        print("codegen: " +FHIR_Resource_name)
+            url = "https://build.fhir.org/" + FHIR_Resource_name.lower() + ".profile.canonical.json"
 
-        url = "https://build.fhir.org/" + FHIR_Resource_name.lower() + ".profile.canonical.json"
+            response = requests.get(url)
+            response.raise_for_status()
+            data = response.json()
+            FHIR_Resource = data['snapshot']['element']
 
-        # Download the JSON content
-        response = requests.get(url)
-        response.raise_for_status()  # Raise exception if request failed
+            #0..* or 1..* elements can have multiple
+            #need to put 0..* elements at end, in own model with foreign key to this model
+            #but if backboneElement is 0..*, need to recurse for all elements in it
 
-        # Parse the JSON
-        data = response.json()
-        FHIR_Resource = data['snapshot']['element']
-
-
-        #0..* or 1..* elements can have multiple
-        #need to put 0..* elements at end, in own model with foreign key to this model
-        #but if backboneElement is 0..*, need to recurse for all elements in it
-
-
-        all_model_lines = elementArray_to_ModelString(FHIR_Resource)
-        print(f'''
+            all_model_lines = elementArray_to_ModelString(FHIR_Resource)
+            
+            #TODO maybe also print diffs vs models_dir/FHIR_Resources/FHIR_Resource_name.py
+            output_dir = "potato/management/commands/codegen_models_output"
+            output_file = os.path.join(output_dir, f"{FHIR_Resource_name}.py")
+            with open(output_file, 'w') as f:
+                f.write(f'''
 from django.db import models
 from ..FHIR_DataTypes.FHIR_generalpurpose import *
 from ..FHIR_DataTypes.FHIR_specialpurpose import *

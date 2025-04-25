@@ -6,8 +6,12 @@ from .models_dir.FHIR_DataTypes.FHIR_metadata import *
 #but maybe easier to manage when there are a lot of resources (nicer git history?)
 from .models_dir.FHIR_Resources.AllergyIntolerance import *
 from .models_dir.FHIR_Resources.Account import *
-from .models_dir.FHIR_Resources.Availability import *
+from .models_dir.FHIR_Resources.ActivityDefinition import *
+from .models_dir.FHIR_Resources.ActorDefinition import *
+from .models_dir.FHIR_Resources.AdministrableProductDefinition import *
+from .models_dir.FHIR_Resources.AllergyIntolerance import *
 from .models_dir.FHIR_Resources.Appointment import *
+from .models_dir.FHIR_Resources.Availability import *
 from .models_dir.FHIR_Resources.Binary import *
 from .models_dir.FHIR_Resources.BiologicallyDerivedProduct import *
 from .models_dir.FHIR_Resources.CarePlan import *
@@ -29,19 +33,23 @@ from .models_dir.FHIR_Resources.GenomicStudy import *
 from .models_dir.FHIR_Resources.Group import *
 from .models_dir.FHIR_Resources.HealthcareService import *
 from .models_dir.FHIR_Resources.ImagingStudy import *
+from .models_dir.FHIR_Resources.Ingredient import *
 from .models_dir.FHIR_Resources.Immunization import *
 from .models_dir.FHIR_Resources.ImmunizationRecommendation import *
 from .models_dir.FHIR_Resources.Location import *
+from .models_dir.FHIR_Resources.ManufacturedItemDefinition import *
 from .models_dir.FHIR_Resources.Medication import *
 from .models_dir.FHIR_Resources.MedicationAdministration import *
 from .models_dir.FHIR_Resources.MedicationDispense import *
 from .models_dir.FHIR_Resources.MedicationRequest import *
 from .models_dir.FHIR_Resources.MedicationStatement import *
+from .models_dir.FHIR_Resources.MedicinalProductDefinition import *
 from .models_dir.FHIR_Resources.NutritionOrder import *
 from .models_dir.FHIR_Resources.NutritionProduct import *
 from .models_dir.FHIR_Resources.Observation import *
 from .models_dir.FHIR_Resources.ObservationDefinition import *
 from .models_dir.FHIR_Resources.Organization import *
+from .models_dir.FHIR_Resources.PackagedProductDefinition import *
 from .models_dir.FHIR_Resources.Patient import *
 from .models_dir.FHIR_Resources.Practitioner import *
 from .models_dir.FHIR_Resources.PractitionerRole import *
@@ -51,6 +59,8 @@ from .models_dir.FHIR_Resources.RelatedPerson import *
 from .models_dir.FHIR_Resources.RequestOrchestration import *
 from .models_dir.FHIR_Resources.ServiceRequest import *
 from .models_dir.FHIR_Resources.Slot import *
+from .models_dir.FHIR_Resources.Specimen import *
 from .models_dir.FHIR_Resources.Substance import *
+from .models_dir.FHIR_Resources.SubstanceDefinition import *
 from .models_dir.FHIR_Resources.VirtualServiceDetail import *
 from .models_dir.FHIR_Resources.VisionPrescription import *

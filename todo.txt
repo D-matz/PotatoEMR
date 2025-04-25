@@ -44,3 +44,5 @@ calendar -> appointment, because calendar links to specific encounter
     the model relation is encounter has many appointments, although we only need one appointment ref
     so when creating encounter, use appointment and its location/status
     for now, going to say when you click on an appointment, it either gets first associated encounter or creates new encounter
+
+calendar double click not working?

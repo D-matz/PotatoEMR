@@ -4,16 +4,16 @@ from django.utils.safestring import mark_safe
 from ..models_dir.FHIR_DataTypes.FHIR_generalpurpose import FHIR_GP_Coding
 from potato.models_dir.FHIR_Resources.AllergyIntolerance import (
     FHIR_AllergyIntolerance,
-    FHIR_AllergyIntolerance_Reaction,
-    FHIR_AllergyIntolerance_Reaction_Manifestation,
-    FHIR_AllergyIntolerance_Note
+    FHIR_AllergyIntolerance_reaction,
+    FHIR_AllergyIntolerance_reaction_manifestation,
+    FHIR_AllergyIntolerance_note
 )
 from django.db import transaction
 
 
 class AllergyIntolerance_Combined_Form(forms.Form):
     code_cc = forms.ModelChoiceField(
-        queryset=FHIR_GP_Coding.objects.filter(codings__binding_rule=FHIR_AllergyIntolerance.BINDING_RULE_CODE).order_by('display', 'code'),
+        queryset=FHIR_GP_Coding.objects.filter(codings__binding_rule=FHIR_AllergyIntolerance.BINDING_code).order_by('display', 'code'),
         widget=forms.Select(attrs={
             'class': 'form-select tomselect',
             'data-plugins': 'remove_button',
@@ -23,7 +23,7 @@ class AllergyIntolerance_Combined_Form(forms.Form):
     )
     type_cc = forms.ModelChoiceField(
         required=False,
-        queryset=FHIR_GP_Coding.objects.filter(codings__binding_rule=FHIR_AllergyIntolerance.BINDING_RULE_TYPE).order_by('display', 'code'),
+        queryset=FHIR_GP_Coding.objects.filter(codings__binding_rule=FHIR_AllergyIntolerance.BINDING_type).order_by('display', 'code'),
         widget=forms.Select(attrs={'class': 'form-select form-select-sm'})
     )
 
@@ -39,23 +39,23 @@ class AllergyIntolerance_Combined_Form(forms.Form):
 
     severity = forms.ModelChoiceField(
         required=False,
-        queryset=FHIR_GP_Coding.objects.filter(codings__binding_rule=FHIR_AllergyIntolerance_Reaction.BINDING_RULE_SEVERITY),
+        queryset=FHIR_GP_Coding.objects.filter(codings__binding_rule="TODO"),
         widget=forms.Select(attrs={'class': 'form-select form-select-sm'})
     )
 
     manifestation_cc_1 = forms.ModelChoiceField(
         required=False,
-        queryset=FHIR_GP_Coding.objects.filter(codings__binding_rule=FHIR_AllergyIntolerance_Reaction_Manifestation.BINDING_RULE_MANIFESTATION).order_by('display', 'code'),
+        queryset=FHIR_GP_Coding.objects.filter(codings__binding_rule=FHIR_AllergyIntolerance_reaction_manifestation.BINDING_manifestation).order_by('display', 'code'),
         widget=forms.Select(attrs={'class': 'form-select tomselect', 'data-plugins': 'remove_button', 'autocomplete': 'off', 'data-allow-empty': 'true'})
     )
     manifestation_cc_2 = forms.ModelChoiceField(
         required=False,
-        queryset=FHIR_GP_Coding.objects.filter(codings__binding_rule=FHIR_AllergyIntolerance_Reaction_Manifestation.BINDING_RULE_MANIFESTATION).order_by('display', 'code'),
+        queryset=FHIR_GP_Coding.objects.filter(codings__binding_rule=FHIR_AllergyIntolerance_reaction_manifestation.BINDING_manifestation).order_by('display', 'code'),
         widget=forms.Select(attrs={'class': 'form-select tomselect', 'data-plugins': 'remove_button', 'autocomplete': 'off', 'data-allow-empty': 'true'})
     )
     manifestation_cc_3 = forms.ModelChoiceField(
         required=False,
-        queryset=FHIR_GP_Coding.objects.filter(codings__binding_rule=FHIR_AllergyIntolerance_Reaction_Manifestation.BINDING_RULE_MANIFESTATION).order_by('display', 'code'),
+        queryset=FHIR_GP_Coding.objects.filter(codings__binding_rule=FHIR_AllergyIntolerance_reaction_manifestation.BINDING_manifestation).order_by('display', 'code'),
         widget=forms.Select(attrs={'class': 'form-select tomselect', 'data-plugins': 'remove_button', 'autocomplete': 'off', 'data-allow-empty': 'true'})
     )
 
@@ -93,17 +93,17 @@ class AllergyIntolerance_Combined_Form(forms.Form):
             allergy_model.code_cc.set([cleaned_data['code_cc']])
             allergy_model.type_cc.set([cleaned_data['type_cc']])
 
-            reaction_model, _ = FHIR_AllergyIntolerance_Reaction.objects.get_or_create(allergy_intolerance=allergy_model)
+            reaction_model, _ = FHIR_AllergyIntolerance_reaction.objects.get_or_create(AllergyIntolerance=allergy_model)
             reaction_model.severity=cleaned_data['severity']
             reaction_model.save()
 
-            note_model, _ = FHIR_AllergyIntolerance_Note.objects.get_or_create(allergy_intolerance=allergy_model)
+            note_model, _ = FHIR_AllergyIntolerance_note.objects.get_or_create(AllergyIntolerance=allergy_model)
             note_model.text=cleaned_data['text']
             note_model.save()
 
 
             if reaction_model:
-                FHIR_AllergyIntolerance_Reaction_Manifestation.objects.filter(reaction=reaction_model).delete()
+                FHIR_AllergyIntolerance_reaction_manifestation.objects.filter(AllergyIntolerance_reaction=reaction_model).delete()
                 manifestation_cc_list = [
                     cleaned_data.get('manifestation_cc_1'),
                     cleaned_data.get('manifestation_cc_2'),
@@ -111,7 +111,7 @@ class AllergyIntolerance_Combined_Form(forms.Form):
                 ]
                 for manifestation_cc in manifestation_cc_list:
                     if manifestation_cc:
-                        manifestation_model = FHIR_AllergyIntolerance_Reaction_Manifestation(reaction=reaction_model)
+                        manifestation_model = FHIR_AllergyIntolerance_reaction_manifestation(AllergyIntolerance_reaction=reaction_model)
                         manifestation_model.save()
                         manifestation_model.manifestation_cc.set([manifestation_cc])
 
@@ -125,12 +125,12 @@ class AllergyIntolerance_Combined_Form(forms.Form):
             print(allergy_model.onset_dateTime, allergy_model.recordedDate)
             self.fields['onset_dateTime'].initial = allergy_model.onset_dateTime
             self.fields['recordedDate'].initial = allergy_model.recordedDate
-            note_model = FHIR_AllergyIntolerance_Note.objects.filter(allergy_intolerance=allergy_model).first()
+            note_model = FHIR_AllergyIntolerance_note.objects.filter(AllergyIntolerance=allergy_model).first()
             if note_model:
                 self.fields['text'].initial = note_model.text
-            reaction_model = FHIR_AllergyIntolerance_Reaction.objects.filter(allergy_intolerance=allergy_model).first()
+            reaction_model = FHIR_AllergyIntolerance_reaction.objects.filter(AllergyIntolerance=allergy_model).first()
             if reaction_model:
                 self.fields['severity'].initial = reaction_model.severity
-                manifestation_model_list = FHIR_AllergyIntolerance_Reaction_Manifestation.objects.filter(reaction=reaction_model)[:3]
+                manifestation_model_list = FHIR_AllergyIntolerance_reaction_manifestation.objects.filter(AllergyIntolerance_reaction=reaction_model)[:3]
                 for fieldnum, manifestation_model in zip(range(1, 4), manifestation_model_list):
                     self.fields['manifestation_cc_'+str(fieldnum)].initial = manifestation_model.manifestation_cc.first()
