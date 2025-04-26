@@ -30,7 +30,7 @@
             <tr style="cursor: pointer;"
                 hx-target="#apptDetails"
                 hx-get="{% url 'home_calendar_peek' appt.id %}"
-                hx-ext="click-or-dblclick" dblclick-url="{% url 'AppointmentEncounter_overview' appt.patient_id 0 %}" dblclick-target="body" dblclick-push-url="false"
+                hx-ext="click-or-dblclick" dblclick-url="{% url 'AppointmentEncounter_overview' appt.patient_id appt.encounter_id %}" dblclick-target="body" dblclick-push-url="false"
                 hx-trigger="click delay:0.3s, dblclick"
                 hx-swap="morph"
                 >

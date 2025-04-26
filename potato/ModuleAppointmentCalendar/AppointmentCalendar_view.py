@@ -61,7 +61,7 @@ def calendar(request, template, apptInfo):
     appt_list = []
     for appt_model in sorted_appts:
         encounter_model = getOrCreateApptEncounter(appt_model)
-        calendar_entry = {
+        appt_list_item = {
             'id': appt_model.id,
             'patient': str(appt_model.subject_patient),
             'patient_id': appt_model.subject_patient.id,
@@ -73,8 +73,8 @@ def calendar(request, template, apptInfo):
         }
         for participant in appt_model.appointment_participant.all():
             practitioner = participant.actor_practitioner
-            if practitioner: calendar_entry['provider'] = str(practitioner)
-        appt_list.append(calendar_entry)
+            if practitioner: appt_list_item['provider'] = str(practitioner)
+        appt_list.append(appt_list_item)
 
     #print(appt_list)
     return render(request, template, {'ApptClndrForm': ApptClndrForm(apptInfo), 'appt_list': appt_list})
