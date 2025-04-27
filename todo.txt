@@ -49,3 +49,8 @@ dark mode switcher doesn't work after clicking patient pages, something with idi
 putting None in login default instead of blank
 error in calendar if appointment has no patient subject - should maybe set patient none gracefully
 back button broken when calendar -> double click appointment
+
+bundle from http://www.iana.org/assignments/link-relations/link-relations.xhtml#link-relations-1
+^some of these codes aren't like a | b | c
+
+add __str__ to models manually idk

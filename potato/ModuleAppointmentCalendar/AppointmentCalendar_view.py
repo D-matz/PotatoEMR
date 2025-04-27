@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from datetime import date, datetime, timedelta
 from .AppointmentCalendar_form import ApptClndrForm
-from potato.models import FHIR_Appointment, FHIR_Location, FHIR_Practitioner, FHIR_Encounter, FHIR_Encounter_Participant, FHIR_Appointment_participant
+from potato.models import FHIR_Appointment, FHIR_Location, FHIR_Practitioner, FHIR_Encounter, FHIR_Encounter_participant, FHIR_Appointment_participant, FHIR_Encounter_location
 from django.http import HttpResponse
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
@@ -22,13 +22,17 @@ def getOrCreateApptEncounter(appt_model):
                 return None
             new_encounter_model = FHIR_Encounter.objects.create(
                 status=FHIR_Encounter.StatusChoices.PLANNED,
-                location_ref=appt_part_location_model.actor_Location,
-                subject_patient=appt_model.subject_Patient,
-                subject_group=appt_model.subject_Group,
+                subject_Patient=appt_model.subject_Patient,
+                subject_Group=appt_model.subject_Group,
             )
-            FHIR_Encounter_Participant.objects.create(
-                encounter=new_encounter_model,
-                actor_practitioner=appt_part_practitioner_model.actor_Practitioner,
+            FHIR_Encounter_location.objects.create(
+                Encounter=new_encounter_model,
+                location=appt_part_location_model.actor_Location,
+                status=FHIR_Encounter_location.StatusChoices.PLANNED
+            )
+            FHIR_Encounter_participant.objects.create(
+                Encounter=new_encounter_model,
+                actor_Practitioner=appt_part_practitioner_model.actor_Practitioner,
             )
             new_encounter_model.appointment.set([appt_model])
         if new_encounter_model is None:
@@ -85,9 +89,9 @@ def calendar_whole(request):
     default_location = FHIR_Location.objects.first()
     if default_location is None: practitioner_id = None
     else:
-        practitioner_models =  FHIR_Practitioner.objects.filter(practitioner_roles__location=default_location.id)
+        practitioner_models =  FHIR_Practitioner.objects.filter(PractitionerRole_practitioner__location=default_location.id)
         if not practitioner_models.exists(): practitioner_id = None
-        else: practitioner_id = FHIR_Practitioner.objects.filter(practitioner_roles__location=default_location.id).first().id
+        else: practitioner_id = FHIR_Practitioner.objects.filter(PractitionerRole_practitioner__location=default_location.id).first().id
     apptInfo = {
         'Date': date.today(),
         'Location': default_location.id,
@@ -102,7 +106,7 @@ def calendar_partial(request):
     #so if they changed location, set practitioner field to first practitioner for that location
     chosen_location_id = request.GET['Location']
     chosen_practitioner_id = request.GET['Practitioner']
-    chosen_location_practitioners = FHIR_Practitioner.objects.filter(practitioner_roles__location=chosen_location_id).distinct()
+    chosen_location_practitioners = FHIR_Practitioner.objects.filter(PractitionerRole_practitioner__location=chosen_location_id).distinct()
     if FHIR_Practitioner.objects.get(id=chosen_practitioner_id) not in chosen_location_practitioners:
         chosen_practitioner_id = chosen_location_practitioners.first().id
     apptInfo = {

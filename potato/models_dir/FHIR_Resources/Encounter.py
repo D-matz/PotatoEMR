@@ -1,197 +1,159 @@
+#FHIR Resource created by python potato/models_dir/Codegen/codegen_models.py
+from django.db import models
 from ..FHIR_DataTypes.FHIR_generalpurpose import *
+from ..FHIR_DataTypes.FHIR_specialpurpose import *
 from ..FHIR_DataTypes.FHIR_metadata import *
+from ..FHIR_DataTypes.FHIR_primitive import *
 
-#an encounter must have at least 1 location and at least 1 status
-#it probably should have patient and practitioner participants, but doesn't have to
 class FHIR_Encounter(models.Model):
-    #identifier foreign key to this
-    class StatusChoices(models.TextChoices): PLANNED = 'planned', 'Planned'; IN_PROGRESS = 'in-progress', 'In Progress'; ON_HOLD = 'on-hold', 'On Hold'; DISCHARGED = 'discharged', 'Discharged'; COMPLETED = 'completed', 'Completed'; CANCELLED = 'cancelled', 'Cancelled'; DISCONTINUED = 'discontinued', 'Discontinued'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered in Error'; UNKNOWN = 'unknown', 'Unknown'
-    status = FHIR_primitive_CodeField(max_length=16, choices=StatusChoices.choices, null=False)
-
-    #class foreign key to this
-
-    BINDING_RULE_PRIORITY = 'todo'
-    priority_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='encounter_priority', limit_choices_to={'codings__binding_rule': BINDING_RULE_PRIORITY})
+    class StatusChoices(models.TextChoices): PLANNED = 'planned', 'Planned'; IN_PROGRESS = 'in-progress', 'In-progress'; ON_HOLD = 'on-hold', 'On-hold'; DISCHARGED = 'discharged', 'Discharged'; COMPLETED = 'completed', 'Completed'; CANCELLED = 'cancelled', 'Cancelled'; DISCONTINUED = 'discontinued', 'Discontinued'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; UNKNOWN = 'unknown', 'Unknown'; 
+    status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
+    BINDING_priority = 'TODO'
+    priority_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_priority}, related_name='Encounter_priority', blank=True)
     priority_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-
-    #type foreign key to this
-
-    #serviceType foreign key to this
-
-    subject_patient = models.ForeignKey('FHIR_Patient', related_name="encounter_subject_patient", null=True, on_delete=models.SET_NULL)
-    subject_group = models.ForeignKey('FHIR_Patient', related_name="encounter_subject_group", null=True, on_delete=models.SET_NULL)
-
-    BINDING_RULE_SUBJECTSTATUS = 'todo'
-    subjectStatus_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='encounter_subjectStatus', limit_choices_to={'codings__binding_rule': BINDING_RULE_SUBJECTSTATUS})
+    subject_Patient = models.ForeignKey("FHIR_Patient", related_name="Encounter_subject", null=True, blank=True, on_delete=models.SET_NULL)
+    subject_Group = models.ForeignKey("FHIR_Group", related_name="Encounter_subject", null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_subjectStatus = 'TODO'
+    subjectStatus_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_subjectStatus}, related_name='Encounter_subjectStatus', blank=True)
     subjectStatus_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    episodeOfCare = models.ManyToManyField("FHIR_EpisodeOfCare", related_name="Encounter_episodeOfCare", blank=True)
+    basedOn_CarePlan = models.ManyToManyField("FHIR_CarePlan", related_name="Encounter_basedOn", blank=True)
+    basedOn_DeviceRequest = models.ManyToManyField("FHIR_DeviceRequest", related_name="Encounter_basedOn", blank=True)
+    basedOn_MedicationRequest = models.ManyToManyField("FHIR_MedicationRequest", related_name="Encounter_basedOn", blank=True)
+    basedOn_ServiceRequest = models.ManyToManyField("FHIR_ServiceRequest", related_name="Encounter_basedOn", blank=True)
+    basedOn_RequestOrchestration = models.ManyToManyField("FHIR_RequestOrchestration", related_name="Encounter_basedOn", blank=True)
+    basedOn_NutritionOrder = models.ManyToManyField("FHIR_NutritionOrder", related_name="Encounter_basedOn", blank=True)
+    basedOn_VisionPrescription = models.ManyToManyField("FHIR_VisionPrescription", related_name="Encounter_basedOn", blank=True)
+    basedOn_ImmunizationRecommendation = models.ManyToManyField("FHIR_ImmunizationRecommendation", related_name="Encounter_basedOn", blank=True)
+    careTeam = models.ManyToManyField("FHIR_CareTeam", related_name="Encounter_careTeam", blank=True)
+    partOf = models.ForeignKey("FHIR_Encounter", related_name="Encounter_partOf", null=True, blank=True, on_delete=models.SET_NULL)
+    serviceProvider = models.ForeignKey("FHIR_Organization", related_name="Encounter_serviceProvider", null=True, blank=True, on_delete=models.SET_NULL)
+    appointment = models.ManyToManyField("FHIR_Appointment", related_name="Encounter_appointment", blank=True)
+    actualPeriod = models.OneToOneField("FHIR_GP_Period", related_name='Encounter_actualPeriod', null=True, blank=True, on_delete=models.SET_NULL)
+    plannedStartDate = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    plannedEndDate = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    length = models.OneToOneField("FHIR_GP_Quantity_Duration", related_name='Encounter_length', null=True, blank=True, on_delete=models.SET_NULL)
+    account = models.ManyToManyField("FHIR_Account", related_name="Encounter_account", blank=True)
 
-    episodeOfCare_ref = models.ManyToManyField('FHIR_EpisodeOfCare', related_name='encounter_episodeOfCare', blank=True)
+class FHIR_Encounter_identifier(FHIR_GP_Identifier):
+    Encounter = models.ForeignKey(FHIR_Encounter, related_name='Encounter_identifier', null=False, on_delete=models.CASCADE)
 
-    basedOn_carePlan_ref = models.ManyToManyField('FHIR_CarePlan', related_name='encounter_basedOn_carePlan', blank=True)
-    basedOn_deviceRequest_ref = models.ManyToManyField('FHIR_DeviceRequest', related_name='encounter_basedOn_deviceRequest', blank=True)
-    basedOn_medicationRequest_ref = models.ManyToManyField('FHIR_MedicationRequest', related_name='encounter_basedOn_medicationRequest', blank=True)
-    basedOn_serviceRequest_ref = models.ManyToManyField('FHIR_ServiceRequest', related_name='encounter_basedOn_serviceRequest', blank=True)
-    basedOn_careTeam_ref = models.ManyToManyField('FHIR_CareTeam', related_name='encounter_basedOn_careTeam', blank=True)
-
-    careTeam = models.ManyToManyField('FHIR_CareTeam', related_name='encounter_careTeam', blank=True)
-    partOf_ref = models.ForeignKey('FHIR_Encounter', related_name='encounter_partOf', null=True, on_delete=models.SET_NULL, blank=True)
-    serviceProvider_ref = models.ForeignKey('FHIR_Organization', related_name='encounter_serviceProvider', null=True, on_delete=models.SET_NULL, blank=True)
-
-    #participant foreign key to this
-
-    appointment = models.ManyToManyField('FHIR_Appointment', related_name='encounter_appointment', blank=True)
-    
-    #virtualServiceDetail foreign key to this
-
-    actualPeriod = FHIR_GP_Period()
-    plannedStartDate = FHIR_primitive_DateTimeField(null=True, blank=True)
-    plannedEndDate = FHIR_primitive_DateTimeField(null=True, blank=True)
-    length = FHIR_GP_Quantity_Duration()
-
-    #reason foreign key to this
-
-    #diagnosis foreign key to this
-
-    account = models.ManyToManyField('FHIR_Account', related_name='encounter_account', blank=True)
-
-    #dietPreference foreign key to this
-    #specialArrangement foreign key to this
-    #specialCourtesy foreign key to this
-
-    #admission backbone element
-    admission_preAdmissionIdentifier = models.OneToOneField('FHIR_GP_Identifier', related_name='encounter_admission_preAdmissionIdentifier', null=True, blank=True, on_delete=models.SET_NULL)
-    admission_origin_location = models.ForeignKey('FHIR_Location', related_name='encounter_admission_origin_location', null=True, blank=True, on_delete=models.SET_NULL)
-    admission_origin_organization = models.ForeignKey('FHIR_Organization', related_name='encounter_admission_origin_organization', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_RULE_ADMIT_SOURCE = 'todo'
-    admission_admitSource_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='encounter_admission_admitSource', limit_choices_to={'codings__binding_rule': BINDING_RULE_ADMIT_SOURCE })
-    admission_admitSource_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_RULE_READMISSION = 'todo'
-    admission_readmission_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='encounter_admission_readmission', limit_choices_to={'codings__binding_rule': BINDING_RULE_READMISSION })
-    admission_readmission_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    admission_destination_location = models.ForeignKey('FHIR_Location', related_name='encounter_admission_destination_location', null=True, blank=True, on_delete=models.SET_NULL)
-    admission_destination_organization = models.ForeignKey('FHIR_Organization', related_name='encounter_admission_destination_organization', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_RULE_DISCHARGE_DISPOSITION = 'todo'
-    admission_dischargeDisposition_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='encounter_admission_dischargeDisposition', limit_choices_to={'codings__binding_rule': BINDING_RULE_DISCHARGE_DISPOSITION })
-    admission_dischargeDisposition_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-
-    #location backbone element
-    location_ref = models.ForeignKey('FHIR_Location', related_name='encounter_location', null=False, on_delete=models.CASCADE)
-    class LocationStatus(models.TextChoices): PLANNED = 'planned', 'Planned'; ACTIVE = 'active', 'Active'; RESERVED = 'reserved', 'Reserved'; COMPLETED = 'completed', 'Completed'
-    location_status = FHIR_primitive_CodeField(max_length=16, choices=LocationStatus.choices, null=True, blank=True)
-    BINDING_RULE_LOCATION_FORM = 'todo'
-    location_form_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='encounter_location_form', limit_choices_to={'codings__binding_rule': BINDING_RULE_LOCATION_FORM })
-    location_form_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    location_period = FHIR_GP_Period()
-
-class FHIR_Encounter_Identifier(FHIR_GP_Identifier):
-    encounter = models.ForeignKey(FHIR_Encounter, on_delete=models.CASCADE, related_name='identifiers')
-
-class FHIR_Encounter_Class(models.Model):
-    encounter = models.ForeignKey(FHIR_Encounter, on_delete=models.CASCADE, related_name='classes')
-    BINDING_RULE_CLASS = 'todo'
-    class_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='encounter_class', limit_choices_to={'codings__binding_rule': BINDING_RULE_CLASS})
+class FHIR_Encounter_class(models.Model):
+    Encounter = models.ForeignKey(FHIR_Encounter, related_name='Encounter_class', null=False, on_delete=models.CASCADE)
+    BINDING_class = 'TODO'
+    class_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_class}, related_name='Encounter_class', blank=True)
     class_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-
-class FHIR_Encounter_Type(models.Model):
-    encounter = models.ForeignKey(FHIR_Encounter, on_delete=models.CASCADE, related_name='types')
-    BINDING_RULE_TYPE = 'todo'
-    type_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='encounter_type', limit_choices_to={'codings__binding_rule': BINDING_RULE_TYPE})
-
-class FHIR_Encounter_ServiceType(models.Model):
-    encounter = models.ForeignKey(FHIR_Encounter, on_delete=models.CASCADE, related_name='service_types')
-    BINDING_RULE_SERVICETYPE = 'todo'
-    serviceType_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='encounter_service_type', limit_choices_to={'codings__binding_rule': BINDING_RULE_SERVICETYPE})
-    serviceType_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    serviceType_reference = models.ForeignKey('FHIR_ServiceRequest', on_delete=models.CASCADE, related_name='encounter_service_type', null=True, blank=True)
-
-class FHIR_Encounter_Participant(models.Model):
-    encounter = models.ForeignKey(FHIR_Encounter, on_delete=models.CASCADE, related_name='participants')
-    period = FHIR_GP_Period()
-    actor_patient = models.ForeignKey('FHIR_Patient', related_name="encounter_participant_actor_patient", null=True, on_delete=models.SET_NULL, blank=True)
-    actor_group = models.ForeignKey('FHIR_Group', related_name="encounter_participant_actor_group", null=True, on_delete=models.SET_NULL, blank=True)
-    actor_relatedPerson = models.ForeignKey('FHIR_RelatedPerson', related_name="encounter_participant_actor_relatedPerson", null=True, on_delete=models.SET_NULL, blank=True)
-    actor_practitioner = models.ForeignKey('FHIR_Practitioner', related_name="encounter_participant_actor_practitioner", null=True, on_delete=models.SET_NULL, blank=True)
-    actor_practitionerRole = models.ForeignKey('FHIR_PractitionerRole', related_name="encounter_participant_actor_practitionerRole", null=True, on_delete=models.SET_NULL, blank=True)
-    actor_device = models.ForeignKey('FHIR_Device', related_name="encounter_participant_actor_device", null=True, on_delete=models.SET_NULL, blank=True)
-    actor_healthcareService = models.ForeignKey('FHIR_HealthcareService', related_name="encounter_participant_actor_healthcareService", null=True, on_delete=models.SET_NULL, blank=True)
-
-class FHIR_Encounter_Participant_Type(models.Model):
-    encounter_participant = models.ForeignKey(FHIR_Encounter_Participant, on_delete=models.CASCADE, related_name='participant_types')
-    BINDING_RULE_PARTICIPANT_TYPE = 'todo'
-    type_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='encounter_participant', limit_choices_to={'codings__binding_rule': BINDING_RULE_PARTICIPANT_TYPE})
+    
+class FHIR_Encounter_type(models.Model):
+    Encounter = models.ForeignKey(FHIR_Encounter, related_name='Encounter_type', null=False, on_delete=models.CASCADE)
+    BINDING_type = 'TODO'
+    type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='Encounter_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    
+class FHIR_Encounter_serviceType(models.Model):
+    Encounter = models.ForeignKey(FHIR_Encounter, related_name='Encounter_serviceType', null=False, on_delete=models.CASCADE)
+    BINDING_serviceType = 'TODO'
+    serviceType_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_serviceType}, related_name='Encounter_serviceType', blank=True)
+    serviceType_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    serviceType_HealthcareService_ref = models.ForeignKey("FHIR_HealthcareService", related_name="Encounter_serviceType_HealthcareService", null=True, blank=True, on_delete=models.SET_NULL)
 
-class FHIR_Encounter_VirtualServiceDetail(FHIR_meta_VirtualServiceDetail):
-    encounter = models.ForeignKey(FHIR_Encounter, on_delete=models.CASCADE, related_name='virtualServiceDetails')
+class FHIR_Encounter_participant(models.Model):
+    Encounter = models.ForeignKey(FHIR_Encounter, related_name='Encounter_participant', null=False, on_delete=models.CASCADE)
+    period = models.OneToOneField("FHIR_GP_Period", related_name='Encounter_participant_period', null=True, blank=True, on_delete=models.SET_NULL)
+    actor_Patient = models.ForeignKey("FHIR_Patient", related_name="Encounter_participant_actor", null=True, blank=True, on_delete=models.SET_NULL)
+    actor_Group = models.ForeignKey("FHIR_Group", related_name="Encounter_participant_actor", null=True, blank=True, on_delete=models.SET_NULL)
+    actor_RelatedPerson = models.ForeignKey("FHIR_RelatedPerson", related_name="Encounter_participant_actor", null=True, blank=True, on_delete=models.SET_NULL)
+    actor_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="Encounter_participant_actor", null=True, blank=True, on_delete=models.SET_NULL)
+    actor_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="Encounter_participant_actor", null=True, blank=True, on_delete=models.SET_NULL)
+    actor_Device = models.ForeignKey("FHIR_Device", related_name="Encounter_participant_actor", null=True, blank=True, on_delete=models.SET_NULL)
+    actor_HealthcareService = models.ForeignKey("FHIR_HealthcareService", related_name="Encounter_participant_actor", null=True, blank=True, on_delete=models.SET_NULL)
 
-class FHIR_Encounter_Reason(models.Model):
-    encounter = models.ForeignKey(FHIR_Encounter, on_delete=models.CASCADE, related_name='reasons')
+class FHIR_Encounter_participant_type(models.Model):
+    Encounter_participant = models.ForeignKey(FHIR_Encounter_participant, related_name='Encounter_participant_type', null=False, on_delete=models.CASCADE)
+    BINDING_type = 'TODO'
+    type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='Encounter_participant_type', blank=True)
+    type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    
+class FHIR_Encounter_virtualService(FHIR_meta_VirtualServiceDetail):
+    Encounter = models.ForeignKey(FHIR_Encounter, related_name='Encounter_virtualService', null=False, on_delete=models.CASCADE)
 
-class FHIR_Encounter_Reason_Use(models.Model):
-    encounter_reason = models.ForeignKey(FHIR_Encounter_Reason, on_delete=models.CASCADE, related_name='reason_uses')
-    BINDING_RULE_REASON_USE = 'todo'
-    use_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='encounter_reason_use', limit_choices_to={'codings__binding_rule': BINDING_RULE_REASON_USE})
+class FHIR_Encounter_reason(models.Model):
+    Encounter = models.ForeignKey(FHIR_Encounter, related_name='Encounter_reason', null=False, on_delete=models.CASCADE)
+
+class FHIR_Encounter_reason_use(models.Model):
+    Encounter_reason = models.ForeignKey(FHIR_Encounter_reason, related_name='Encounter_reason_use', null=False, on_delete=models.CASCADE)
+    BINDING_use = 'TODO'
+    use_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_use}, related_name='Encounter_reason_use', blank=True)
     use_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    
+class FHIR_Encounter_reason_value(models.Model):
+    Encounter_reason = models.ForeignKey(FHIR_Encounter_reason, related_name='Encounter_reason_value', null=False, on_delete=models.CASCADE)
+    BINDING_value = 'TODO'
+    value_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value}, related_name='Encounter_reason_value', blank=True)
+    value_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    value_Condition_ref = models.ForeignKey("FHIR_Condition", related_name="Encounter_reason_value_Condition", null=True, blank=True, on_delete=models.SET_NULL)
+    value_DiagnosticReport_ref = models.ForeignKey("FHIR_DiagnosticReport", related_name="Encounter_reason_value_DiagnosticReport", null=True, blank=True, on_delete=models.SET_NULL)
+    value_Observation_ref = models.ForeignKey("FHIR_Observation", related_name="Encounter_reason_value_Observation", null=True, blank=True, on_delete=models.SET_NULL)
+    value_ImmunizationRecommendation_ref = models.ForeignKey("FHIR_ImmunizationRecommendation", related_name="Encounter_reason_value_ImmunizationRecommendation", null=True, blank=True, on_delete=models.SET_NULL)
+    value_Procedure_ref = models.ForeignKey("FHIR_Procedure", related_name="Encounter_reason_value_Procedure", null=True, blank=True, on_delete=models.SET_NULL)
 
-class FHIR_Encounter_Reason_Value(models.Model):
-    encounter_reason = models.ForeignKey(FHIR_Encounter_Reason, on_delete=models.CASCADE, related_name='reason_values')
+class FHIR_Encounter_diagnosis(models.Model):
+    Encounter = models.ForeignKey(FHIR_Encounter, related_name='Encounter_diagnosis', null=False, on_delete=models.CASCADE)
 
-    BINDING_RULE_REASON_VALUE_CONDITION = 'todo'
-    value_condition_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='encounter_reason_value_condition', limit_choices_to={'codings__binding_rule': BINDING_RULE_REASON_VALUE_CONDITION })
-    value_condition_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value_condition_ref = models.ForeignKey('FHIR_Condition', on_delete=models.CASCADE, related_name='encounter_reason', null=True, blank=True)
-
-    BINDING_RULE_REASON_VALUE_DIAGNOSTICREPORT = 'todo'
-    value_diagnosticReport_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='encounter_reason_value_diagnosticreport', limit_choices_to={'codings__binding_rule': BINDING_RULE_REASON_VALUE_DIAGNOSTICREPORT })
-    value_diagnosticReport_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value_diagnosticReport_ref = models.ForeignKey('FHIR_DiagnosticReport', on_delete=models.CASCADE, related_name='encounter_reason', null=True, blank=True)
-
-    BINDING_RULE_REASON_VALUE_OBSERVATION = 'todo'
-    value_observation_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='encounter_reason_value_observation', limit_choices_to={'codings__binding_rule': BINDING_RULE_REASON_VALUE_OBSERVATION })
-    value_observation_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value_observation_ref = models.ForeignKey('FHIR_Observation', on_delete=models.CASCADE, related_name='encounter_reason', null=True, blank=True)
-
-    BINDING_RULE_REASON_VALUE_IMMUNIZATIONRECOMMENDATION = 'todo'
-    value_immunizationRecommendation_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='encounter_reason_value_immunization', limit_choices_to={'codings__binding_rule': BINDING_RULE_REASON_VALUE_IMMUNIZATIONRECOMMENDATION })
-    value_immunizationRecommendation_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value_immunizationRecommendation_ref = models.ForeignKey('FHIR_ImmunizationRecommendation', on_delete=models.CASCADE, related_name='encounter_reason', null=True, blank=True)
-
-    BINDING_RULE_REASON_VALUE_PROCEDURE = 'todo'
-    value_procedure_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='encounter_reason_value_procedure', limit_choices_to={'codings__binding_rule': BINDING_RULE_REASON_VALUE_PROCEDURE })
-    value_procedure_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value_procedure_ref = models.ForeignKey('FHIR_Procedure', on_delete=models.CASCADE, related_name='encounter_reason', null=True, blank=True)
-
-class FHIR_Encounter_Diagnosis(models.Model):
-    encounter = models.ForeignKey(FHIR_Encounter, on_delete=models.CASCADE, related_name='diagnoses')
-
-class FHIR_Encounter_Diagnosis_Condition(models.Model):
-    encounter_diagnosis = models.ForeignKey(FHIR_Encounter_Diagnosis, on_delete=models.CASCADE, related_name='condition')
-    BINDING_RULE_DIAGNOSIS_CONDITION = 'todo'
-    condition_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='encounter_diagnosis_condition', limit_choices_to={'codings__binding_rule': BINDING_RULE_DIAGNOSIS_CONDITION })
+class FHIR_Encounter_diagnosis_condition(models.Model):
+    Encounter_diagnosis = models.ForeignKey(FHIR_Encounter_diagnosis, related_name='Encounter_diagnosis_condition', null=False, on_delete=models.CASCADE)
+    BINDING_condition = 'TODO'
+    condition_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_condition}, related_name='Encounter_diagnosis_condition', blank=True)
     condition_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    condition_ref = models.ForeignKey('FHIR_Condition', on_delete=models.CASCADE, related_name='encounter_diagnosis', null=True, blank=True)
+    condition_Condition_ref = models.ForeignKey("FHIR_Condition", related_name="Encounter_diagnosis_condition_Condition", null=True, blank=True, on_delete=models.SET_NULL)
 
-class FHIR_Encounter_Diagnosis_Use(models.Model):
-    encounter_diagnosis = models.ForeignKey(FHIR_Encounter_Diagnosis, on_delete=models.CASCADE, related_name='use')
-    BINDING_RULE_DIAGNOSIS_USE = 'todo'
-    use_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='encounter_diagnosis_use', limit_choices_to={'codings__binding_rule': BINDING_RULE_DIAGNOSIS_USE })
+class FHIR_Encounter_diagnosis_use(models.Model):
+    Encounter_diagnosis = models.ForeignKey(FHIR_Encounter_diagnosis, related_name='Encounter_diagnosis_use', null=False, on_delete=models.CASCADE)
+    BINDING_use = 'TODO'
+    use_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_use}, related_name='Encounter_diagnosis_use', blank=True)
     use_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-
-class FHIR_Encounter_DietPreference(models.Model):
-    encounter = models.ForeignKey(FHIR_Encounter, on_delete=models.CASCADE, related_name='dietPreferences')
-    BINDING_RULE_DIET_PREFERENCE = 'todo'
-    dietPreference_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='encounter_dietPreference', limit_choices_to={'codings__binding_rule': BINDING_RULE_DIET_PREFERENCE })
+    
+class FHIR_Encounter_dietPreference(models.Model):
+    Encounter = models.ForeignKey(FHIR_Encounter, related_name='Encounter_dietPreference', null=False, on_delete=models.CASCADE)
+    BINDING_dietPreference = 'TODO'
+    dietPreference_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_dietPreference}, related_name='Encounter_dietPreference', blank=True)
     dietPreference_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-
-class FHIR_Encounter_SpecialArrangement(models.Model):
-    encounter = models.ForeignKey(FHIR_Encounter, on_delete=models.CASCADE, related_name='specialArrangements')
-    BINDING_RULE_SPECIAL_ARRANGEMENT = 'todo'
-    specialArrangement_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='encounter_specialArrangement', limit_choices_to={'codings__binding_rule': BINDING_RULE_SPECIAL_ARRANGEMENT })
+    
+class FHIR_Encounter_specialArrangement(models.Model):
+    Encounter = models.ForeignKey(FHIR_Encounter, related_name='Encounter_specialArrangement', null=False, on_delete=models.CASCADE)
+    BINDING_specialArrangement = 'TODO'
+    specialArrangement_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_specialArrangement}, related_name='Encounter_specialArrangement', blank=True)
     specialArrangement_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-
-class FHIR_Encounter_SpecialCourtesy(models.Model):
-    encounter = models.ForeignKey(FHIR_Encounter, on_delete=models.CASCADE, related_name='specialCourtesies')
-    BINDING_RULE_SPECIAL_COURTESY = 'todo'
-    specialCourtesy_cc = models.ManyToManyField(FHIR_GP_Coding, related_name='encounter_specialCourtesy', limit_choices_to={'codings__binding_rule': BINDING_RULE_SPECIAL_COURTESY })
+    
+class FHIR_Encounter_specialCourtesy(models.Model):
+    Encounter = models.ForeignKey(FHIR_Encounter, related_name='Encounter_specialCourtesy', null=False, on_delete=models.CASCADE)
+    BINDING_specialCourtesy = 'TODO'
+    specialCourtesy_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_specialCourtesy}, related_name='Encounter_specialCourtesy', blank=True)
     specialCourtesy_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    
+class FHIR_Encounter_admission(models.Model):
+    Encounter = models.ForeignKey(FHIR_Encounter, related_name='Encounter_admission', null=False, on_delete=models.CASCADE)
+    preAdmissionIdentifier = models.OneToOneField("FHIR_GP_Identifier", related_name='Encounter_admission_preAdmissionIdentifier', null=True, blank=True, on_delete=models.SET_NULL)
+    origin_Location = models.ForeignKey("FHIR_Location", related_name="Encounter_admission_origin", null=True, blank=True, on_delete=models.SET_NULL)
+    origin_Organization = models.ForeignKey("FHIR_Organization", related_name="Encounter_admission_origin", null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_admitSource = 'TODO'
+    admitSource_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_admitSource}, related_name='Encounter_admission_admitSource', blank=True)
+    admitSource_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    BINDING_reAdmission = 'TODO'
+    reAdmission_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_reAdmission}, related_name='Encounter_admission_reAdmission', blank=True)
+    reAdmission_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    destination_Location = models.ForeignKey("FHIR_Location", related_name="Encounter_admission_destination", null=True, blank=True, on_delete=models.SET_NULL)
+    destination_Organization = models.ForeignKey("FHIR_Organization", related_name="Encounter_admission_destination", null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_dischargeDisposition = 'TODO'
+    dischargeDisposition_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_dischargeDisposition}, related_name='Encounter_admission_dischargeDisposition', blank=True)
+    dischargeDisposition_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
+class FHIR_Encounter_location(models.Model):
+    Encounter = models.ForeignKey(FHIR_Encounter, related_name='Encounter_location', null=False, on_delete=models.CASCADE)
+    location = models.ForeignKey("FHIR_Location", related_name="Encounter_location_location", null=True, blank=True, on_delete=models.SET_NULL)
+    class StatusChoices(models.TextChoices): PLANNED = 'planned', 'Planned'; ACTIVE = 'active', 'Active'; RESERVED = 'reserved', 'Reserved'; COMPLETED = 'completed', 'Completed'; 
+    status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
+    BINDING_form = 'TODO'
+    form_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_form}, related_name='Encounter_location_form', blank=True)
+    form_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    period = models.OneToOneField("FHIR_GP_Period", related_name='Encounter_location_period', null=True, blank=True, on_delete=models.SET_NULL)

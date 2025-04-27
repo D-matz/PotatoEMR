@@ -1,3 +1,4 @@
+#FHIR Resource created by python potato/models_dir/Codegen/codegen_models.py
 from django.db import models
 from ..FHIR_DataTypes.FHIR_generalpurpose import *
 from ..FHIR_DataTypes.FHIR_specialpurpose import *
@@ -24,9 +25,9 @@ class FHIR_Account(models.Model):
     servicePeriod = models.OneToOneField("FHIR_GP_Period", related_name='Account_servicePeriod', null=True, blank=True, on_delete=models.SET_NULL)
     covers_Encounter = models.ManyToManyField("FHIR_Encounter", related_name="Account_covers", blank=True)
     covers_EpisodeOfCare = models.ManyToManyField("FHIR_EpisodeOfCare", related_name="Account_covers", blank=True)
-    owner_Organization = models.ForeignKey("FHIR_Organization", related_name="Account_owner", null=True, blank=True, on_delete=models.SET_NULL)
+    owner = models.ForeignKey("FHIR_Organization", related_name="Account_owner", null=True, blank=True, on_delete=models.SET_NULL)
     description = FHIR_primitive_MarkdownField(null=True, blank=True, )
-    parent_Account = models.ForeignKey("FHIR_Account", related_name="Account_parent", null=True, blank=True, on_delete=models.SET_NULL)
+    parent = models.ForeignKey("FHIR_Account", related_name="Account_parent", null=True, blank=True, on_delete=models.SET_NULL)
     BINDING_currency = 'TODO'
     currency_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_currency}, related_name='Account_currency', blank=True)
     currency_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
@@ -37,7 +38,7 @@ class FHIR_Account_identifier(FHIR_GP_Identifier):
 
 class FHIR_Account_coverage(models.Model):
     Account = models.ForeignKey(FHIR_Account, related_name='Account_coverage', null=False, on_delete=models.CASCADE)
-    coverage_Coverage = models.ForeignKey("FHIR_Coverage", related_name="Account_coverage_coverage", null=True, blank=True, on_delete=models.SET_NULL)
+    coverage = models.ForeignKey("FHIR_Coverage", related_name="Account_coverage_coverage", null=True, blank=True, on_delete=models.SET_NULL)
     priority = FHIR_primitive_PositiveIntField(null=True, blank=True, )
 
 class FHIR_Account_guarantor(models.Model):
@@ -47,7 +48,7 @@ class FHIR_Account_guarantor(models.Model):
     party_Organization = models.ForeignKey("FHIR_Organization", related_name="Account_guarantor_party", null=True, blank=True, on_delete=models.SET_NULL)
     onHold = FHIR_primitive_BooleanField(null=True, blank=True, )
     period = models.OneToOneField("FHIR_GP_Period", related_name='Account_guarantor_period', null=True, blank=True, on_delete=models.SET_NULL)
-    account_Account = models.ForeignKey("FHIR_Account", related_name="Account_guarantor_account", null=True, blank=True, on_delete=models.SET_NULL)
+    account = models.ForeignKey("FHIR_Account", related_name="Account_guarantor_account", null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_Account_diagnosis(models.Model):
     Account = models.ForeignKey(FHIR_Account, related_name='Account_diagnosis', null=False, on_delete=models.CASCADE)
@@ -55,7 +56,7 @@ class FHIR_Account_diagnosis(models.Model):
     BINDING_condition = 'TODO'
     condition_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_condition}, related_name='Account_diagnosis_condition', blank=True)
     condition_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    condition_Condition_ref = models.ForeignKey("FHIR_Condition", related_name="Account_diagnosis_condition", null=True, blank=True, on_delete=models.SET_NULL)
+    condition_Condition_ref = models.ForeignKey("FHIR_Condition", related_name="Account_diagnosis_condition_Condition", null=True, blank=True, on_delete=models.SET_NULL)
     dateOfDiagnosis = FHIR_primitive_DateTimeField(null=True, blank=True, )
     onAdmission = FHIR_primitive_BooleanField(null=True, blank=True, )
 
@@ -77,9 +78,9 @@ class FHIR_Account_procedure(models.Model):
     BINDING_code = 'TODO'
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='Account_procedure_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    code_Procedure_ref = models.ForeignKey("FHIR_Procedure", related_name="Account_procedure_code", null=True, blank=True, on_delete=models.SET_NULL)
+    code_Procedure_ref = models.ForeignKey("FHIR_Procedure", related_name="Account_procedure_code_Procedure", null=True, blank=True, on_delete=models.SET_NULL)
     dateOfService = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    device_Device = models.ManyToManyField("FHIR_Device", related_name="Account_procedure_device", blank=True)
+    device = models.ManyToManyField("FHIR_Device", related_name="Account_procedure_device", blank=True)
 
 class FHIR_Account_procedure_type(models.Model):
     Account_procedure = models.ForeignKey(FHIR_Account_procedure, related_name='Account_procedure_type', null=False, on_delete=models.CASCADE)

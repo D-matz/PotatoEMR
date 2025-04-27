@@ -1,4 +1,4 @@
-
+#FHIR Resource created by python potato/models_dir/Codegen/codegen_models.py
 from django.db import models
 from ..FHIR_DataTypes.FHIR_generalpurpose import *
 from ..FHIR_DataTypes.FHIR_specialpurpose import *
@@ -36,7 +36,7 @@ class FHIR_ActivityDefinition(models.Model):
     approvalDate = FHIR_primitive_DateField(null=True, blank=True, )
     lastReviewDate = FHIR_primitive_DateField(null=True, blank=True, )
     effectivePeriod = models.OneToOneField("FHIR_GP_Period", related_name='ActivityDefinition_effectivePeriod', null=True, blank=True, on_delete=models.SET_NULL)
-    class KindChoices(models.TextChoices): KIND_OF_RESOURCE = 'Kind of resource', 'Kind of resource'; 
+    class KindChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
     kind = FHIR_primitive_CodeField(choices=KindChoices.choices, null=True, blank=True, )
     profile = FHIR_primitive_CanonicalField(null=True, blank=True, )
     BINDING_code = 'TODO'
@@ -58,7 +58,7 @@ class FHIR_ActivityDefinition(models.Model):
     BINDING_location = 'TODO'
     location_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_location}, related_name='ActivityDefinition_location', blank=True)
     location_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    location_Location_ref = models.ForeignKey("FHIR_Location", related_name="ActivityDefinition_location", null=True, blank=True, on_delete=models.SET_NULL)
+    location_Location_ref = models.ForeignKey("FHIR_Location", related_name="ActivityDefinition_location_Location", null=True, blank=True, on_delete=models.SET_NULL)
     product_Medication = models.ForeignKey("FHIR_Medication", related_name="ActivityDefinition_product", null=True, blank=True, on_delete=models.SET_NULL)
     product_Ingredient = models.ForeignKey("FHIR_Ingredient", related_name="ActivityDefinition_product", null=True, blank=True, on_delete=models.SET_NULL)
     product_SubstanceDefinition = models.ForeignKey("FHIR_SubstanceDefinition", related_name="ActivityDefinition_product", null=True, blank=True, on_delete=models.SET_NULL)

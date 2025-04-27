@@ -1,93 +1,165 @@
+#FHIR Resource created by python potato/models_dir/Codegen/codegen_models.py
 from django.db import models
 from ..FHIR_DataTypes.FHIR_generalpurpose import *
+from ..FHIR_DataTypes.FHIR_specialpurpose import *
+from ..FHIR_DataTypes.FHIR_metadata import *
+from ..FHIR_DataTypes.FHIR_primitive import *
 
 class FHIR_Observation(models.Model):
-    #identifier foreign key to this
-    #pattern similar to CodeableReference, where you can have general definition or reference specific instance
-    #URL to a ObservationDefinition resource definition
-    instantiates_canonical = FHIR_primitive_CanonicalField(max_length=1000, null=True, blank=True)
-    #reference to a ObservationDefinition in database
-    instantiates_reference = models.ForeignKey('FHIR_ObservationDefinition', related_name="observation_instantiates_reference", null=True, on_delete=models.SET_NULL)
+    instantiates = FHIR_primitive_CanonicalField(null=True, blank=True, )
+    instantiates = models.ForeignKey("FHIR_ObservationDefinition", related_name="Observation_instantiates", null=True, blank=True, on_delete=models.SET_NULL)
+    basedOn_CarePlan = models.ManyToManyField("FHIR_CarePlan", related_name="Observation_basedOn", blank=True)
+    basedOn_DeviceRequest = models.ManyToManyField("FHIR_DeviceRequest", related_name="Observation_basedOn", blank=True)
+    basedOn_ImmunizationRecommendation = models.ManyToManyField("FHIR_ImmunizationRecommendation", related_name="Observation_basedOn", blank=True)
+    basedOn_MedicationRequest = models.ManyToManyField("FHIR_MedicationRequest", related_name="Observation_basedOn", blank=True)
+    basedOn_NutritionOrder = models.ManyToManyField("FHIR_NutritionOrder", related_name="Observation_basedOn", blank=True)
+    basedOn_ServiceRequest = models.ManyToManyField("FHIR_ServiceRequest", related_name="Observation_basedOn", blank=True)
+    partOf_MedicationAdministration = models.ManyToManyField("FHIR_MedicationAdministration", related_name="Observation_partOf", blank=True)
+    partOf_MedicationDispense = models.ManyToManyField("FHIR_MedicationDispense", related_name="Observation_partOf", blank=True)
+    partOf_MedicationStatement = models.ManyToManyField("FHIR_MedicationStatement", related_name="Observation_partOf", blank=True)
+    partOf_Procedure = models.ManyToManyField("FHIR_Procedure", related_name="Observation_partOf", blank=True)
+    partOf_Immunization = models.ManyToManyField("FHIR_Immunization", related_name="Observation_partOf", blank=True)
+    partOf_ImagingStudy = models.ManyToManyField("FHIR_ImagingStudy", related_name="Observation_partOf", blank=True)
+    partOf_GenomicStudy = models.ManyToManyField("FHIR_GenomicStudy", related_name="Observation_partOf", blank=True)
+    class StatusChoices(models.TextChoices): REGISTERED = 'registered', 'Registered'; SPECIMEN_IN_PROCESS = 'specimen-in-process', 'Specimen-in-process'; PRELIMINARY = 'preliminary', 'Preliminary'; FINAL = 'final', 'Final'; AMENDED = 'amended', 'Amended'; CORRECTED = 'corrected', 'Corrected'; APPENDED = 'appended', 'Appended'; CANCELLED = 'cancelled', 'Cancelled'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; UNKNOWN = 'unknown', 'Unknown'; CANNOT_BE_OBTAINED = 'cannot-be-obtained', 'Cannot-be-obtained'; 
+    status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
+    BINDING_code = 'TODO'
+    code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='Observation_code', blank=True)
+    code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    subject_Patient = models.ForeignKey("FHIR_Patient", related_name="Observation_subject", null=True, blank=True, on_delete=models.SET_NULL)
+    subject_Group = models.ForeignKey("FHIR_Group", related_name="Observation_subject", null=True, blank=True, on_delete=models.SET_NULL)
+    subject_Device = models.ForeignKey("FHIR_Device", related_name="Observation_subject", null=True, blank=True, on_delete=models.SET_NULL)
+    subject_Location = models.ForeignKey("FHIR_Location", related_name="Observation_subject", null=True, blank=True, on_delete=models.SET_NULL)
+    subject_Organization = models.ForeignKey("FHIR_Organization", related_name="Observation_subject", null=True, blank=True, on_delete=models.SET_NULL)
+    subject_Procedure = models.ForeignKey("FHIR_Procedure", related_name="Observation_subject", null=True, blank=True, on_delete=models.SET_NULL)
+    subject_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="Observation_subject", null=True, blank=True, on_delete=models.SET_NULL)
+    subject_Medication = models.ForeignKey("FHIR_Medication", related_name="Observation_subject", null=True, blank=True, on_delete=models.SET_NULL)
+    subject_Substance = models.ForeignKey("FHIR_Substance", related_name="Observation_subject", null=True, blank=True, on_delete=models.SET_NULL)
+    subject_BiologicallyDerivedProduct = models.ForeignKey("FHIR_BiologicallyDerivedProduct", related_name="Observation_subject", null=True, blank=True, on_delete=models.SET_NULL)
+    subject_NutritionProduct = models.ForeignKey("FHIR_NutritionProduct", related_name="Observation_subject", null=True, blank=True, on_delete=models.SET_NULL)
+    organizer = FHIR_primitive_BooleanField(null=True, blank=True, )
+    encounter = models.ForeignKey("FHIR_Encounter", related_name="Observation_encounter", null=True, blank=True, on_delete=models.SET_NULL)
+    effective = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    effective = models.OneToOneField("FHIR_GP_Period", related_name='Observation_effective', null=True, blank=True, on_delete=models.SET_NULL)
+    effective = models.OneToOneField("FHIR_GP_Timing", related_name='Observation_effective', null=True, blank=True, on_delete=models.SET_NULL)
+    effective = FHIR_primitive_InstantField(null=True, blank=True, )
+    issued = FHIR_primitive_InstantField(null=True, blank=True, )
+    performer_Practitioner = models.ManyToManyField("FHIR_Practitioner", related_name="Observation_performer", blank=True)
+    performer_PractitionerRole = models.ManyToManyField("FHIR_PractitionerRole", related_name="Observation_performer", blank=True)
+    performer_Organization = models.ManyToManyField("FHIR_Organization", related_name="Observation_performer", blank=True)
+    performer_CareTeam = models.ManyToManyField("FHIR_CareTeam", related_name="Observation_performer", blank=True)
+    performer_Patient = models.ManyToManyField("FHIR_Patient", related_name="Observation_performer", blank=True)
+    performer_RelatedPerson = models.ManyToManyField("FHIR_RelatedPerson", related_name="Observation_performer", blank=True)
+    performer_HealthcareService = models.ManyToManyField("FHIR_HealthcareService", related_name="Observation_performer", blank=True)
+    value = models.OneToOneField("FHIR_GP_Quantity", related_name='Observation_value', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_value = 'TODO'
+    value_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value}, related_name='Observation_value', blank=True)
+    value_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    value = FHIR_primitive_StringField(null=True, blank=True, )
+    value = FHIR_primitive_BooleanField(null=True, blank=True, )
+    value = models.OneToOneField("FHIR_GP_Range", related_name='Observation_value', null=True, blank=True, on_delete=models.SET_NULL)
+    value = models.OneToOneField("FHIR_GP_Ratio", related_name='Observation_value', null=True, blank=True, on_delete=models.SET_NULL)
+    value = models.OneToOneField("FHIR_GP_SampledData", related_name='Observation_value', null=True, blank=True, on_delete=models.SET_NULL)
+    value = FHIR_primitive_TimeField(null=True, blank=True, )
+    value = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    value = models.OneToOneField("FHIR_GP_Period", related_name='Observation_value', null=True, blank=True, on_delete=models.SET_NULL)
+    value = models.OneToOneField("FHIR_GP_Attachment", related_name='Observation_value', null=True, blank=True, on_delete=models.SET_NULL)
+    value = models.ForeignKey("FHIR_MolecularSequence", related_name="Observation_value", null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_dataAbsentReason = 'TODO'
+    dataAbsentReason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_dataAbsentReason}, related_name='Observation_dataAbsentReason', blank=True)
+    dataAbsentReason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    BINDING_bodySite = 'TODO'
+    bodySite_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_bodySite}, related_name='Observation_bodySite', blank=True)
+    bodySite_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    bodyStructure = models.ForeignKey("FHIR_BodyStructure", related_name="Observation_bodyStructure", null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_method = 'TODO'
+    method_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_method}, related_name='Observation_method', blank=True)
+    method_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    specimen_Specimen = models.ForeignKey("FHIR_Specimen", related_name="Observation_specimen", null=True, blank=True, on_delete=models.SET_NULL)
+    specimen_Group = models.ForeignKey("FHIR_Group", related_name="Observation_specimen", null=True, blank=True, on_delete=models.SET_NULL)
+    device_Device = models.ForeignKey("FHIR_Device", related_name="Observation_device", null=True, blank=True, on_delete=models.SET_NULL)
+    device_DeviceMetric = models.ForeignKey("FHIR_DeviceMetric", related_name="Observation_device", null=True, blank=True, on_delete=models.SET_NULL)
+    hasMember_Observation = models.ManyToManyField("FHIR_Observation", related_name="Observation_hasMember", blank=True)
+    hasMember_QuestionnaireResponse = models.ManyToManyField("FHIR_QuestionnaireResponse", related_name="Observation_hasMember", blank=True)
+    hasMember_MolecularSequence = models.ManyToManyField("FHIR_MolecularSequence", related_name="Observation_hasMember", blank=True)
+    derivedFrom_DocumentReference = models.ManyToManyField("FHIR_DocumentReference", related_name="Observation_derivedFrom", blank=True)
+    derivedFrom_ImagingStudy = models.ManyToManyField("FHIR_ImagingStudy", related_name="Observation_derivedFrom", blank=True)
+    derivedFrom_ImagingSelection = models.ManyToManyField("FHIR_ImagingSelection", related_name="Observation_derivedFrom", blank=True)
+    derivedFrom_QuestionnaireResponse = models.ManyToManyField("FHIR_QuestionnaireResponse", related_name="Observation_derivedFrom", blank=True)
+    derivedFrom_Observation = models.ManyToManyField("FHIR_Observation", related_name="Observation_derivedFrom", blank=True)
+    derivedFrom_MolecularSequence = models.ManyToManyField("FHIR_MolecularSequence", related_name="Observation_derivedFrom", blank=True)
+    derivedFrom_GenomicStudy = models.ManyToManyField("FHIR_GenomicStudy", related_name="Observation_derivedFrom", blank=True)
 
-    basedOn_carePlan = models.ManyToManyField('FHIR_CarePlan', related_name="observation_basedOn_carePlans", blank=True)
-    basedOn_deviceRequest = models.ManyToManyField('FHIR_DeviceRequest', related_name="observation_basedOn_deviceRequests", blank=True)
-    basedOn_immunizationRecommendation = models.ManyToManyField('FHIR_ImmunizationRecommendation', related_name="observation_basedOn_immunizationRecommendations", blank=True)
-    basedOn_medicationRequest = models.ManyToManyField('FHIR_MedicationRequest', related_name="observation_basedOn_medicationRequests", blank=True)
-    basedOn_nutritionOrder = models.ManyToManyField('FHIR_NutritionOrder', related_name="observation_basedOn_nutritionOrders", blank=True)
-    basedOn_serviceRequest = models.ManyToManyField('FHIR_ServiceRequest', related_name="observation_basedOn_serviceRequests", blank=True)
+class FHIR_Observation_identifier(FHIR_GP_Identifier):
+    Observation = models.ForeignKey(FHIR_Observation, related_name='Observation_identifier', null=False, on_delete=models.CASCADE)
 
-    triggeredBy = models.ManyToManyField('self', through='TriggeredByThrough', symmetrical=False, related_name='triggeredBys')
+class FHIR_Observation_triggeredBy(models.Model):
+    Observation = models.ForeignKey(FHIR_Observation, related_name='Observation_triggeredBy', null=False, on_delete=models.CASCADE)
+    triggeredBy_observation = models.ForeignKey("FHIR_Observation", related_name="Observation_triggeredBy_observation", null=True, blank=True, on_delete=models.SET_NULL)
+    class TypeChoices(models.TextChoices): REFLEX = 'reflex', 'Reflex'; REPEAT = 'repeat', 'Repeat'; RE_RUN = 're-run', 'Re-run'; 
+    type = FHIR_primitive_CodeField(choices=TypeChoices.choices, null=True, blank=True, )
+    reason = FHIR_primitive_StringField(null=True, blank=True, )
 
-    status = FHIR_primitive_CodeField(max_length=20, choices=[
-        ('registered', 'Registered'),
-        ('preliminary', 'Preliminary'),
-        ('final', 'Final'),
-        ('amended', 'Amended'),
-        ('corrected', 'Corrected'),
-        ('cancelled', 'Cancelled'),
-        ('entered-in-error', 'Entered in Error'),
-        ('unknown', 'Unknown'),
-    ], null=False, blank=False, default='unknown')
-
-class FHIR_Observation_Identifier(FHIR_GP_Identifier):
-    observation = models.ForeignKey(FHIR_Observation, related_name="observation_identifiers", on_delete=models.CASCADE)
-
-class TriggeredByThrough(models.Model):
-    from_Observation = models.ForeignKey('FHIR_Observation', on_delete=models.CASCADE, related_name='observation')
-    toTriggeredBy_Observation = models.ForeignKey('FHIR_Observation', on_delete=models.CASCADE, related_name='observation_triggeredBy')
-
-    type = FHIR_primitive_CodeField(max_length=7, choices=[
-        ('reflex', 'Reflex'),
-        ('repeat', 'Repeat'),
-        ('re-run', 'Re-run'),
-    ], null=False, blank=False)
-    reason = models.CharField(max_length=255, null=True, blank=True)
-
-    partOf_medicationAdministration = models.ManyToManyField('FHIR_MedicationAdministration', related_name="observation_partOf_medicationAdministrations", blank=True)
-    partOf_medicationDispense = models.ManyToManyField('FHIR_MedicationDispense', related_name="observation_partOf_medicationDispensers", blank=True)
-    partOf_medicationStatement = models.ManyToManyField('FHIR_MedicationStatement', related_name="observation_partOf_medicationStatements", blank=True)
-    partOf_procedure = models.ManyToManyField('FHIR_Procedure', related_name="observation_partOf_procedures", blank=True)
-    partOf_immunization = models.ManyToManyField('FHIR_Immunization', related_name="observation_partOf_immunizations", blank=True)
-    partOf_imagingStudy = models.ManyToManyField('FHIR_ImagingStudy', related_name="observation_partOf_imagingStudies", blank=True)
-    partOf_genomicStudy = models.ManyToManyField('FHIR_GenomicStudy', related_name="observation_partOf_genomicStudies", blank=True)
-
-    status = FHIR_primitive_CodeField(max_length=20, choices=[
-        ('registered', 'Registered'),
-        ('preliminary', 'Preliminary'),
-        ('final', 'Final'),
-        ('amended', 'Amended'),
-        ('corrected', 'Corrected'),
-        ('cancelled', 'Cancelled'),
-        ('entered-in-error', 'Entered in Error'),
-        ('unknown', 'Unknown'),
-    ], null=False, blank=False, default='unknown')
-
-    # category = models.ManyToManyField('FHIR_GP_Coding', related_name="observation_category", blank=True,
-    #     limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-observation-category.html'})
-    # code = models.ManyToManyField('FHIR_GP_Coding', related_name="observation_code", blank=True,
-    #     limit_choices_to={'binding__binding_rule': 'https://www.hl7.org/fhir/valueset-observation-codes.html'})
+class FHIR_Observation_category(models.Model):
+    Observation = models.ForeignKey(FHIR_Observation, related_name='Observation_category', null=False, on_delete=models.CASCADE)
+    BINDING_category = 'TODO'
+    category_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_category}, related_name='Observation_category', blank=True)
+    category_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
-    subject_patient = models.ForeignKey('FHIR_Patient', related_name="observation_subject_patient", on_delete=models.SET_NULL, null=True, blank=True)
-    subject_group = models.ForeignKey('FHIR_Group', related_name="observation_subject_group", on_delete=models.SET_NULL, null=True, blank=True)
-    subject_device = models.ForeignKey('FHIR_Device', related_name="observation_subject_device", on_delete=models.SET_NULL, null=True, blank=True)
-    subject_location = models.ForeignKey('FHIR_Location', related_name="observation_subject_location", on_delete=models.SET_NULL, null=True, blank=True)
-    subject_organization = models.ForeignKey('FHIR_Organization', related_name="observation_subject_organization", on_delete=models.SET_NULL, null=True, blank=True)
-    subject_procedure = models.ForeignKey('FHIR_Procedure', related_name="observation_subject_procedure", on_delete=models.SET_NULL, null=True, blank=True)
-    subject_practitioner = models.ForeignKey('FHIR_Practitioner', related_name="observation_subject_practitioner", on_delete=models.SET_NULL, null=True, blank=True)
-    subject_practitionerRole = models.ForeignKey('FHIR_PractitionerRole', related_name="observation_subject_practitionerRole", on_delete=models.SET_NULL, null=True, blank=True)
-    subject_relatedPerson = models.ForeignKey('FHIR_RelatedPerson', related_name="observation_subject_relatedPerson", on_delete=models.SET_NULL, null=True, blank=True)
-    subject_medication = models.ForeignKey('FHIR_Medication', related_name="observation_subject_medication", on_delete=models.SET_NULL, null=True, blank=True)
-    subject_substance = models.ForeignKey('FHIR_Substance', related_name="observation_subject_substance", on_delete=models.SET_NULL, null=True, blank=True)
-    subject_biologicallyDerivedProduct = models.ForeignKey('FHIR_BiologicallyDerivedProduct', related_name="observation_subject_biologicallyDerivedProduct", on_delete=models.SET_NULL, null=True, blank=True)
-    subject_nutritionProduct = models.ForeignKey('FHIR_NutritionProduct', related_name="observation_subject_nutritionProduct", on_delete=models.SET_NULL, null=True, blank=True)
+class FHIR_Observation_interpretation(models.Model):
+    Observation = models.ForeignKey(FHIR_Observation, related_name='Observation_interpretation', null=False, on_delete=models.CASCADE)
+    BINDING_interpretation = 'TODO'
+    interpretation_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_interpretation}, related_name='Observation_interpretation', blank=True)
+    interpretation_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    
+class FHIR_Observation_note(FHIR_GP_Annotation):
+    Observation = models.ForeignKey(FHIR_Observation, related_name='Observation_note', null=False, on_delete=models.CASCADE)
 
-    # Focus field that can reference any FHIR resource...will figure out later
+class FHIR_Observation_referenceRange(models.Model):
+    Observation = models.ForeignKey(FHIR_Observation, related_name='Observation_referenceRange', null=False, on_delete=models.CASCADE)
+    low = models.OneToOneField("FHIR_GP_Quantity", related_name='Observation_referenceRange_low', null=True, blank=True, on_delete=models.SET_NULL)
+    high = models.OneToOneField("FHIR_GP_Quantity", related_name='Observation_referenceRange_high', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_normalValue = 'TODO'
+    normalValue_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_normalValue}, related_name='Observation_referenceRange_normalValue', blank=True)
+    normalValue_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    BINDING_type = 'TODO'
+    type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='Observation_referenceRange_type', blank=True)
+    type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    age = models.OneToOneField("FHIR_GP_Range", related_name='Observation_referenceRange_age', null=True, blank=True, on_delete=models.SET_NULL)
+    text = FHIR_primitive_MarkdownField(null=True, blank=True, )
 
-    encounter = models.ForeignKey('FHIR_Encounter', related_name="observation_encounter", on_delete=models.SET_NULL, null=True, blank=True)
+class FHIR_Observation_referenceRange_appliesTo(models.Model):
+    Observation_referenceRange = models.ForeignKey(FHIR_Observation_referenceRange, related_name='Observation_referenceRange_appliesTo', null=False, on_delete=models.CASCADE)
+    BINDING_appliesTo = 'TODO'
+    appliesTo_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_appliesTo}, related_name='Observation_referenceRange_appliesTo', blank=True)
+    appliesTo_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    
+class FHIR_Observation_component(models.Model):
+    Observation = models.ForeignKey(FHIR_Observation, related_name='Observation_component', null=False, on_delete=models.CASCADE)
+    BINDING_code = 'TODO'
+    code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='Observation_component_code', blank=True)
+    code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    value = models.OneToOneField("FHIR_GP_Quantity", related_name='Observation_component_value', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_value = 'TODO'
+    value_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value}, related_name='Observation_component_value', blank=True)
+    value_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    value = FHIR_primitive_StringField(null=True, blank=True, )
+    value = FHIR_primitive_BooleanField(null=True, blank=True, )
+    value = models.OneToOneField("FHIR_GP_Range", related_name='Observation_component_value', null=True, blank=True, on_delete=models.SET_NULL)
+    value = models.OneToOneField("FHIR_GP_Ratio", related_name='Observation_component_value', null=True, blank=True, on_delete=models.SET_NULL)
+    value = models.OneToOneField("FHIR_GP_SampledData", related_name='Observation_component_value', null=True, blank=True, on_delete=models.SET_NULL)
+    value = FHIR_primitive_TimeField(null=True, blank=True, )
+    value = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    value = models.OneToOneField("FHIR_GP_Period", related_name='Observation_component_value', null=True, blank=True, on_delete=models.SET_NULL)
+    value = models.OneToOneField("FHIR_GP_Attachment", related_name='Observation_component_value', null=True, blank=True, on_delete=models.SET_NULL)
+    value = models.ForeignKey("FHIR_MolecularSequence", related_name="Observation_component_value", null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_dataAbsentReason = 'TODO'
+    dataAbsentReason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_dataAbsentReason}, related_name='Observation_component_dataAbsentReason', blank=True)
+    dataAbsentReason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
-    effective_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True)
-    effective_period = models.OneToOneField('FHIR_GP_Period', related_name="observation_effective_period", on_delete=models.SET_NULL, null=True, blank=True)
-    effective_timing = models.OneToOneField('FHIR_GP_Timing', related_name="observation_effective_timing", on_delete=models.SET_NULL, null=True, blank=True)
-    effective_string = FHIR_primitive_StringField(max_length=255, null=True, blank=True)
-
+class FHIR_Observation_component_interpretation(models.Model):
+    Observation_component = models.ForeignKey(FHIR_Observation_component, related_name='Observation_component_interpretation', null=False, on_delete=models.CASCADE)
+    BINDING_interpretation = 'TODO'
+    interpretation_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_interpretation}, related_name='Observation_component_interpretation', blank=True)
+    interpretation_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     

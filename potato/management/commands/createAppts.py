@@ -10,7 +10,7 @@ class Command(BaseCommand):
         patientNames = ["Peter", "Paul", "Patricia", "Paula", "Philip", "Phoebe", "Penelope", "Preston", "Piper", "Patrick", "Priscilla", "Paxton", "Palmer", "Poppy", "Pierce", "Peyton", "Pearl", "Pilar", "Phoenix", "Prudence"]
         for pname in patientNames:
             patient_model = FHIR_Patient.objects.create()
-            patient_name_model = FHIR_Patient_Name.objects.create(text=pname, patient=patient_model)
+            patient_name_model = FHIR_Patient_name.objects.create(text=pname, Patient=patient_model)
         patient_model_list = FHIR_Patient.objects.all()
         print("patients", patient_model_list)
 
@@ -25,7 +25,7 @@ class Command(BaseCommand):
         names = ["Alice", "Bob", "Charlie", "Diana", "Ethan", "Fiona", "George", "Hannah", "Ian", "Julia"]
         for name in names:
             practitioner_model = FHIR_Practitioner.objects.create()
-            practitioner_humanName_model = FHIR_Practitioner_Name.objects.create(text=name, practitioner=practitioner_model)
+            practitioner_humanName_model = FHIR_Practitioner_name.objects.create(text=name, Practitioner=practitioner_model)
             practitionerRole_model = FHIR_PractitionerRole.objects.create(practitioner=practitioner_model)
             locNums = random.sample(range(len(location_model_list)), 2)
             for locNum in locNums:
@@ -33,7 +33,7 @@ class Command(BaseCommand):
         for i in range(0, 300):
             appt_model = FHIR_Appointment.objects.create()
             loc_model = random.choice(location_model_list)
-            practitioner_model_list = FHIR_Practitioner.objects.filter(practitioner_roles__location=loc_model).distinct()
+            practitioner_model_list = FHIR_Practitioner.objects.filter(PractitionerRole_practitioner__location=loc_model).distinct()
             pract_model = random.choice(practitioner_model_list)
 
             FHIR_Appointment_participant.objects.create(

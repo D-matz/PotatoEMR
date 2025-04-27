@@ -1,4 +1,4 @@
-
+#FHIR Resource created by python potato/models_dir/Codegen/codegen_models.py
 from django.db import models
 from ..FHIR_DataTypes.FHIR_generalpurpose import *
 from ..FHIR_DataTypes.FHIR_specialpurpose import *

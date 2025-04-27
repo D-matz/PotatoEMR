@@ -19,7 +19,7 @@ class ApptClndrForm(forms.Form):
 
         #practitioner list depends on the chosen location
         practitioners = FHIR_Practitioner.objects.filter(
-            practitioner_roles__location=args[0].get('Location')
+            PractitionerRole_practitioner__location=args[0].get('Location')
         ).distinct()
 
         self.fields['Practitioner'] = forms.ModelChoiceField(

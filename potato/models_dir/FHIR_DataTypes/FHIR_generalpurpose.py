@@ -8,7 +8,7 @@
 
 from .FHIR_primitive import *
 from .FHIR_specialpurpose import *
-from ..FHIR_Resources.Organization import FHIR_Organization
+from django.db import models #for fhir_organization
 
 class FHIR_GP_Attachment(models.Model):
     contentType = FHIR_primitive_CodeField(max_length=256)  # Mime type of the content, with charset etc.
@@ -233,7 +233,7 @@ class FHIR_GP_Identifier(models.Model):
     system = FHIR_primitive_URIField(max_length=1024, null=True, blank=True)
     value = FHIR_primitive_StringField(max_length=1024, null=True, blank=True)
     period = models.OneToOneField(FHIR_GP_Period, on_delete=models.CASCADE, related_name="identifier_period", null=True, blank=True)
-    assigner_foreignKey = models.ForeignKey(FHIR_Organization, on_delete=models.CASCADE, related_name="identifier_assigner")
+    assigner_foreignKey = models.ForeignKey('FHIR_Organization', on_delete=models.CASCADE, related_name="identifier_assigner")
     def clean(self):
         if not self.value:
             raise ValidationError("Value must exist.")
