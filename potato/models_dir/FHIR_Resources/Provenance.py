@@ -6,12 +6,12 @@ from ..FHIR_DataTypes.FHIR_metadata import *
 from ..FHIR_DataTypes.FHIR_primitive import *
 
 class FHIR_Provenance(models.Model):
-    occurred = models.OneToOneField("FHIR_GP_Period", related_name='Provenance_occurred', null=True, blank=True, on_delete=models.SET_NULL)
-    occurred = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    occurred_Period = models.OneToOneField("FHIR_GP_Period", related_name='Provenance_occurred_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    occurred_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
     recorded = FHIR_primitive_InstantField(null=True, blank=True, )
     location = models.ForeignKey("FHIR_Location", related_name="Provenance_location", null=True, blank=True, on_delete=models.SET_NULL)
     why = FHIR_primitive_MarkdownField(null=True, blank=True, )
-    BINDING_activity = 'TODO'
+    BINDING_activity = "TODO"
     activity_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_activity}, related_name='Provenance_activity', blank=True)
     activity_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     patient = models.ForeignKey("FHIR_Patient", related_name="Provenance_patient", null=True, blank=True, on_delete=models.SET_NULL)
@@ -24,7 +24,7 @@ class FHIR_Provenance_policy(models.Model):
     
 class FHIR_Provenance_agent(models.Model):
     Provenance = models.ForeignKey(FHIR_Provenance, related_name='Provenance_agent', null=False, on_delete=models.CASCADE)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='Provenance_agent_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     who_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="Provenance_agent_who", null=True, blank=True, on_delete=models.SET_NULL)
@@ -46,7 +46,7 @@ class FHIR_Provenance_agent(models.Model):
 
 class FHIR_Provenance_agent_role(models.Model):
     Provenance_agent = models.ForeignKey(FHIR_Provenance_agent, related_name='Provenance_agent_role', null=False, on_delete=models.CASCADE)
-    BINDING_role = 'TODO'
+    BINDING_role = "TODO"
     role_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_role}, related_name='Provenance_agent_role', blank=True)
     role_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     

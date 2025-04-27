@@ -8,8 +8,8 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 class FHIR_TestScript(models.Model):
     url = FHIR_primitive_URIField(null=True, blank=True, )
     version = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = models.OneToOneField("FHIR_GP_Coding", related_name='TestScript_versionAlgorithm', null=True, blank=True, on_delete=models.SET_NULL)
+    versionAlgorithm_string = FHIR_primitive_StringField(null=True, blank=True, )
+    versionAlgorithm_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='TestScript_versionAlgorithm_Coding', null=True, blank=True, on_delete=models.SET_NULL)
     name = FHIR_primitive_StringField(null=True, blank=True, )
     title = FHIR_primitive_StringField(null=True, blank=True, )
     class StatusChoices(models.TextChoices): DRAFT = 'draft', 'Draft'; ACTIVE = 'active', 'Active'; RETIRED = 'retired', 'Retired'; UNKNOWN = 'unknown', 'Unknown'; 
@@ -27,7 +27,7 @@ class FHIR_TestScript_identifier(FHIR_GP_Identifier):
 
 class FHIR_TestScript_jurisdiction(models.Model):
     TestScript = models.ForeignKey(FHIR_TestScript, related_name='TestScript_jurisdiction', null=False, on_delete=models.CASCADE)
-    BINDING_jurisdiction = 'TODO'
+    BINDING_jurisdiction = "TODO"
     jurisdiction_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_jurisdiction}, related_name='TestScript_jurisdiction', blank=True)
     jurisdiction_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -66,10 +66,10 @@ class FHIR_TestScript_metadata_capability_link(models.Model):
 class FHIR_TestScript_scope(models.Model):
     TestScript = models.ForeignKey(FHIR_TestScript, related_name='TestScript_scope', null=False, on_delete=models.CASCADE)
     artifact = FHIR_primitive_CanonicalField(null=True, blank=True, )
-    BINDING_conformance = 'TODO'
+    BINDING_conformance = "TODO"
     conformance_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_conformance}, related_name='TestScript_scope_conformance', blank=True)
     conformance_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_phase = 'TODO'
+    BINDING_phase = "TODO"
     phase_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_phase}, related_name='TestScript_scope_phase', blank=True)
     phase_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 

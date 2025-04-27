@@ -13,7 +13,7 @@ class FHIR_DiagnosticReport(models.Model):
     basedOn_ServiceRequest = models.ManyToManyField("FHIR_ServiceRequest", related_name="DiagnosticReport_basedOn", blank=True)
     class StatusChoices(models.TextChoices): REGISTERED = 'registered', 'Registered'; PARTIAL = 'partial', 'Partial'; PRELIMINARY = 'preliminary', 'Preliminary'; MODIFIED = 'modified', 'Modified'; FINAL = 'final', 'Final'; AMENDED = 'amended', 'Amended'; CORRECTED = 'corrected', 'Corrected'; APPENDED = 'appended', 'Appended'; CANCELLED = 'cancelled', 'Cancelled'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; UNKNOWN = 'unknown', 'Unknown'; 
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
-    BINDING_code = 'TODO'
+    BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='DiagnosticReport_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     subject_Patient = models.ForeignKey("FHIR_Patient", related_name="DiagnosticReport_subject", null=True, blank=True, on_delete=models.SET_NULL)
@@ -26,8 +26,8 @@ class FHIR_DiagnosticReport(models.Model):
     subject_Substance = models.ForeignKey("FHIR_Substance", related_name="DiagnosticReport_subject", null=True, blank=True, on_delete=models.SET_NULL)
     subject_BiologicallyDerivedProduct = models.ForeignKey("FHIR_BiologicallyDerivedProduct", related_name="DiagnosticReport_subject", null=True, blank=True, on_delete=models.SET_NULL)
     encounter = models.ForeignKey("FHIR_Encounter", related_name="DiagnosticReport_encounter", null=True, blank=True, on_delete=models.SET_NULL)
-    effective = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    effective = models.OneToOneField("FHIR_GP_Period", related_name='DiagnosticReport_effective', null=True, blank=True, on_delete=models.SET_NULL)
+    effective_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    effective_Period = models.OneToOneField("FHIR_GP_Period", related_name='DiagnosticReport_effective_Period', null=True, blank=True, on_delete=models.SET_NULL)
     issued = FHIR_primitive_InstantField(null=True, blank=True, )
     procedure = models.ManyToManyField("FHIR_Procedure", related_name="DiagnosticReport_procedure", blank=True)
     performer_Practitioner = models.ManyToManyField("FHIR_Practitioner", related_name="DiagnosticReport_performer", blank=True)
@@ -53,7 +53,7 @@ class FHIR_DiagnosticReport_identifier(FHIR_GP_Identifier):
 
 class FHIR_DiagnosticReport_category(models.Model):
     DiagnosticReport = models.ForeignKey(FHIR_DiagnosticReport, related_name='DiagnosticReport_category', null=False, on_delete=models.CASCADE)
-    BINDING_category = 'TODO'
+    BINDING_category = "TODO"
     category_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_category}, related_name='DiagnosticReport_category', blank=True)
     category_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -62,7 +62,7 @@ class FHIR_DiagnosticReport_note(FHIR_GP_Annotation):
 
 class FHIR_DiagnosticReport_supportingInfo(models.Model):
     DiagnosticReport = models.ForeignKey(FHIR_DiagnosticReport, related_name='DiagnosticReport_supportingInfo', null=False, on_delete=models.CASCADE)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='DiagnosticReport_supportingInfo_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     reference_ImagingStudy = models.ForeignKey("FHIR_ImagingStudy", related_name="DiagnosticReport_supportingInfo_reference", null=True, blank=True, on_delete=models.SET_NULL)
@@ -83,7 +83,7 @@ class FHIR_DiagnosticReport_media(models.Model):
 
 class FHIR_DiagnosticReport_conclusionCode(models.Model):
     DiagnosticReport = models.ForeignKey(FHIR_DiagnosticReport, related_name='DiagnosticReport_conclusionCode', null=False, on_delete=models.CASCADE)
-    BINDING_conclusionCode = 'TODO'
+    BINDING_conclusionCode = "TODO"
     conclusionCode_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_conclusionCode}, related_name='DiagnosticReport_conclusionCode', blank=True)
     conclusionCode_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     conclusionCode_Observation_ref = models.ForeignKey("FHIR_Observation", related_name="DiagnosticReport_conclusionCode_Observation", null=True, blank=True, on_delete=models.SET_NULL)
@@ -91,7 +91,7 @@ class FHIR_DiagnosticReport_conclusionCode(models.Model):
 
 class FHIR_DiagnosticReport_recomendation(models.Model):
     DiagnosticReport = models.ForeignKey(FHIR_DiagnosticReport, related_name='DiagnosticReport_recomendation', null=False, on_delete=models.CASCADE)
-    BINDING_recomendation = 'TODO'
+    BINDING_recomendation = "TODO"
     recomendation_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_recomendation}, related_name='DiagnosticReport_recomendation', blank=True)
     recomendation_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 

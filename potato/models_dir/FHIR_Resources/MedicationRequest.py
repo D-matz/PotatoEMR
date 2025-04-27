@@ -15,7 +15,7 @@ class FHIR_MedicationRequest(models.Model):
     groupIdentifier = models.OneToOneField("FHIR_GP_Identifier", related_name='MedicationRequest_groupIdentifier', null=True, blank=True, on_delete=models.SET_NULL)
     class StatusChoices(models.TextChoices): ACTIVE = 'active', 'Active'; ON_HOLD = 'on-hold', 'On-hold'; ENDED = 'ended', 'Ended'; STOPPED = 'stopped', 'Stopped'; COMPLETED = 'completed', 'Completed'; CANCELLED = 'cancelled', 'Cancelled'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; DRAFT = 'draft', 'Draft'; UNKNOWN = 'unknown', 'Unknown'; 
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
-    BINDING_statusReason = 'TODO'
+    BINDING_statusReason = "TODO"
     statusReason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_statusReason}, related_name='MedicationRequest_statusReason', blank=True)
     statusReason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     statusChanged = FHIR_primitive_DateTimeField(null=True, blank=True, )
@@ -24,7 +24,7 @@ class FHIR_MedicationRequest(models.Model):
     class PriorityChoices(models.TextChoices): ROUTINE = 'routine', 'Routine'; URGENT = 'urgent', 'Urgent'; ASAP = 'asap', 'Asap'; STAT = 'stat', 'Stat'; 
     priority = FHIR_primitive_CodeField(choices=PriorityChoices.choices, null=True, blank=True, )
     doNotPerform = FHIR_primitive_BooleanField(null=True, blank=True, )
-    BINDING_medication = 'TODO'
+    BINDING_medication = "TODO"
     medication_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_medication}, related_name='MedicationRequest_medication', blank=True)
     medication_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     medication_Medication_ref = models.ForeignKey("FHIR_Medication", related_name="MedicationRequest_medication_Medication", null=True, blank=True, on_delete=models.SET_NULL)
@@ -45,7 +45,7 @@ class FHIR_MedicationRequest(models.Model):
     requester_RelatedPerson = models.ForeignKey("FHIR_RelatedPerson", related_name="MedicationRequest_requester", null=True, blank=True, on_delete=models.SET_NULL)
     requester_Device = models.ForeignKey("FHIR_Device", related_name="MedicationRequest_requester", null=True, blank=True, on_delete=models.SET_NULL)
     reported = FHIR_primitive_BooleanField(null=True, blank=True, )
-    BINDING_performerType = 'TODO'
+    BINDING_performerType = "TODO"
     performerType_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_performerType}, related_name='MedicationRequest_performerType', blank=True)
     performerType_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     performer_Practitioner = models.ManyToManyField("FHIR_Practitioner", related_name="MedicationRequest_performer", blank=True)
@@ -59,7 +59,7 @@ class FHIR_MedicationRequest(models.Model):
     performer_Group = models.ManyToManyField("FHIR_Group", related_name="MedicationRequest_performer", blank=True)
     recorder_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="MedicationRequest_recorder", null=True, blank=True, on_delete=models.SET_NULL)
     recorder_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="MedicationRequest_recorder", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_courseOfTherapyType = 'TODO'
+    BINDING_courseOfTherapyType = "TODO"
     courseOfTherapyType_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_courseOfTherapyType}, related_name='MedicationRequest_courseOfTherapyType', blank=True)
     courseOfTherapyType_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     insurance_Coverage = models.ManyToManyField("FHIR_Coverage", related_name="MedicationRequest_insurance", blank=True)
@@ -73,20 +73,20 @@ class FHIR_MedicationRequest_identifier(FHIR_GP_Identifier):
 
 class FHIR_MedicationRequest_category(models.Model):
     MedicationRequest = models.ForeignKey(FHIR_MedicationRequest, related_name='MedicationRequest_category', null=False, on_delete=models.CASCADE)
-    BINDING_category = 'TODO'
+    BINDING_category = "TODO"
     category_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_category}, related_name='MedicationRequest_category', blank=True)
     category_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_MedicationRequest_device(models.Model):
     MedicationRequest = models.ForeignKey(FHIR_MedicationRequest, related_name='MedicationRequest_device', null=False, on_delete=models.CASCADE)
-    BINDING_device = 'TODO'
+    BINDING_device = "TODO"
     device_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_device}, related_name='MedicationRequest_device', blank=True)
     device_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     device_DeviceDefinition_ref = models.ForeignKey("FHIR_DeviceDefinition", related_name="MedicationRequest_device_DeviceDefinition", null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_MedicationRequest_reason(models.Model):
     MedicationRequest = models.ForeignKey(FHIR_MedicationRequest, related_name='MedicationRequest_reason', null=False, on_delete=models.CASCADE)
-    BINDING_reason = 'TODO'
+    BINDING_reason = "TODO"
     reason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_reason}, related_name='MedicationRequest_reason', blank=True)
     reason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     reason_Condition_ref = models.ForeignKey("FHIR_Condition", related_name="MedicationRequest_reason_Condition", null=True, blank=True, on_delete=models.SET_NULL)
@@ -108,7 +108,7 @@ class FHIR_MedicationRequest_dispenseRequest(models.Model):
     quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='MedicationRequest_dispenseRequest_quantity', null=True, blank=True, on_delete=models.SET_NULL)
     expectedSupplyDuration = models.OneToOneField("FHIR_GP_Quantity_Duration", related_name='MedicationRequest_dispenseRequest_expectedSupplyDuration', null=True, blank=True, on_delete=models.SET_NULL)
     dispenser = models.ForeignKey("FHIR_Organization", related_name="MedicationRequest_dispenseRequest_dispenser", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_doseAdministrationAid = 'TODO'
+    BINDING_doseAdministrationAid = "TODO"
     doseAdministrationAid_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_doseAdministrationAid}, related_name='MedicationRequest_dispenseRequest_doseAdministrationAid', blank=True)
     doseAdministrationAid_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
@@ -122,10 +122,10 @@ class FHIR_MedicationRequest_dispenseRequest_dispenserInstruction(FHIR_GP_Annota
 
 class FHIR_MedicationRequest_substitution(models.Model):
     MedicationRequest = models.ForeignKey(FHIR_MedicationRequest, related_name='MedicationRequest_substitution', null=False, on_delete=models.CASCADE)
-    allowed = FHIR_primitive_BooleanField(null=True, blank=True, )
-    BINDING_allowed = 'TODO'
-    allowed_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_allowed}, related_name='MedicationRequest_substitution_allowed', blank=True)
-    allowed_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_reason = 'TODO'
+    allowed_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    BINDING_allowed_CodeableConcept = "TODO"
+    allowed_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_allowed_CodeableConcept}, related_name='MedicationRequest_substitution_allowed_CodeableConcept', blank=True)
+    allowed_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    BINDING_reason = "TODO"
     reason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_reason}, related_name='MedicationRequest_substitution_reason', blank=True)
     reason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)

@@ -6,7 +6,7 @@ from ..FHIR_DataTypes.FHIR_metadata import *
 from ..FHIR_DataTypes.FHIR_primitive import *
 
 class FHIR_MeasureReport(models.Model):
-    BINDING_category = 'TODO'
+    BINDING_category = "TODO"
     category_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_category}, related_name='MeasureReport_category', blank=True)
     category_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     messages = models.ForeignKey("FHIR_OperationOutcome", related_name="MeasureReport_messages", null=True, blank=True, on_delete=models.SET_NULL)
@@ -35,10 +35,10 @@ class FHIR_MeasureReport(models.Model):
     location = models.ManyToManyField("FHIR_Location", related_name="MeasureReport_location", blank=True)
     period = models.OneToOneField("FHIR_GP_Period", related_name='MeasureReport_period', null=True, blank=True, on_delete=models.SET_NULL)
     inputParameters = models.ForeignKey("FHIR_Parameters", related_name="MeasureReport_inputParameters", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_scoring = 'TODO'
+    BINDING_scoring = "TODO"
     scoring_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_scoring}, related_name='MeasureReport_scoring', blank=True)
     scoring_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_improvementNotation = 'TODO'
+    BINDING_improvementNotation = "TODO"
     improvementNotation_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_improvementNotation}, related_name='MeasureReport_improvementNotation', blank=True)
     improvementNotation_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
@@ -49,7 +49,7 @@ class FHIR_MeasureReport_group(models.Model):
     MeasureReport = models.ForeignKey(FHIR_MeasureReport, related_name='MeasureReport_group', null=False, on_delete=models.CASCADE)
     linkId = FHIR_primitive_StringField(null=True, blank=True, )
     calculatedDate = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    BINDING_code = 'TODO'
+    BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='MeasureReport_group_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     description = FHIR_primitive_MarkdownField(null=True, blank=True, )
@@ -63,27 +63,27 @@ class FHIR_MeasureReport_group(models.Model):
     subject_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="MeasureReport_group_subject", null=True, blank=True, on_delete=models.SET_NULL)
     subject_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="MeasureReport_group_subject", null=True, blank=True, on_delete=models.SET_NULL)
     subject_RelatedPerson = models.ForeignKey("FHIR_RelatedPerson", related_name="MeasureReport_group_subject", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_scoring = 'TODO'
+    BINDING_scoring = "TODO"
     scoring_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_scoring}, related_name='MeasureReport_group_scoring', blank=True)
     scoring_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_improvementNotation = 'TODO'
+    BINDING_improvementNotation = "TODO"
     improvementNotation_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_improvementNotation}, related_name='MeasureReport_group_improvementNotation', blank=True)
     improvementNotation_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     improvementNotationGuidance = FHIR_primitive_MarkdownField(null=True, blank=True, )
-    measureScore = models.OneToOneField("FHIR_GP_Quantity", related_name='MeasureReport_group_measureScore', null=True, blank=True, on_delete=models.SET_NULL)
-    measureScore = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    BINDING_measureScore = 'TODO'
-    measureScore_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_measureScore}, related_name='MeasureReport_group_measureScore', blank=True)
-    measureScore_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    measureScore = models.OneToOneField("FHIR_GP_Period", related_name='MeasureReport_group_measureScore', null=True, blank=True, on_delete=models.SET_NULL)
-    measureScore = models.OneToOneField("FHIR_GP_Range", related_name='MeasureReport_group_measureScore', null=True, blank=True, on_delete=models.SET_NULL)
-    measureScore = models.OneToOneField("FHIR_GP_Quantity_Duration", related_name='MeasureReport_group_measureScore', null=True, blank=True, on_delete=models.SET_NULL)
-    measureScore = FHIR_primitive_BooleanField(null=True, blank=True, )
+    measureScore_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='MeasureReport_group_measureScore_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    measureScore_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    BINDING_measureScore_CodeableConcept = "TODO"
+    measureScore_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_measureScore_CodeableConcept}, related_name='MeasureReport_group_measureScore_CodeableConcept', blank=True)
+    measureScore_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    measureScore_Period = models.OneToOneField("FHIR_GP_Period", related_name='MeasureReport_group_measureScore_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    measureScore_Range = models.OneToOneField("FHIR_GP_Range", related_name='MeasureReport_group_measureScore_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    measureScore_Duration = models.OneToOneField("FHIR_GP_Quantity_Duration", related_name='MeasureReport_group_measureScore_Duration', null=True, blank=True, on_delete=models.SET_NULL)
+    measureScore_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
 
 class FHIR_MeasureReport_group_population(models.Model):
     MeasureReport_group = models.ForeignKey(FHIR_MeasureReport_group, related_name='MeasureReport_group_population', null=False, on_delete=models.CASCADE)
     linkId = FHIR_primitive_StringField(null=True, blank=True, )
-    BINDING_code = 'TODO'
+    BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='MeasureReport_group_population_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     description = FHIR_primitive_MarkdownField(null=True, blank=True, )
@@ -95,47 +95,47 @@ class FHIR_MeasureReport_group_population(models.Model):
 class FHIR_MeasureReport_group_stratifier(models.Model):
     MeasureReport_group = models.ForeignKey(FHIR_MeasureReport_group, related_name='MeasureReport_group_stratifier', null=False, on_delete=models.CASCADE)
     linkId = FHIR_primitive_StringField(null=True, blank=True, )
-    BINDING_code = 'TODO'
+    BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='MeasureReport_group_stratifier_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     description = FHIR_primitive_MarkdownField(null=True, blank=True, )
 
 class FHIR_MeasureReport_group_stratifier_stratum(models.Model):
     MeasureReport_group_stratifier = models.ForeignKey(FHIR_MeasureReport_group_stratifier, related_name='MeasureReport_group_stratifier_stratum', null=False, on_delete=models.CASCADE)
-    BINDING_value = 'TODO'
-    value_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value}, related_name='MeasureReport_group_stratifier_stratum_value', blank=True)
-    value_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='MeasureReport_group_stratifier_stratum_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Range", related_name='MeasureReport_group_stratifier_stratum_value', null=True, blank=True, on_delete=models.SET_NULL)
-    measureScore = models.OneToOneField("FHIR_GP_Quantity", related_name='MeasureReport_group_stratifier_stratum_measureScore', null=True, blank=True, on_delete=models.SET_NULL)
-    measureScore = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    BINDING_measureScore = 'TODO'
-    measureScore_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_measureScore}, related_name='MeasureReport_group_stratifier_stratum_measureScore', blank=True)
-    measureScore_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    measureScore = models.OneToOneField("FHIR_GP_Period", related_name='MeasureReport_group_stratifier_stratum_measureScore', null=True, blank=True, on_delete=models.SET_NULL)
-    measureScore = models.OneToOneField("FHIR_GP_Range", related_name='MeasureReport_group_stratifier_stratum_measureScore', null=True, blank=True, on_delete=models.SET_NULL)
-    measureScore = models.OneToOneField("FHIR_GP_Quantity_Duration", related_name='MeasureReport_group_stratifier_stratum_measureScore', null=True, blank=True, on_delete=models.SET_NULL)
-    measureScore = FHIR_primitive_BooleanField(null=True, blank=True, )
+    BINDING_value_CodeableConcept = "TODO"
+    value_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value_CodeableConcept}, related_name='MeasureReport_group_stratifier_stratum_value_CodeableConcept', blank=True)
+    value_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='MeasureReport_group_stratifier_stratum_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Range = models.OneToOneField("FHIR_GP_Range", related_name='MeasureReport_group_stratifier_stratum_value_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    measureScore_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='MeasureReport_group_stratifier_stratum_measureScore_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    measureScore_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    BINDING_measureScore_CodeableConcept = "TODO"
+    measureScore_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_measureScore_CodeableConcept}, related_name='MeasureReport_group_stratifier_stratum_measureScore_CodeableConcept', blank=True)
+    measureScore_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    measureScore_Period = models.OneToOneField("FHIR_GP_Period", related_name='MeasureReport_group_stratifier_stratum_measureScore_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    measureScore_Range = models.OneToOneField("FHIR_GP_Range", related_name='MeasureReport_group_stratifier_stratum_measureScore_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    measureScore_Duration = models.OneToOneField("FHIR_GP_Quantity_Duration", related_name='MeasureReport_group_stratifier_stratum_measureScore_Duration', null=True, blank=True, on_delete=models.SET_NULL)
+    measureScore_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
 
 class FHIR_MeasureReport_group_stratifier_stratum_component(models.Model):
     MeasureReport_group_stratifier_stratum = models.ForeignKey(FHIR_MeasureReport_group_stratifier_stratum, related_name='MeasureReport_group_stratifier_stratum_component', null=False, on_delete=models.CASCADE)
     linkId = FHIR_primitive_StringField(null=True, blank=True, )
-    BINDING_code = 'TODO'
+    BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='MeasureReport_group_stratifier_stratum_component_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     description = FHIR_primitive_MarkdownField(null=True, blank=True, )
-    BINDING_value = 'TODO'
-    value_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value}, related_name='MeasureReport_group_stratifier_stratum_component_value', blank=True)
-    value_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='MeasureReport_group_stratifier_stratum_component_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Range", related_name='MeasureReport_group_stratifier_stratum_component_value', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_value_CodeableConcept = "TODO"
+    value_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value_CodeableConcept}, related_name='MeasureReport_group_stratifier_stratum_component_value_CodeableConcept', blank=True)
+    value_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='MeasureReport_group_stratifier_stratum_component_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Range = models.OneToOneField("FHIR_GP_Range", related_name='MeasureReport_group_stratifier_stratum_component_value_Range', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_MeasureReport_group_stratifier_stratum_population(models.Model):
     MeasureReport_group_stratifier_stratum = models.ForeignKey(FHIR_MeasureReport_group_stratifier_stratum, related_name='MeasureReport_group_stratifier_stratum_population', null=False, on_delete=models.CASCADE)
     linkId = FHIR_primitive_StringField(null=True, blank=True, )
-    BINDING_code = 'TODO'
+    BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='MeasureReport_group_stratifier_stratum_population_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     countQuantity = models.OneToOneField("FHIR_GP_Quantity", related_name='MeasureReport_group_stratifier_stratum_population_countQuantity', null=True, blank=True, on_delete=models.SET_NULL)

@@ -8,8 +8,8 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 class FHIR_ValueSet(models.Model):
     url = FHIR_primitive_URIField(null=True, blank=True, )
     version = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = models.OneToOneField("FHIR_GP_Coding", related_name='ValueSet_versionAlgorithm', null=True, blank=True, on_delete=models.SET_NULL)
+    versionAlgorithm_string = FHIR_primitive_StringField(null=True, blank=True, )
+    versionAlgorithm_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='ValueSet_versionAlgorithm_Coding', null=True, blank=True, on_delete=models.SET_NULL)
     name = FHIR_primitive_StringField(null=True, blank=True, )
     title = FHIR_primitive_StringField(null=True, blank=True, )
     class StatusChoices(models.TextChoices): DRAFT = 'draft', 'Draft'; ACTIVE = 'active', 'Active'; RETIRED = 'retired', 'Retired'; UNKNOWN = 'unknown', 'Unknown'; 
@@ -31,13 +31,13 @@ class FHIR_ValueSet_identifier(FHIR_GP_Identifier):
 
 class FHIR_ValueSet_jurisdiction(models.Model):
     ValueSet = models.ForeignKey(FHIR_ValueSet, related_name='ValueSet_jurisdiction', null=False, on_delete=models.CASCADE)
-    BINDING_jurisdiction = 'TODO'
+    BINDING_jurisdiction = "TODO"
     jurisdiction_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_jurisdiction}, related_name='ValueSet_jurisdiction', blank=True)
     jurisdiction_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_ValueSet_topic(models.Model):
     ValueSet = models.ForeignKey(FHIR_ValueSet, related_name='ValueSet_topic', null=False, on_delete=models.CASCADE)
-    BINDING_topic = 'TODO'
+    BINDING_topic = "TODO"
     topic_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_topic}, related_name='ValueSet_topic', blank=True)
     topic_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -95,13 +95,13 @@ class FHIR_ValueSet_expansion(models.Model):
 class FHIR_ValueSet_expansion_parameter(models.Model):
     ValueSet_expansion = models.ForeignKey(FHIR_ValueSet_expansion, related_name='ValueSet_expansion_parameter', null=False, on_delete=models.CASCADE)
     name = FHIR_primitive_StringField(null=True, blank=True, )
-    value = FHIR_primitive_StringField(null=True, blank=True, )
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
-    value = FHIR_primitive_DecimalField(null=True, blank=True, )
-    value = FHIR_primitive_URIField(null=True, blank=True, )
-    class ValueChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
-    value = FHIR_primitive_CodeField(choices=ValueChoices.choices, null=True, blank=True, )
-    value = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    value_string = FHIR_primitive_StringField(null=True, blank=True, )
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    value_decimal = FHIR_primitive_DecimalField(null=True, blank=True, )
+    value_uri = FHIR_primitive_URIField(null=True, blank=True, )
+    class Value_codeChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
+    value_code = FHIR_primitive_CodeField(choices=Value_codeChoices.choices, null=True, blank=True, )
+    value_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
 
 class FHIR_ValueSet_expansion_property(models.Model):
     ValueSet_expansion = models.ForeignKey(FHIR_ValueSet_expansion, related_name='ValueSet_expansion_property', null=False, on_delete=models.CASCADE)
@@ -123,25 +123,25 @@ class FHIR_ValueSet_expansion_contains_property(models.Model):
     ValueSet_expansion_contains = models.ForeignKey(FHIR_ValueSet_expansion_contains, related_name='ValueSet_expansion_contains_property', null=False, on_delete=models.CASCADE)
     class CodeChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
     code = FHIR_primitive_CodeField(choices=CodeChoices.choices, null=True, blank=True, )
-    class ValueChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
-    value = FHIR_primitive_CodeField(choices=ValueChoices.choices, null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Coding", related_name='ValueSet_expansion_contains_property_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = FHIR_primitive_StringField(null=True, blank=True, )
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
-    value = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    value = FHIR_primitive_DecimalField(null=True, blank=True, )
+    class Value_codeChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
+    value_code = FHIR_primitive_CodeField(choices=Value_codeChoices.choices, null=True, blank=True, )
+    value_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='ValueSet_expansion_contains_property_value_Coding', null=True, blank=True, on_delete=models.SET_NULL)
+    value_string = FHIR_primitive_StringField(null=True, blank=True, )
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    value_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    value_decimal = FHIR_primitive_DecimalField(null=True, blank=True, )
 
 class FHIR_ValueSet_expansion_contains_property_subProperty(models.Model):
     ValueSet_expansion_contains_property = models.ForeignKey(FHIR_ValueSet_expansion_contains_property, related_name='ValueSet_expansion_contains_property_subProperty', null=False, on_delete=models.CASCADE)
     class CodeChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
     code = FHIR_primitive_CodeField(choices=CodeChoices.choices, null=True, blank=True, )
-    class ValueChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
-    value = FHIR_primitive_CodeField(choices=ValueChoices.choices, null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Coding", related_name='ValueSet_expansion_contains_property_subProperty_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = FHIR_primitive_StringField(null=True, blank=True, )
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
-    value = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    value = FHIR_primitive_DecimalField(null=True, blank=True, )
+    class Value_codeChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
+    value_code = FHIR_primitive_CodeField(choices=Value_codeChoices.choices, null=True, blank=True, )
+    value_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='ValueSet_expansion_contains_property_subProperty_value_Coding', null=True, blank=True, on_delete=models.SET_NULL)
+    value_string = FHIR_primitive_StringField(null=True, blank=True, )
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    value_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    value_decimal = FHIR_primitive_DecimalField(null=True, blank=True, )
 
 class FHIR_ValueSet_scope(models.Model):
     ValueSet = models.ForeignKey(FHIR_ValueSet, related_name='ValueSet_scope', null=False, on_delete=models.CASCADE)

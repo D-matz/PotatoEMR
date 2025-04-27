@@ -24,19 +24,19 @@ class FHIR_HealthcareService_identifier(FHIR_GP_Identifier):
 
 class FHIR_HealthcareService_category(models.Model):
     HealthcareService = models.ForeignKey(FHIR_HealthcareService, related_name='HealthcareService_category', null=False, on_delete=models.CASCADE)
-    BINDING_category = 'TODO'
+    BINDING_category = "TODO"
     category_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_category}, related_name='HealthcareService_category', blank=True)
     category_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_HealthcareService_type(models.Model):
     HealthcareService = models.ForeignKey(FHIR_HealthcareService, related_name='HealthcareService_type', null=False, on_delete=models.CASCADE)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='HealthcareService_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_HealthcareService_specialty(models.Model):
     HealthcareService = models.ForeignKey(FHIR_HealthcareService, related_name='HealthcareService_specialty', null=False, on_delete=models.CASCADE)
-    BINDING_specialty = 'TODO'
+    BINDING_specialty = "TODO"
     specialty_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_specialty}, related_name='HealthcareService_specialty', blank=True)
     specialty_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -45,45 +45,45 @@ class FHIR_HealthcareService_contact(FHIR_meta_ExtendedContactDetail):
 
 class FHIR_HealthcareService_serviceProvisionCode(models.Model):
     HealthcareService = models.ForeignKey(FHIR_HealthcareService, related_name='HealthcareService_serviceProvisionCode', null=False, on_delete=models.CASCADE)
-    BINDING_serviceProvisionCode = 'TODO'
+    BINDING_serviceProvisionCode = "TODO"
     serviceProvisionCode_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_serviceProvisionCode}, related_name='HealthcareService_serviceProvisionCode', blank=True)
     serviceProvisionCode_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_HealthcareService_eligibility(models.Model):
     HealthcareService = models.ForeignKey(FHIR_HealthcareService, related_name='HealthcareService_eligibility', null=False, on_delete=models.CASCADE)
-    BINDING_code = 'TODO'
+    BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='HealthcareService_eligibility_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_value = 'TODO'
-    value_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value}, related_name='HealthcareService_eligibility_value', blank=True)
-    value_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='HealthcareService_eligibility_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Range", related_name='HealthcareService_eligibility_value', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_value_CodeableConcept = "TODO"
+    value_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value_CodeableConcept}, related_name='HealthcareService_eligibility_value_CodeableConcept', blank=True)
+    value_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='HealthcareService_eligibility_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Range = models.OneToOneField("FHIR_GP_Range", related_name='HealthcareService_eligibility_value_Range', null=True, blank=True, on_delete=models.SET_NULL)
     comment = FHIR_primitive_MarkdownField(null=True, blank=True, )
     period = FHIR_primitive_MarkdownField(null=True, blank=True, )
 
 class FHIR_HealthcareService_program(models.Model):
     HealthcareService = models.ForeignKey(FHIR_HealthcareService, related_name='HealthcareService_program', null=False, on_delete=models.CASCADE)
-    BINDING_program = 'TODO'
+    BINDING_program = "TODO"
     program_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_program}, related_name='HealthcareService_program', blank=True)
     program_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_HealthcareService_characteristic(models.Model):
     HealthcareService = models.ForeignKey(FHIR_HealthcareService, related_name='HealthcareService_characteristic', null=False, on_delete=models.CASCADE)
-    BINDING_characteristic = 'TODO'
+    BINDING_characteristic = "TODO"
     characteristic_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_characteristic}, related_name='HealthcareService_characteristic', blank=True)
     characteristic_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_HealthcareService_communication(models.Model):
     HealthcareService = models.ForeignKey(FHIR_HealthcareService, related_name='HealthcareService_communication', null=False, on_delete=models.CASCADE)
-    BINDING_communication = 'TODO'
+    BINDING_communication = "TODO"
     communication_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_communication}, related_name='HealthcareService_communication', blank=True)
     communication_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_HealthcareService_referralMethod(models.Model):
     HealthcareService = models.ForeignKey(FHIR_HealthcareService, related_name='HealthcareService_referralMethod', null=False, on_delete=models.CASCADE)
-    BINDING_referralMethod = 'TODO'
+    BINDING_referralMethod = "TODO"
     referralMethod_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_referralMethod}, related_name='HealthcareService_referralMethod', blank=True)
     referralMethod_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     

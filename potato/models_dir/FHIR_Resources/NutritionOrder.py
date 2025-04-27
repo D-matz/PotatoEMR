@@ -36,7 +36,7 @@ class FHIR_NutritionOrder_instantiatesCanonical(models.Model):
     
 class FHIR_NutritionOrder_performer(models.Model):
     NutritionOrder = models.ForeignKey(FHIR_NutritionOrder, related_name='NutritionOrder_performer', null=False, on_delete=models.CASCADE)
-    BINDING_performer = 'TODO'
+    BINDING_performer = "TODO"
     performer_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_performer}, related_name='NutritionOrder_performer', blank=True)
     performer_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     performer_CareTeam_ref = models.ForeignKey("FHIR_CareTeam", related_name="NutritionOrder_performer_CareTeam", null=True, blank=True, on_delete=models.SET_NULL)
@@ -49,13 +49,13 @@ class FHIR_NutritionOrder_performer(models.Model):
 
 class FHIR_NutritionOrder_foodPreferenceModifier(models.Model):
     NutritionOrder = models.ForeignKey(FHIR_NutritionOrder, related_name='NutritionOrder_foodPreferenceModifier', null=False, on_delete=models.CASCADE)
-    BINDING_foodPreferenceModifier = 'TODO'
+    BINDING_foodPreferenceModifier = "TODO"
     foodPreferenceModifier_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_foodPreferenceModifier}, related_name='NutritionOrder_foodPreferenceModifier', blank=True)
     foodPreferenceModifier_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_NutritionOrder_excludeFoodModifier(models.Model):
     NutritionOrder = models.ForeignKey(FHIR_NutritionOrder, related_name='NutritionOrder_excludeFoodModifier', null=False, on_delete=models.CASCADE)
-    BINDING_excludeFoodModifier = 'TODO'
+    BINDING_excludeFoodModifier = "TODO"
     excludeFoodModifier_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_excludeFoodModifier}, related_name='NutritionOrder_excludeFoodModifier', blank=True)
     excludeFoodModifier_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -66,14 +66,14 @@ class FHIR_NutritionOrder_oralDiet(models.Model):
 
 class FHIR_NutritionOrder_oralDiet_type(models.Model):
     NutritionOrder_oralDiet = models.ForeignKey(FHIR_NutritionOrder_oralDiet, related_name='NutritionOrder_oralDiet_type', null=False, on_delete=models.CASCADE)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='NutritionOrder_oralDiet_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_NutritionOrder_oralDiet_schedule(models.Model):
     NutritionOrder_oralDiet = models.ForeignKey(FHIR_NutritionOrder_oralDiet, related_name='NutritionOrder_oralDiet_schedule', null=False, on_delete=models.CASCADE)
     asNeeded = FHIR_primitive_BooleanField(null=True, blank=True, )
-    BINDING_asNeededFor = 'TODO'
+    BINDING_asNeededFor = "TODO"
     asNeededFor_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_asNeededFor}, related_name='NutritionOrder_oralDiet_schedule_asNeededFor', blank=True)
     asNeededFor_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
@@ -82,23 +82,23 @@ class FHIR_NutritionOrder_oralDiet_schedule_timing(FHIR_GP_Timing):
 
 class FHIR_NutritionOrder_oralDiet_nutrient(models.Model):
     NutritionOrder_oralDiet = models.ForeignKey(FHIR_NutritionOrder_oralDiet, related_name='NutritionOrder_oralDiet_nutrient', null=False, on_delete=models.CASCADE)
-    BINDING_modifier = 'TODO'
+    BINDING_modifier = "TODO"
     modifier_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_modifier}, related_name='NutritionOrder_oralDiet_nutrient_modifier', blank=True)
     modifier_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     amount = models.OneToOneField("FHIR_GP_Quantity", related_name='NutritionOrder_oralDiet_nutrient_amount', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_NutritionOrder_oralDiet_texture(models.Model):
     NutritionOrder_oralDiet = models.ForeignKey(FHIR_NutritionOrder_oralDiet, related_name='NutritionOrder_oralDiet_texture', null=False, on_delete=models.CASCADE)
-    BINDING_modifier = 'TODO'
+    BINDING_modifier = "TODO"
     modifier_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_modifier}, related_name='NutritionOrder_oralDiet_texture_modifier', blank=True)
     modifier_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='NutritionOrder_oralDiet_texture_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
 class FHIR_NutritionOrder_supplement(models.Model):
     NutritionOrder = models.ForeignKey(FHIR_NutritionOrder, related_name='NutritionOrder_supplement', null=False, on_delete=models.CASCADE)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='NutritionOrder_supplement_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     type_NutritionProduct_ref = models.ForeignKey("FHIR_NutritionProduct", related_name="NutritionOrder_supplement_type_NutritionProduct", null=True, blank=True, on_delete=models.SET_NULL)
@@ -110,7 +110,7 @@ class FHIR_NutritionOrder_supplement(models.Model):
 class FHIR_NutritionOrder_supplement_schedule(models.Model):
     NutritionOrder_supplement = models.ForeignKey(FHIR_NutritionOrder_supplement, related_name='NutritionOrder_supplement_schedule', null=False, on_delete=models.CASCADE)
     asNeeded = FHIR_primitive_BooleanField(null=True, blank=True, )
-    BINDING_asNeededFor = 'TODO'
+    BINDING_asNeededFor = "TODO"
     asNeededFor_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_asNeededFor}, related_name='NutritionOrder_supplement_schedule_asNeededFor', blank=True)
     asNeededFor_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
@@ -119,7 +119,7 @@ class FHIR_NutritionOrder_supplement_schedule_timing(FHIR_GP_Timing):
 
 class FHIR_NutritionOrder_enteralFormula(models.Model):
     NutritionOrder = models.ForeignKey(FHIR_NutritionOrder, related_name='NutritionOrder_enteralFormula', null=False, on_delete=models.CASCADE)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='NutritionOrder_enteralFormula_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     type_NutritionProduct_ref = models.ForeignKey("FHIR_NutritionProduct", related_name="NutritionOrder_enteralFormula_type_NutritionProduct", null=True, blank=True, on_delete=models.SET_NULL)
@@ -130,27 +130,27 @@ class FHIR_NutritionOrder_enteralFormula(models.Model):
 
 class FHIR_NutritionOrder_enteralFormula_deliveryDevice(models.Model):
     NutritionOrder_enteralFormula = models.ForeignKey(FHIR_NutritionOrder_enteralFormula, related_name='NutritionOrder_enteralFormula_deliveryDevice', null=False, on_delete=models.CASCADE)
-    BINDING_deliveryDevice = 'TODO'
+    BINDING_deliveryDevice = "TODO"
     deliveryDevice_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_deliveryDevice}, related_name='NutritionOrder_enteralFormula_deliveryDevice', blank=True)
     deliveryDevice_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     deliveryDevice_DeviceDefinition_ref = models.ForeignKey("FHIR_DeviceDefinition", related_name="NutritionOrder_enteralFormula_deliveryDevice_DeviceDefinition", null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_NutritionOrder_enteralFormula_routeOfAdministration(models.Model):
     NutritionOrder_enteralFormula = models.ForeignKey(FHIR_NutritionOrder_enteralFormula, related_name='NutritionOrder_enteralFormula_routeOfAdministration', null=False, on_delete=models.CASCADE)
-    BINDING_routeOfAdministration = 'TODO'
+    BINDING_routeOfAdministration = "TODO"
     routeOfAdministration_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_routeOfAdministration}, related_name='NutritionOrder_enteralFormula_routeOfAdministration', blank=True)
     routeOfAdministration_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_NutritionOrder_enteralFormula_administration(models.Model):
     NutritionOrder_enteralFormula = models.ForeignKey(FHIR_NutritionOrder_enteralFormula, related_name='NutritionOrder_enteralFormula_administration', null=False, on_delete=models.CASCADE)
     quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='NutritionOrder_enteralFormula_administration_quantity', null=True, blank=True, on_delete=models.SET_NULL)
-    rate = models.OneToOneField("FHIR_GP_Quantity", related_name='NutritionOrder_enteralFormula_administration_rate', null=True, blank=True, on_delete=models.SET_NULL)
-    rate = models.OneToOneField("FHIR_GP_Ratio", related_name='NutritionOrder_enteralFormula_administration_rate', null=True, blank=True, on_delete=models.SET_NULL)
+    rate_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='NutritionOrder_enteralFormula_administration_rate_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    rate_Ratio = models.OneToOneField("FHIR_GP_Ratio", related_name='NutritionOrder_enteralFormula_administration_rate_Ratio', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_NutritionOrder_enteralFormula_administration_schedule(models.Model):
     NutritionOrder_enteralFormula_administration = models.ForeignKey(FHIR_NutritionOrder_enteralFormula_administration, related_name='NutritionOrder_enteralFormula_administration_schedule', null=False, on_delete=models.CASCADE)
     asNeeded = FHIR_primitive_BooleanField(null=True, blank=True, )
-    BINDING_asNeededFor = 'TODO'
+    BINDING_asNeededFor = "TODO"
     asNeededFor_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_asNeededFor}, related_name='NutritionOrder_enteralFormula_administration_schedule_asNeededFor', blank=True)
     asNeededFor_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
@@ -159,7 +159,7 @@ class FHIR_NutritionOrder_enteralFormula_administration_schedule_timing(FHIR_GP_
 
 class FHIR_NutritionOrder_additive(models.Model):
     NutritionOrder = models.ForeignKey(FHIR_NutritionOrder, related_name='NutritionOrder_additive', null=False, on_delete=models.CASCADE)
-    BINDING_modularType = 'TODO'
+    BINDING_modularType = "TODO"
     modularType_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_modularType}, related_name='NutritionOrder_additive_modularType', blank=True)
     modularType_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     modularType_NutritionProduct_ref = models.ForeignKey("FHIR_NutritionProduct", related_name="NutritionOrder_additive_modularType_NutritionProduct", null=True, blank=True, on_delete=models.SET_NULL)
@@ -168,7 +168,7 @@ class FHIR_NutritionOrder_additive(models.Model):
 
 class FHIR_NutritionOrder_additive_routeOfAdministration(models.Model):
     NutritionOrder_additive = models.ForeignKey(FHIR_NutritionOrder_additive, related_name='NutritionOrder_additive_routeOfAdministration', null=False, on_delete=models.CASCADE)
-    BINDING_routeOfAdministration = 'TODO'
+    BINDING_routeOfAdministration = "TODO"
     routeOfAdministration_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_routeOfAdministration}, related_name='NutritionOrder_additive_routeOfAdministration', blank=True)
     routeOfAdministration_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     

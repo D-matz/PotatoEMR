@@ -6,7 +6,7 @@ from ..FHIR_DataTypes.FHIR_metadata import *
 from ..FHIR_DataTypes.FHIR_primitive import *
 
 class FHIR_BiologicallyDerivedProduct(models.Model):
-    BINDING_productCode = 'TODO'
+    BINDING_productCode = "TODO"
     productCode_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_productCode}, related_name='BiologicallyDerivedProduct_productCode', blank=True)
     productCode_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     parent = models.ManyToManyField("FHIR_BiologicallyDerivedProduct", related_name="BiologicallyDerivedProduct_parent", blank=True)
@@ -20,7 +20,7 @@ class FHIR_BiologicallyDerivedProduct(models.Model):
 
 class FHIR_BiologicallyDerivedProduct_productCategory(models.Model):
     BiologicallyDerivedProduct = models.ForeignKey(FHIR_BiologicallyDerivedProduct, related_name='BiologicallyDerivedProduct_productCategory', null=False, on_delete=models.CASCADE)
-    BINDING_productCategory = 'TODO'
+    BINDING_productCategory = "TODO"
     productCategory_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_productCategory}, related_name='BiologicallyDerivedProduct_productCategory', blank=True)
     productCategory_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -33,22 +33,22 @@ class FHIR_BiologicallyDerivedProduct_collection(models.Model):
     collector_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="BiologicallyDerivedProduct_collection_collector", null=True, blank=True, on_delete=models.SET_NULL)
     source_Patient = models.ForeignKey("FHIR_Patient", related_name="BiologicallyDerivedProduct_collection_source", null=True, blank=True, on_delete=models.SET_NULL)
     source_Organization = models.ForeignKey("FHIR_Organization", related_name="BiologicallyDerivedProduct_collection_source", null=True, blank=True, on_delete=models.SET_NULL)
-    collected = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    collected = models.OneToOneField("FHIR_GP_Period", related_name='BiologicallyDerivedProduct_collection_collected', null=True, blank=True, on_delete=models.SET_NULL)
+    collected_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    collected_Period = models.OneToOneField("FHIR_GP_Period", related_name='BiologicallyDerivedProduct_collection_collected_Period', null=True, blank=True, on_delete=models.SET_NULL)
     procedure = models.ForeignKey("FHIR_Procedure", related_name="BiologicallyDerivedProduct_collection_procedure", null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_BiologicallyDerivedProduct_property(models.Model):
     BiologicallyDerivedProduct = models.ForeignKey(FHIR_BiologicallyDerivedProduct, related_name='BiologicallyDerivedProduct_property', null=False, on_delete=models.CASCADE)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='BiologicallyDerivedProduct_property_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
-    BINDING_value = 'TODO'
-    value_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value}, related_name='BiologicallyDerivedProduct_property_value', blank=True)
-    value_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = models.OneToOneField("FHIR_GP_Period", related_name='BiologicallyDerivedProduct_property_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='BiologicallyDerivedProduct_property_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Range", related_name='BiologicallyDerivedProduct_property_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Ratio", related_name='BiologicallyDerivedProduct_property_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = FHIR_primitive_StringField(null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Attachment", related_name='BiologicallyDerivedProduct_property_value', null=True, blank=True, on_delete=models.SET_NULL)
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    BINDING_value_CodeableConcept = "TODO"
+    value_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value_CodeableConcept}, related_name='BiologicallyDerivedProduct_property_value_CodeableConcept', blank=True)
+    value_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    value_Period = models.OneToOneField("FHIR_GP_Period", related_name='BiologicallyDerivedProduct_property_value_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='BiologicallyDerivedProduct_property_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Range = models.OneToOneField("FHIR_GP_Range", related_name='BiologicallyDerivedProduct_property_value_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Ratio = models.OneToOneField("FHIR_GP_Ratio", related_name='BiologicallyDerivedProduct_property_value_Ratio', null=True, blank=True, on_delete=models.SET_NULL)
+    value_string = FHIR_primitive_StringField(null=True, blank=True, )
+    value_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='BiologicallyDerivedProduct_property_value_Attachment', null=True, blank=True, on_delete=models.SET_NULL)

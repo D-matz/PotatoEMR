@@ -10,12 +10,12 @@ class FHIR_Patient(models.Model):
     class GenderChoices(models.TextChoices): MALE = 'male', 'Male'; FEMALE = 'female', 'Female'; OTHER = 'other', 'Other'; UNKNOWN = 'unknown', 'Unknown'; 
     gender = FHIR_primitive_CodeField(choices=GenderChoices.choices, null=True, blank=True, )
     birthDate = FHIR_primitive_DateField(null=True, blank=True, )
-    deceased = FHIR_primitive_BooleanField(null=True, blank=True, )
-    deceased = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    BINDING_maritalStatus = 'TODO'
+    deceased_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    deceased_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    BINDING_maritalStatus = "TODO"
     maritalStatus_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_maritalStatus}, related_name='Patient_maritalStatus', blank=True)
     maritalStatus_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    multipleBirth = FHIR_primitive_BooleanField(null=True, blank=True, )
+    multipleBirth_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
     generalPractitioner_Organization = models.ManyToManyField("FHIR_Organization", related_name="Patient_generalPractitioner", blank=True)
     generalPractitioner_Practitioner = models.ManyToManyField("FHIR_Practitioner", related_name="Patient_generalPractitioner", blank=True)
     generalPractitioner_PractitionerRole = models.ManyToManyField("FHIR_PractitionerRole", related_name="Patient_generalPractitioner", blank=True)
@@ -47,13 +47,13 @@ class FHIR_Patient_contact(models.Model):
 
 class FHIR_Patient_contact_relationship(models.Model):
     Patient_contact = models.ForeignKey(FHIR_Patient_contact, related_name='Patient_contact_relationship', null=False, on_delete=models.CASCADE)
-    BINDING_relationship = 'TODO'
+    BINDING_relationship = "TODO"
     relationship_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_relationship}, related_name='Patient_contact_relationship', blank=True)
     relationship_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_Patient_contact_role(models.Model):
     Patient_contact = models.ForeignKey(FHIR_Patient_contact, related_name='Patient_contact_role', null=False, on_delete=models.CASCADE)
-    BINDING_role = 'TODO'
+    BINDING_role = "TODO"
     role_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_role}, related_name='Patient_contact_role', blank=True)
     role_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -68,7 +68,7 @@ class FHIR_Patient_contact_additionalAddress(FHIR_GP_Address):
 
 class FHIR_Patient_communication(models.Model):
     Patient = models.ForeignKey(FHIR_Patient, related_name='Patient_communication', null=False, on_delete=models.CASCADE)
-    BINDING_language = 'TODO'
+    BINDING_language = "TODO"
     language_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_language}, related_name='Patient_communication_language', blank=True)
     language_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     preferred = FHIR_primitive_BooleanField(null=True, blank=True, )

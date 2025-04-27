@@ -8,7 +8,7 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 class FHIR_InventoryItem(models.Model):
     class StatusChoices(models.TextChoices): ACTIVE = 'active', 'Active'; INACTIVE = 'inactive', 'Inactive'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; UNKNOWN = 'unknown', 'Unknown'; 
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
-    BINDING_baseUnit = 'TODO'
+    BINDING_baseUnit = "TODO"
     baseUnit_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_baseUnit}, related_name='InventoryItem_baseUnit', blank=True)
     baseUnit_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     netContent = models.OneToOneField("FHIR_GP_Quantity", related_name='InventoryItem_netContent', null=True, blank=True, on_delete=models.SET_NULL)
@@ -22,13 +22,13 @@ class FHIR_InventoryItem_identifier(FHIR_GP_Identifier):
 
 class FHIR_InventoryItem_category(models.Model):
     InventoryItem = models.ForeignKey(FHIR_InventoryItem, related_name='InventoryItem_category', null=False, on_delete=models.CASCADE)
-    BINDING_category = 'TODO'
+    BINDING_category = "TODO"
     category_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_category}, related_name='InventoryItem_category', blank=True)
     category_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_InventoryItem_code(models.Model):
     InventoryItem = models.ForeignKey(FHIR_InventoryItem, related_name='InventoryItem_code', null=False, on_delete=models.CASCADE)
-    BINDING_code = 'TODO'
+    BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='InventoryItem_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -41,7 +41,7 @@ class FHIR_InventoryItem_name(models.Model):
 
 class FHIR_InventoryItem_responsibleOrganization(models.Model):
     InventoryItem = models.ForeignKey(FHIR_InventoryItem, related_name='InventoryItem_responsibleOrganization', null=False, on_delete=models.CASCADE)
-    BINDING_role = 'TODO'
+    BINDING_role = "TODO"
     role_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_role}, related_name='InventoryItem_responsibleOrganization_role', blank=True)
     role_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     organization = models.ForeignKey("FHIR_Organization", related_name="InventoryItem_responsibleOrganization_organization", null=True, blank=True, on_delete=models.SET_NULL)
@@ -54,13 +54,13 @@ class FHIR_InventoryItem_description(models.Model):
 
 class FHIR_InventoryItem_inventoryStatus(models.Model):
     InventoryItem = models.ForeignKey(FHIR_InventoryItem, related_name='InventoryItem_inventoryStatus', null=False, on_delete=models.CASCADE)
-    BINDING_inventoryStatus = 'TODO'
+    BINDING_inventoryStatus = "TODO"
     inventoryStatus_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_inventoryStatus}, related_name='InventoryItem_inventoryStatus', blank=True)
     inventoryStatus_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_InventoryItem_association(models.Model):
     InventoryItem = models.ForeignKey(FHIR_InventoryItem, related_name='InventoryItem_association', null=False, on_delete=models.CASCADE)
-    BINDING_associationType = 'TODO'
+    BINDING_associationType = "TODO"
     associationType_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_associationType}, related_name='InventoryItem_association_associationType', blank=True)
     associationType_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     relatedItem_InventoryItem = models.ForeignKey("FHIR_InventoryItem", related_name="InventoryItem_association_relatedItem", null=True, blank=True, on_delete=models.SET_NULL)
@@ -74,23 +74,23 @@ class FHIR_InventoryItem_association(models.Model):
 
 class FHIR_InventoryItem_characteristic(models.Model):
     InventoryItem = models.ForeignKey(FHIR_InventoryItem, related_name='InventoryItem_characteristic', null=False, on_delete=models.CASCADE)
-    BINDING_characteristicType = 'TODO'
+    BINDING_characteristicType = "TODO"
     characteristicType_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_characteristicType}, related_name='InventoryItem_characteristic_characteristicType', blank=True)
     characteristicType_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = FHIR_primitive_StringField(null=True, blank=True, )
-    value = FHIR_primitive_DecimalField(null=True, blank=True, )
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
-    value = FHIR_primitive_URLField(null=True, blank=True, )
-    value = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='InventoryItem_characteristic_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Range", related_name='InventoryItem_characteristic_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Ratio", related_name='InventoryItem_characteristic_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Annotation", related_name='InventoryItem_characteristic_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Address", related_name='InventoryItem_characteristic_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Quantity_Duration", related_name='InventoryItem_characteristic_value', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_value = 'TODO'
-    value_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value}, related_name='InventoryItem_characteristic_value', blank=True)
-    value_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    value_string = FHIR_primitive_StringField(null=True, blank=True, )
+    value_decimal = FHIR_primitive_DecimalField(null=True, blank=True, )
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    value_url = FHIR_primitive_URLField(null=True, blank=True, )
+    value_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='InventoryItem_characteristic_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Range = models.OneToOneField("FHIR_GP_Range", related_name='InventoryItem_characteristic_value_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Ratio = models.OneToOneField("FHIR_GP_Ratio", related_name='InventoryItem_characteristic_value_Ratio', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Annotation = models.OneToOneField("FHIR_GP_Annotation", related_name='InventoryItem_characteristic_value_Annotation', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Address = models.OneToOneField("FHIR_GP_Address", related_name='InventoryItem_characteristic_value_Address', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Duration = models.OneToOneField("FHIR_GP_Quantity_Duration", related_name='InventoryItem_characteristic_value_Duration', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_value_CodeableConcept = "TODO"
+    value_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value_CodeableConcept}, related_name='InventoryItem_characteristic_value_CodeableConcept', blank=True)
+    value_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
 class FHIR_InventoryItem_instance(models.Model):
     InventoryItem = models.ForeignKey(FHIR_InventoryItem, related_name='InventoryItem_instance', null=False, on_delete=models.CASCADE)

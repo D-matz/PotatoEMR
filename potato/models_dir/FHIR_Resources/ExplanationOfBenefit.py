@@ -8,10 +8,10 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 class FHIR_ExplanationOfBenefit(models.Model):
     class StatusChoices(models.TextChoices): ACTIVE = 'active', 'Active'; CANCELLED = 'cancelled', 'Cancelled'; DRAFT = 'draft', 'Draft'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; 
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='ExplanationOfBenefit_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_subType = 'TODO'
+    BINDING_subType = "TODO"
     subType_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_subType}, related_name='ExplanationOfBenefit_subType', blank=True)
     subType_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     class UseChoices(models.TextChoices): CLAIM = 'claim', 'Claim'; PREAUTHORIZATION = 'preauthorization', 'Preauthorization'; PREDETERMINATION = 'predetermination', 'Predetermination'; 
@@ -27,13 +27,13 @@ class FHIR_ExplanationOfBenefit(models.Model):
     provider_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="ExplanationOfBenefit_provider", null=True, blank=True, on_delete=models.SET_NULL)
     provider_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="ExplanationOfBenefit_provider", null=True, blank=True, on_delete=models.SET_NULL)
     provider_Organization = models.ForeignKey("FHIR_Organization", related_name="ExplanationOfBenefit_provider", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_priority = 'TODO'
+    BINDING_priority = "TODO"
     priority_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_priority}, related_name='ExplanationOfBenefit_priority', blank=True)
     priority_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_fundsReserveRequested = 'TODO'
+    BINDING_fundsReserveRequested = "TODO"
     fundsReserveRequested_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_fundsReserveRequested}, related_name='ExplanationOfBenefit_fundsReserveRequested', blank=True)
     fundsReserveRequested_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_fundsReserve = 'TODO'
+    BINDING_fundsReserve = "TODO"
     fundsReserve_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_fundsReserve}, related_name='ExplanationOfBenefit_fundsReserve', blank=True)
     fundsReserve_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     prescription_MedicationRequest = models.ForeignKey("FHIR_MedicationRequest", related_name="ExplanationOfBenefit_prescription", null=True, blank=True, on_delete=models.SET_NULL)
@@ -47,16 +47,16 @@ class FHIR_ExplanationOfBenefit(models.Model):
     claimResponse = models.ForeignKey("FHIR_ClaimResponse", related_name="ExplanationOfBenefit_claimResponse", null=True, blank=True, on_delete=models.SET_NULL)
     class OutcomeChoices(models.TextChoices): QUEUED = 'queued', 'Queued'; COMPLETE = 'complete', 'Complete'; ERROR = 'error', 'Error'; PARTIAL = 'partial', 'Partial'; 
     outcome = FHIR_primitive_CodeField(choices=OutcomeChoices.choices, null=True, blank=True, )
-    BINDING_decision = 'TODO'
+    BINDING_decision = "TODO"
     decision_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_decision}, related_name='ExplanationOfBenefit_decision', blank=True)
     decision_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     disposition = FHIR_primitive_StringField(null=True, blank=True, )
-    BINDING_diagnosisRelatedGroup = 'TODO'
+    BINDING_diagnosisRelatedGroup = "TODO"
     diagnosisRelatedGroup_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_diagnosisRelatedGroup}, related_name='ExplanationOfBenefit_diagnosisRelatedGroup', blank=True)
     diagnosisRelatedGroup_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     precedence = FHIR_primitive_PositiveIntField(null=True, blank=True, )
     patientPaid = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='ExplanationOfBenefit_patientPaid', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_formCode = 'TODO'
+    BINDING_formCode = "TODO"
     formCode_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_formCode}, related_name='ExplanationOfBenefit_formCode', blank=True)
     formCode_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     form = models.OneToOneField("FHIR_GP_Attachment", related_name='ExplanationOfBenefit_form', null=True, blank=True, on_delete=models.SET_NULL)
@@ -71,22 +71,22 @@ class FHIR_ExplanationOfBenefit_traceNumber(FHIR_GP_Identifier):
 class FHIR_ExplanationOfBenefit_related(models.Model):
     ExplanationOfBenefit = models.ForeignKey(FHIR_ExplanationOfBenefit, related_name='ExplanationOfBenefit_related', null=False, on_delete=models.CASCADE)
     claim = models.ForeignKey("FHIR_Claim", related_name="ExplanationOfBenefit_related_claim", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_relationship = 'TODO'
+    BINDING_relationship = "TODO"
     relationship_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_relationship}, related_name='ExplanationOfBenefit_related_relationship', blank=True)
     relationship_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     reference = models.OneToOneField("FHIR_GP_Identifier", related_name='ExplanationOfBenefit_related_reference', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_ExplanationOfBenefit_event(models.Model):
     ExplanationOfBenefit = models.ForeignKey(FHIR_ExplanationOfBenefit, related_name='ExplanationOfBenefit_event', null=False, on_delete=models.CASCADE)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='ExplanationOfBenefit_event_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    when = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    when = models.OneToOneField("FHIR_GP_Period", related_name='ExplanationOfBenefit_event_when', null=True, blank=True, on_delete=models.SET_NULL)
+    when_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    when_Period = models.OneToOneField("FHIR_GP_Period", related_name='ExplanationOfBenefit_event_when_Period', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_ExplanationOfBenefit_payee(models.Model):
     ExplanationOfBenefit = models.ForeignKey(FHIR_ExplanationOfBenefit, related_name='ExplanationOfBenefit_payee', null=False, on_delete=models.CASCADE)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='ExplanationOfBenefit_payee_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     party_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="ExplanationOfBenefit_payee_party", null=True, blank=True, on_delete=models.SET_NULL)
@@ -110,45 +110,45 @@ class FHIR_ExplanationOfBenefit_careTeam(models.Model):
     provider_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="ExplanationOfBenefit_careTeam_provider", null=True, blank=True, on_delete=models.SET_NULL)
     provider_Organization = models.ForeignKey("FHIR_Organization", related_name="ExplanationOfBenefit_careTeam_provider", null=True, blank=True, on_delete=models.SET_NULL)
     responsible = FHIR_primitive_BooleanField(null=True, blank=True, )
-    BINDING_role = 'TODO'
+    BINDING_role = "TODO"
     role_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_role}, related_name='ExplanationOfBenefit_careTeam_role', blank=True)
     role_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_specialty = 'TODO'
+    BINDING_specialty = "TODO"
     specialty_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_specialty}, related_name='ExplanationOfBenefit_careTeam_specialty', blank=True)
     specialty_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
 class FHIR_ExplanationOfBenefit_supportingInfo(models.Model):
     ExplanationOfBenefit = models.ForeignKey(FHIR_ExplanationOfBenefit, related_name='ExplanationOfBenefit_supportingInfo', null=False, on_delete=models.CASCADE)
     sequence = FHIR_primitive_PositiveIntField(null=True, blank=True, )
-    BINDING_category = 'TODO'
+    BINDING_category = "TODO"
     category_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_category}, related_name='ExplanationOfBenefit_supportingInfo_category', blank=True)
     category_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_code = 'TODO'
+    BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='ExplanationOfBenefit_supportingInfo_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    timing = FHIR_primitive_DateField(null=True, blank=True, )
-    timing = models.OneToOneField("FHIR_GP_Period", related_name='ExplanationOfBenefit_supportingInfo_timing', null=True, blank=True, on_delete=models.SET_NULL)
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
-    value = FHIR_primitive_StringField(null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='ExplanationOfBenefit_supportingInfo_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Attachment", related_name='ExplanationOfBenefit_supportingInfo_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Identifier", related_name='ExplanationOfBenefit_supportingInfo_value', null=True, blank=True, on_delete=models.SET_NULL)
+    timing_date = FHIR_primitive_DateField(null=True, blank=True, )
+    timing_Period = models.OneToOneField("FHIR_GP_Period", related_name='ExplanationOfBenefit_supportingInfo_timing_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    value_string = FHIR_primitive_StringField(null=True, blank=True, )
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='ExplanationOfBenefit_supportingInfo_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='ExplanationOfBenefit_supportingInfo_value_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Identifier = models.OneToOneField("FHIR_GP_Identifier", related_name='ExplanationOfBenefit_supportingInfo_value_Identifier', null=True, blank=True, on_delete=models.SET_NULL)
     reason = models.OneToOneField("FHIR_GP_Coding", related_name='ExplanationOfBenefit_supportingInfo_reason', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_ExplanationOfBenefit_diagnosis(models.Model):
     ExplanationOfBenefit = models.ForeignKey(FHIR_ExplanationOfBenefit, related_name='ExplanationOfBenefit_diagnosis', null=False, on_delete=models.CASCADE)
     sequence = FHIR_primitive_PositiveIntField(null=True, blank=True, )
-    BINDING_diagnosis = 'TODO'
-    diagnosis_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_diagnosis}, related_name='ExplanationOfBenefit_diagnosis_diagnosis', blank=True)
-    diagnosis_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    diagnosis = models.ForeignKey("FHIR_Condition", related_name="ExplanationOfBenefit_diagnosis_diagnosis", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_onAdmission = 'TODO'
+    BINDING_diagnosis_CodeableConcept = "TODO"
+    diagnosis_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_diagnosis_CodeableConcept}, related_name='ExplanationOfBenefit_diagnosis_diagnosis_CodeableConcept', blank=True)
+    diagnosis_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    diagnosis_Reference = models.ForeignKey("FHIR_Condition", related_name="ExplanationOfBenefit_diagnosis_diagnosis_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_onAdmission = "TODO"
     onAdmission_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_onAdmission}, related_name='ExplanationOfBenefit_diagnosis_onAdmission', blank=True)
     onAdmission_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
 class FHIR_ExplanationOfBenefit_diagnosis_type(models.Model):
     ExplanationOfBenefit_diagnosis = models.ForeignKey(FHIR_ExplanationOfBenefit_diagnosis, related_name='ExplanationOfBenefit_diagnosis_type', null=False, on_delete=models.CASCADE)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='ExplanationOfBenefit_diagnosis_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -156,15 +156,15 @@ class FHIR_ExplanationOfBenefit_procedure(models.Model):
     ExplanationOfBenefit = models.ForeignKey(FHIR_ExplanationOfBenefit, related_name='ExplanationOfBenefit_procedure', null=False, on_delete=models.CASCADE)
     sequence = FHIR_primitive_PositiveIntField(null=True, blank=True, )
     date = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    BINDING_procedure = 'TODO'
-    procedure_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_procedure}, related_name='ExplanationOfBenefit_procedure_procedure', blank=True)
-    procedure_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    procedure = models.ForeignKey("FHIR_Procedure", related_name="ExplanationOfBenefit_procedure_procedure", null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_procedure_CodeableConcept = "TODO"
+    procedure_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_procedure_CodeableConcept}, related_name='ExplanationOfBenefit_procedure_procedure_CodeableConcept', blank=True)
+    procedure_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    procedure_Reference = models.ForeignKey("FHIR_Procedure", related_name="ExplanationOfBenefit_procedure_procedure_Reference", null=True, blank=True, on_delete=models.SET_NULL)
     udi = models.ManyToManyField("FHIR_Device", related_name="ExplanationOfBenefit_procedure_udi", blank=True)
 
 class FHIR_ExplanationOfBenefit_procedure_type(models.Model):
     ExplanationOfBenefit_procedure = models.ForeignKey(FHIR_ExplanationOfBenefit_procedure, related_name='ExplanationOfBenefit_procedure_type', null=False, on_delete=models.CASCADE)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='ExplanationOfBenefit_procedure_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -181,25 +181,25 @@ class FHIR_ExplanationOfBenefit_insurance_preAuthRef(models.Model):
 class FHIR_ExplanationOfBenefit_accident(models.Model):
     ExplanationOfBenefit = models.ForeignKey(FHIR_ExplanationOfBenefit, related_name='ExplanationOfBenefit_accident', null=False, on_delete=models.CASCADE)
     date = FHIR_primitive_DateField(null=True, blank=True, )
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='ExplanationOfBenefit_accident_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    location = models.OneToOneField("FHIR_GP_Address", related_name='ExplanationOfBenefit_accident_location', null=True, blank=True, on_delete=models.SET_NULL)
-    location = models.ForeignKey("FHIR_Location", related_name="ExplanationOfBenefit_accident_location", null=True, blank=True, on_delete=models.SET_NULL)
+    location_Address = models.OneToOneField("FHIR_GP_Address", related_name='ExplanationOfBenefit_accident_location_Address', null=True, blank=True, on_delete=models.SET_NULL)
+    location_Reference = models.ForeignKey("FHIR_Location", related_name="ExplanationOfBenefit_accident_location_Reference", null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_ExplanationOfBenefit_item(models.Model):
     ExplanationOfBenefit = models.ForeignKey(FHIR_ExplanationOfBenefit, related_name='ExplanationOfBenefit_item', null=False, on_delete=models.CASCADE)
     sequence = FHIR_primitive_PositiveIntField(null=True, blank=True, )
-    BINDING_revenue = 'TODO'
+    BINDING_revenue = "TODO"
     revenue_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_revenue}, related_name='ExplanationOfBenefit_item_revenue', blank=True)
     revenue_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_category = 'TODO'
+    BINDING_category = "TODO"
     category_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_category}, related_name='ExplanationOfBenefit_item_category', blank=True)
     category_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_productOrService = 'TODO'
+    BINDING_productOrService = "TODO"
     productOrService_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_productOrService}, related_name='ExplanationOfBenefit_item_productOrService', blank=True)
     productOrService_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_productOrServiceEnd = 'TODO'
+    BINDING_productOrServiceEnd = "TODO"
     productOrServiceEnd_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_productOrServiceEnd}, related_name='ExplanationOfBenefit_item_productOrServiceEnd', blank=True)
     productOrServiceEnd_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     request_DeviceRequest = models.ManyToManyField("FHIR_DeviceRequest", related_name="ExplanationOfBenefit_item_request", blank=True)
@@ -208,13 +208,13 @@ class FHIR_ExplanationOfBenefit_item(models.Model):
     request_ServiceRequest = models.ManyToManyField("FHIR_ServiceRequest", related_name="ExplanationOfBenefit_item_request", blank=True)
     request_SupplyRequest = models.ManyToManyField("FHIR_SupplyRequest", related_name="ExplanationOfBenefit_item_request", blank=True)
     request_VisionPrescription = models.ManyToManyField("FHIR_VisionPrescription", related_name="ExplanationOfBenefit_item_request", blank=True)
-    serviced = FHIR_primitive_DateField(null=True, blank=True, )
-    serviced = models.OneToOneField("FHIR_GP_Period", related_name='ExplanationOfBenefit_item_serviced', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_location = 'TODO'
-    location_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_location}, related_name='ExplanationOfBenefit_item_location', blank=True)
-    location_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    location = models.OneToOneField("FHIR_GP_Address", related_name='ExplanationOfBenefit_item_location', null=True, blank=True, on_delete=models.SET_NULL)
-    location = models.ForeignKey("FHIR_Location", related_name="ExplanationOfBenefit_item_location", null=True, blank=True, on_delete=models.SET_NULL)
+    serviced_date = FHIR_primitive_DateField(null=True, blank=True, )
+    serviced_Period = models.OneToOneField("FHIR_GP_Period", related_name='ExplanationOfBenefit_item_serviced_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_location_CodeableConcept = "TODO"
+    location_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_location_CodeableConcept}, related_name='ExplanationOfBenefit_item_location_CodeableConcept', blank=True)
+    location_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    location_Address = models.OneToOneField("FHIR_GP_Address", related_name='ExplanationOfBenefit_item_location_Address', null=True, blank=True, on_delete=models.SET_NULL)
+    location_Reference = models.ForeignKey("FHIR_Location", related_name="ExplanationOfBenefit_item_location_Reference", null=True, blank=True, on_delete=models.SET_NULL)
     patientPaid = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='ExplanationOfBenefit_item_patientPaid', null=True, blank=True, on_delete=models.SET_NULL)
     quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='ExplanationOfBenefit_item_quantity', null=True, blank=True, on_delete=models.SET_NULL)
     unitPrice = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='ExplanationOfBenefit_item_unitPrice', null=True, blank=True, on_delete=models.SET_NULL)
@@ -249,13 +249,13 @@ class FHIR_ExplanationOfBenefit_item_traceNumber(FHIR_GP_Identifier):
 
 class FHIR_ExplanationOfBenefit_item_modifier(models.Model):
     ExplanationOfBenefit_item = models.ForeignKey(FHIR_ExplanationOfBenefit_item, related_name='ExplanationOfBenefit_item_modifier', null=False, on_delete=models.CASCADE)
-    BINDING_modifier = 'TODO'
+    BINDING_modifier = "TODO"
     modifier_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_modifier}, related_name='ExplanationOfBenefit_item_modifier', blank=True)
     modifier_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_ExplanationOfBenefit_item_programCode(models.Model):
     ExplanationOfBenefit_item = models.ForeignKey(FHIR_ExplanationOfBenefit_item, related_name='ExplanationOfBenefit_item_programCode', null=False, on_delete=models.CASCADE)
-    BINDING_programCode = 'TODO'
+    BINDING_programCode = "TODO"
     programCode_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_programCode}, related_name='ExplanationOfBenefit_item_programCode', blank=True)
     programCode_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -264,14 +264,14 @@ class FHIR_ExplanationOfBenefit_item_bodySite(models.Model):
 
 class FHIR_ExplanationOfBenefit_item_bodySite_site(models.Model):
     ExplanationOfBenefit_item_bodySite = models.ForeignKey(FHIR_ExplanationOfBenefit_item_bodySite, related_name='ExplanationOfBenefit_item_bodySite_site', null=False, on_delete=models.CASCADE)
-    BINDING_site = 'TODO'
+    BINDING_site = "TODO"
     site_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_site}, related_name='ExplanationOfBenefit_item_bodySite_site', blank=True)
     site_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     site_BodyStructure_ref = models.ForeignKey("FHIR_BodyStructure", related_name="ExplanationOfBenefit_item_bodySite_site_BodyStructure", null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_ExplanationOfBenefit_item_bodySite_subSite(models.Model):
     ExplanationOfBenefit_item_bodySite = models.ForeignKey(FHIR_ExplanationOfBenefit_item_bodySite, related_name='ExplanationOfBenefit_item_bodySite_subSite', null=False, on_delete=models.CASCADE)
-    BINDING_subSite = 'TODO'
+    BINDING_subSite = "TODO"
     subSite_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_subSite}, related_name='ExplanationOfBenefit_item_bodySite_subSite', blank=True)
     subSite_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -282,7 +282,7 @@ class FHIR_ExplanationOfBenefit_item_noteNumber(models.Model):
     
 class FHIR_ExplanationOfBenefit_item_reviewOutcome(models.Model):
     ExplanationOfBenefit_item = models.ForeignKey(FHIR_ExplanationOfBenefit_item, related_name='ExplanationOfBenefit_item_reviewOutcome', null=False, on_delete=models.CASCADE)
-    BINDING_decision = 'TODO'
+    BINDING_decision = "TODO"
     decision_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_decision}, related_name='ExplanationOfBenefit_item_reviewOutcome_decision', blank=True)
     decision_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     preAuthRef = FHIR_primitive_StringField(null=True, blank=True, )
@@ -290,16 +290,16 @@ class FHIR_ExplanationOfBenefit_item_reviewOutcome(models.Model):
 
 class FHIR_ExplanationOfBenefit_item_reviewOutcome_reason(models.Model):
     ExplanationOfBenefit_item_reviewOutcome = models.ForeignKey(FHIR_ExplanationOfBenefit_item_reviewOutcome, related_name='ExplanationOfBenefit_item_reviewOutcome_reason', null=False, on_delete=models.CASCADE)
-    BINDING_reason = 'TODO'
+    BINDING_reason = "TODO"
     reason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_reason}, related_name='ExplanationOfBenefit_item_reviewOutcome_reason', blank=True)
     reason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_ExplanationOfBenefit_item_adjudication(models.Model):
     ExplanationOfBenefit_item = models.ForeignKey(FHIR_ExplanationOfBenefit_item, related_name='ExplanationOfBenefit_item_adjudication', null=False, on_delete=models.CASCADE)
-    BINDING_category = 'TODO'
+    BINDING_category = "TODO"
     category_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_category}, related_name='ExplanationOfBenefit_item_adjudication_category', blank=True)
     category_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_reason = 'TODO'
+    BINDING_reason = "TODO"
     reason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_reason}, related_name='ExplanationOfBenefit_item_adjudication_reason', blank=True)
     reason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     amount = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='ExplanationOfBenefit_item_adjudication_amount', null=True, blank=True, on_delete=models.SET_NULL)
@@ -308,16 +308,16 @@ class FHIR_ExplanationOfBenefit_item_adjudication(models.Model):
 class FHIR_ExplanationOfBenefit_item_detail(models.Model):
     ExplanationOfBenefit_item = models.ForeignKey(FHIR_ExplanationOfBenefit_item, related_name='ExplanationOfBenefit_item_detail', null=False, on_delete=models.CASCADE)
     sequence = FHIR_primitive_PositiveIntField(null=True, blank=True, )
-    BINDING_revenue = 'TODO'
+    BINDING_revenue = "TODO"
     revenue_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_revenue}, related_name='ExplanationOfBenefit_item_detail_revenue', blank=True)
     revenue_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_category = 'TODO'
+    BINDING_category = "TODO"
     category_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_category}, related_name='ExplanationOfBenefit_item_detail_category', blank=True)
     category_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_productOrService = 'TODO'
+    BINDING_productOrService = "TODO"
     productOrService_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_productOrService}, related_name='ExplanationOfBenefit_item_detail_productOrService', blank=True)
     productOrService_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_productOrServiceEnd = 'TODO'
+    BINDING_productOrServiceEnd = "TODO"
     productOrServiceEnd_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_productOrServiceEnd}, related_name='ExplanationOfBenefit_item_detail_productOrServiceEnd', blank=True)
     productOrServiceEnd_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     patientPaid = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='ExplanationOfBenefit_item_detail_patientPaid', null=True, blank=True, on_delete=models.SET_NULL)
@@ -333,13 +333,13 @@ class FHIR_ExplanationOfBenefit_item_detail_traceNumber(FHIR_GP_Identifier):
 
 class FHIR_ExplanationOfBenefit_item_detail_modifier(models.Model):
     ExplanationOfBenefit_item_detail = models.ForeignKey(FHIR_ExplanationOfBenefit_item_detail, related_name='ExplanationOfBenefit_item_detail_modifier', null=False, on_delete=models.CASCADE)
-    BINDING_modifier = 'TODO'
+    BINDING_modifier = "TODO"
     modifier_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_modifier}, related_name='ExplanationOfBenefit_item_detail_modifier', blank=True)
     modifier_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_ExplanationOfBenefit_item_detail_programCode(models.Model):
     ExplanationOfBenefit_item_detail = models.ForeignKey(FHIR_ExplanationOfBenefit_item_detail, related_name='ExplanationOfBenefit_item_detail_programCode', null=False, on_delete=models.CASCADE)
-    BINDING_programCode = 'TODO'
+    BINDING_programCode = "TODO"
     programCode_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_programCode}, related_name='ExplanationOfBenefit_item_detail_programCode', blank=True)
     programCode_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -351,16 +351,16 @@ class FHIR_ExplanationOfBenefit_item_detail_noteNumber(models.Model):
 class FHIR_ExplanationOfBenefit_item_detail_subDetail(models.Model):
     ExplanationOfBenefit_item_detail = models.ForeignKey(FHIR_ExplanationOfBenefit_item_detail, related_name='ExplanationOfBenefit_item_detail_subDetail', null=False, on_delete=models.CASCADE)
     sequence = FHIR_primitive_PositiveIntField(null=True, blank=True, )
-    BINDING_revenue = 'TODO'
+    BINDING_revenue = "TODO"
     revenue_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_revenue}, related_name='ExplanationOfBenefit_item_detail_subDetail_revenue', blank=True)
     revenue_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_category = 'TODO'
+    BINDING_category = "TODO"
     category_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_category}, related_name='ExplanationOfBenefit_item_detail_subDetail_category', blank=True)
     category_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_productOrService = 'TODO'
+    BINDING_productOrService = "TODO"
     productOrService_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_productOrService}, related_name='ExplanationOfBenefit_item_detail_subDetail_productOrService', blank=True)
     productOrService_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_productOrServiceEnd = 'TODO'
+    BINDING_productOrServiceEnd = "TODO"
     productOrServiceEnd_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_productOrServiceEnd}, related_name='ExplanationOfBenefit_item_detail_subDetail_productOrServiceEnd', blank=True)
     productOrServiceEnd_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     patientPaid = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='ExplanationOfBenefit_item_detail_subDetail_patientPaid', null=True, blank=True, on_delete=models.SET_NULL)
@@ -376,13 +376,13 @@ class FHIR_ExplanationOfBenefit_item_detail_subDetail_traceNumber(FHIR_GP_Identi
 
 class FHIR_ExplanationOfBenefit_item_detail_subDetail_modifier(models.Model):
     ExplanationOfBenefit_item_detail_subDetail = models.ForeignKey(FHIR_ExplanationOfBenefit_item_detail_subDetail, related_name='ExplanationOfBenefit_item_detail_subDetail_modifier', null=False, on_delete=models.CASCADE)
-    BINDING_modifier = 'TODO'
+    BINDING_modifier = "TODO"
     modifier_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_modifier}, related_name='ExplanationOfBenefit_item_detail_subDetail_modifier', blank=True)
     modifier_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_ExplanationOfBenefit_item_detail_subDetail_programCode(models.Model):
     ExplanationOfBenefit_item_detail_subDetail = models.ForeignKey(FHIR_ExplanationOfBenefit_item_detail_subDetail, related_name='ExplanationOfBenefit_item_detail_subDetail_programCode', null=False, on_delete=models.CASCADE)
-    BINDING_programCode = 'TODO'
+    BINDING_programCode = "TODO"
     programCode_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_programCode}, related_name='ExplanationOfBenefit_item_detail_subDetail_programCode', blank=True)
     programCode_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -396,13 +396,13 @@ class FHIR_ExplanationOfBenefit_addItem(models.Model):
     provider_Practitioner = models.ManyToManyField("FHIR_Practitioner", related_name="ExplanationOfBenefit_addItem_provider", blank=True)
     provider_PractitionerRole = models.ManyToManyField("FHIR_PractitionerRole", related_name="ExplanationOfBenefit_addItem_provider", blank=True)
     provider_Organization = models.ManyToManyField("FHIR_Organization", related_name="ExplanationOfBenefit_addItem_provider", blank=True)
-    BINDING_revenue = 'TODO'
+    BINDING_revenue = "TODO"
     revenue_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_revenue}, related_name='ExplanationOfBenefit_addItem_revenue', blank=True)
     revenue_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_productOrService = 'TODO'
+    BINDING_productOrService = "TODO"
     productOrService_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_productOrService}, related_name='ExplanationOfBenefit_addItem_productOrService', blank=True)
     productOrService_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_productOrServiceEnd = 'TODO'
+    BINDING_productOrServiceEnd = "TODO"
     productOrServiceEnd_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_productOrServiceEnd}, related_name='ExplanationOfBenefit_addItem_productOrServiceEnd', blank=True)
     productOrServiceEnd_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     request_DeviceRequest = models.ManyToManyField("FHIR_DeviceRequest", related_name="ExplanationOfBenefit_addItem_request", blank=True)
@@ -411,13 +411,13 @@ class FHIR_ExplanationOfBenefit_addItem(models.Model):
     request_ServiceRequest = models.ManyToManyField("FHIR_ServiceRequest", related_name="ExplanationOfBenefit_addItem_request", blank=True)
     request_SupplyRequest = models.ManyToManyField("FHIR_SupplyRequest", related_name="ExplanationOfBenefit_addItem_request", blank=True)
     request_VisionPrescription = models.ManyToManyField("FHIR_VisionPrescription", related_name="ExplanationOfBenefit_addItem_request", blank=True)
-    serviced = FHIR_primitive_DateField(null=True, blank=True, )
-    serviced = models.OneToOneField("FHIR_GP_Period", related_name='ExplanationOfBenefit_addItem_serviced', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_location = 'TODO'
-    location_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_location}, related_name='ExplanationOfBenefit_addItem_location', blank=True)
-    location_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    location = models.OneToOneField("FHIR_GP_Address", related_name='ExplanationOfBenefit_addItem_location', null=True, blank=True, on_delete=models.SET_NULL)
-    location = models.ForeignKey("FHIR_Location", related_name="ExplanationOfBenefit_addItem_location", null=True, blank=True, on_delete=models.SET_NULL)
+    serviced_date = FHIR_primitive_DateField(null=True, blank=True, )
+    serviced_Period = models.OneToOneField("FHIR_GP_Period", related_name='ExplanationOfBenefit_addItem_serviced_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_location_CodeableConcept = "TODO"
+    location_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_location_CodeableConcept}, related_name='ExplanationOfBenefit_addItem_location_CodeableConcept', blank=True)
+    location_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    location_Address = models.OneToOneField("FHIR_GP_Address", related_name='ExplanationOfBenefit_addItem_location_Address', null=True, blank=True, on_delete=models.SET_NULL)
+    location_Reference = models.ForeignKey("FHIR_Location", related_name="ExplanationOfBenefit_addItem_location_Reference", null=True, blank=True, on_delete=models.SET_NULL)
     patientPaid = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='ExplanationOfBenefit_addItem_patientPaid', null=True, blank=True, on_delete=models.SET_NULL)
     quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='ExplanationOfBenefit_addItem_quantity', null=True, blank=True, on_delete=models.SET_NULL)
     unitPrice = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='ExplanationOfBenefit_addItem_unitPrice', null=True, blank=True, on_delete=models.SET_NULL)
@@ -445,13 +445,13 @@ class FHIR_ExplanationOfBenefit_addItem_traceNumber(FHIR_GP_Identifier):
 
 class FHIR_ExplanationOfBenefit_addItem_modifier(models.Model):
     ExplanationOfBenefit_addItem = models.ForeignKey(FHIR_ExplanationOfBenefit_addItem, related_name='ExplanationOfBenefit_addItem_modifier', null=False, on_delete=models.CASCADE)
-    BINDING_modifier = 'TODO'
+    BINDING_modifier = "TODO"
     modifier_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_modifier}, related_name='ExplanationOfBenefit_addItem_modifier', blank=True)
     modifier_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_ExplanationOfBenefit_addItem_programCode(models.Model):
     ExplanationOfBenefit_addItem = models.ForeignKey(FHIR_ExplanationOfBenefit_addItem, related_name='ExplanationOfBenefit_addItem_programCode', null=False, on_delete=models.CASCADE)
-    BINDING_programCode = 'TODO'
+    BINDING_programCode = "TODO"
     programCode_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_programCode}, related_name='ExplanationOfBenefit_addItem_programCode', blank=True)
     programCode_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -460,14 +460,14 @@ class FHIR_ExplanationOfBenefit_addItem_bodySite(models.Model):
 
 class FHIR_ExplanationOfBenefit_addItem_bodySite_site(models.Model):
     ExplanationOfBenefit_addItem_bodySite = models.ForeignKey(FHIR_ExplanationOfBenefit_addItem_bodySite, related_name='ExplanationOfBenefit_addItem_bodySite_site', null=False, on_delete=models.CASCADE)
-    BINDING_site = 'TODO'
+    BINDING_site = "TODO"
     site_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_site}, related_name='ExplanationOfBenefit_addItem_bodySite_site', blank=True)
     site_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     site_BodyStructure_ref = models.ForeignKey("FHIR_BodyStructure", related_name="ExplanationOfBenefit_addItem_bodySite_site_BodyStructure", null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_ExplanationOfBenefit_addItem_bodySite_subSite(models.Model):
     ExplanationOfBenefit_addItem_bodySite = models.ForeignKey(FHIR_ExplanationOfBenefit_addItem_bodySite, related_name='ExplanationOfBenefit_addItem_bodySite_subSite', null=False, on_delete=models.CASCADE)
-    BINDING_subSite = 'TODO'
+    BINDING_subSite = "TODO"
     subSite_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_subSite}, related_name='ExplanationOfBenefit_addItem_bodySite_subSite', blank=True)
     subSite_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -478,13 +478,13 @@ class FHIR_ExplanationOfBenefit_addItem_noteNumber(models.Model):
     
 class FHIR_ExplanationOfBenefit_addItem_detail(models.Model):
     ExplanationOfBenefit_addItem = models.ForeignKey(FHIR_ExplanationOfBenefit_addItem, related_name='ExplanationOfBenefit_addItem_detail', null=False, on_delete=models.CASCADE)
-    BINDING_revenue = 'TODO'
+    BINDING_revenue = "TODO"
     revenue_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_revenue}, related_name='ExplanationOfBenefit_addItem_detail_revenue', blank=True)
     revenue_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_productOrService = 'TODO'
+    BINDING_productOrService = "TODO"
     productOrService_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_productOrService}, related_name='ExplanationOfBenefit_addItem_detail_productOrService', blank=True)
     productOrService_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_productOrServiceEnd = 'TODO'
+    BINDING_productOrServiceEnd = "TODO"
     productOrServiceEnd_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_productOrServiceEnd}, related_name='ExplanationOfBenefit_addItem_detail_productOrServiceEnd', blank=True)
     productOrServiceEnd_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     patientPaid = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='ExplanationOfBenefit_addItem_detail_patientPaid', null=True, blank=True, on_delete=models.SET_NULL)
@@ -499,7 +499,7 @@ class FHIR_ExplanationOfBenefit_addItem_detail_traceNumber(FHIR_GP_Identifier):
 
 class FHIR_ExplanationOfBenefit_addItem_detail_modifier(models.Model):
     ExplanationOfBenefit_addItem_detail = models.ForeignKey(FHIR_ExplanationOfBenefit_addItem_detail, related_name='ExplanationOfBenefit_addItem_detail_modifier', null=False, on_delete=models.CASCADE)
-    BINDING_modifier = 'TODO'
+    BINDING_modifier = "TODO"
     modifier_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_modifier}, related_name='ExplanationOfBenefit_addItem_detail_modifier', blank=True)
     modifier_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -510,13 +510,13 @@ class FHIR_ExplanationOfBenefit_addItem_detail_noteNumber(models.Model):
     
 class FHIR_ExplanationOfBenefit_addItem_detail_subDetail(models.Model):
     ExplanationOfBenefit_addItem_detail = models.ForeignKey(FHIR_ExplanationOfBenefit_addItem_detail, related_name='ExplanationOfBenefit_addItem_detail_subDetail', null=False, on_delete=models.CASCADE)
-    BINDING_revenue = 'TODO'
+    BINDING_revenue = "TODO"
     revenue_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_revenue}, related_name='ExplanationOfBenefit_addItem_detail_subDetail_revenue', blank=True)
     revenue_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_productOrService = 'TODO'
+    BINDING_productOrService = "TODO"
     productOrService_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_productOrService}, related_name='ExplanationOfBenefit_addItem_detail_subDetail_productOrService', blank=True)
     productOrService_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_productOrServiceEnd = 'TODO'
+    BINDING_productOrServiceEnd = "TODO"
     productOrServiceEnd_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_productOrServiceEnd}, related_name='ExplanationOfBenefit_addItem_detail_subDetail_productOrServiceEnd', blank=True)
     productOrServiceEnd_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     patientPaid = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='ExplanationOfBenefit_addItem_detail_subDetail_patientPaid', null=True, blank=True, on_delete=models.SET_NULL)
@@ -531,7 +531,7 @@ class FHIR_ExplanationOfBenefit_addItem_detail_subDetail_traceNumber(FHIR_GP_Ide
 
 class FHIR_ExplanationOfBenefit_addItem_detail_subDetail_modifier(models.Model):
     ExplanationOfBenefit_addItem_detail_subDetail = models.ForeignKey(FHIR_ExplanationOfBenefit_addItem_detail_subDetail, related_name='ExplanationOfBenefit_addItem_detail_subDetail_modifier', null=False, on_delete=models.CASCADE)
-    BINDING_modifier = 'TODO'
+    BINDING_modifier = "TODO"
     modifier_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_modifier}, related_name='ExplanationOfBenefit_addItem_detail_subDetail_modifier', blank=True)
     modifier_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -542,18 +542,18 @@ class FHIR_ExplanationOfBenefit_addItem_detail_subDetail_noteNumber(models.Model
     
 class FHIR_ExplanationOfBenefit_total(models.Model):
     ExplanationOfBenefit = models.ForeignKey(FHIR_ExplanationOfBenefit, related_name='ExplanationOfBenefit_total', null=False, on_delete=models.CASCADE)
-    BINDING_category = 'TODO'
+    BINDING_category = "TODO"
     category_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_category}, related_name='ExplanationOfBenefit_total_category', blank=True)
     category_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     amount = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='ExplanationOfBenefit_total_amount', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_ExplanationOfBenefit_payment(models.Model):
     ExplanationOfBenefit = models.ForeignKey(FHIR_ExplanationOfBenefit, related_name='ExplanationOfBenefit_payment', null=False, on_delete=models.CASCADE)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='ExplanationOfBenefit_payment_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     adjustment = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='ExplanationOfBenefit_payment_adjustment', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_adjustmentReason = 'TODO'
+    BINDING_adjustmentReason = "TODO"
     adjustmentReason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_adjustmentReason}, related_name='ExplanationOfBenefit_payment_adjustmentReason', blank=True)
     adjustmentReason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     date = FHIR_primitive_DateField(null=True, blank=True, )
@@ -563,39 +563,39 @@ class FHIR_ExplanationOfBenefit_payment(models.Model):
 class FHIR_ExplanationOfBenefit_processNote(models.Model):
     ExplanationOfBenefit = models.ForeignKey(FHIR_ExplanationOfBenefit, related_name='ExplanationOfBenefit_processNote', null=False, on_delete=models.CASCADE)
     number = FHIR_primitive_PositiveIntField(null=True, blank=True, )
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='ExplanationOfBenefit_processNote_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     text = FHIR_primitive_StringField(null=True, blank=True, )
-    BINDING_language = 'TODO'
+    BINDING_language = "TODO"
     language_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_language}, related_name='ExplanationOfBenefit_processNote_language', blank=True)
     language_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
 class FHIR_ExplanationOfBenefit_benefitBalance(models.Model):
     ExplanationOfBenefit = models.ForeignKey(FHIR_ExplanationOfBenefit, related_name='ExplanationOfBenefit_benefitBalance', null=False, on_delete=models.CASCADE)
-    BINDING_category = 'TODO'
+    BINDING_category = "TODO"
     category_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_category}, related_name='ExplanationOfBenefit_benefitBalance_category', blank=True)
     category_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     excluded = FHIR_primitive_BooleanField(null=True, blank=True, )
     name = FHIR_primitive_StringField(null=True, blank=True, )
     description = FHIR_primitive_StringField(null=True, blank=True, )
-    BINDING_network = 'TODO'
+    BINDING_network = "TODO"
     network_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_network}, related_name='ExplanationOfBenefit_benefitBalance_network', blank=True)
     network_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_unit = 'TODO'
+    BINDING_unit = "TODO"
     unit_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_unit}, related_name='ExplanationOfBenefit_benefitBalance_unit', blank=True)
     unit_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_term = 'TODO'
+    BINDING_term = "TODO"
     term_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_term}, related_name='ExplanationOfBenefit_benefitBalance_term', blank=True)
     term_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
 class FHIR_ExplanationOfBenefit_benefitBalance_financial(models.Model):
     ExplanationOfBenefit_benefitBalance = models.ForeignKey(FHIR_ExplanationOfBenefit_benefitBalance, related_name='ExplanationOfBenefit_benefitBalance_financial', null=False, on_delete=models.CASCADE)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='ExplanationOfBenefit_benefitBalance_financial_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    allowed = FHIR_primitive_UnsignedIntField(null=True, blank=True, )
-    allowed = FHIR_primitive_StringField(null=True, blank=True, )
-    allowed = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='ExplanationOfBenefit_benefitBalance_financial_allowed', null=True, blank=True, on_delete=models.SET_NULL)
-    used = FHIR_primitive_UnsignedIntField(null=True, blank=True, )
-    used = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='ExplanationOfBenefit_benefitBalance_financial_used', null=True, blank=True, on_delete=models.SET_NULL)
+    allowed_unsignedInt = FHIR_primitive_UnsignedIntField(null=True, blank=True, )
+    allowed_string = FHIR_primitive_StringField(null=True, blank=True, )
+    allowed_Money = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='ExplanationOfBenefit_benefitBalance_financial_allowed_Money', null=True, blank=True, on_delete=models.SET_NULL)
+    used_unsignedInt = FHIR_primitive_UnsignedIntField(null=True, blank=True, )
+    used_Money = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='ExplanationOfBenefit_benefitBalance_financial_used_Money', null=True, blank=True, on_delete=models.SET_NULL)

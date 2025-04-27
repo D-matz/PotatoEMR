@@ -30,13 +30,13 @@ class FHIR_GenomicStudy_identifier(FHIR_GP_Identifier):
 
 class FHIR_GenomicStudy_type(models.Model):
     GenomicStudy = models.ForeignKey(FHIR_GenomicStudy, related_name='GenomicStudy_type', null=False, on_delete=models.CASCADE)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='GenomicStudy_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_GenomicStudy_reason(models.Model):
     GenomicStudy = models.ForeignKey(FHIR_GenomicStudy, related_name='GenomicStudy_reason', null=False, on_delete=models.CASCADE)
-    BINDING_reason = 'TODO'
+    BINDING_reason = "TODO"
     reason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_reason}, related_name='GenomicStudy_reason', blank=True)
     reason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     reason_Condition_ref = models.ForeignKey("FHIR_Condition", related_name="GenomicStudy_reason_Condition", null=True, blank=True, on_delete=models.SET_NULL)
@@ -47,7 +47,7 @@ class FHIR_GenomicStudy_note(FHIR_GP_Annotation):
 
 class FHIR_GenomicStudy_analysis(models.Model):
     GenomicStudy = models.ForeignKey(FHIR_GenomicStudy, related_name='GenomicStudy_analysis', null=False, on_delete=models.CASCADE)
-    BINDING_genomeBuild = 'TODO'
+    BINDING_genomeBuild = "TODO"
     genomeBuild_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_genomeBuild}, related_name='GenomicStudy_analysis_genomeBuild', blank=True)
     genomeBuild_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     instantiatesCanonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
@@ -67,13 +67,13 @@ class FHIR_GenomicStudy_analysis_identifier(FHIR_GP_Identifier):
 
 class FHIR_GenomicStudy_analysis_methodType(models.Model):
     GenomicStudy_analysis = models.ForeignKey(FHIR_GenomicStudy_analysis, related_name='GenomicStudy_analysis_methodType', null=False, on_delete=models.CASCADE)
-    BINDING_methodType = 'TODO'
+    BINDING_methodType = "TODO"
     methodType_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_methodType}, related_name='GenomicStudy_analysis_methodType', blank=True)
     methodType_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_GenomicStudy_analysis_changeType(models.Model):
     GenomicStudy_analysis = models.ForeignKey(FHIR_GenomicStudy_analysis, related_name='GenomicStudy_analysis_changeType', null=False, on_delete=models.CASCADE)
-    BINDING_changeType = 'TODO'
+    BINDING_changeType = "TODO"
     changeType_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_changeType}, related_name='GenomicStudy_analysis_changeType', blank=True)
     changeType_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -83,16 +83,16 @@ class FHIR_GenomicStudy_analysis_note(FHIR_GP_Annotation):
 class FHIR_GenomicStudy_analysis_input(models.Model):
     GenomicStudy_analysis = models.ForeignKey(FHIR_GenomicStudy_analysis, related_name='GenomicStudy_analysis_input', null=False, on_delete=models.CASCADE)
     file = models.ForeignKey("FHIR_DocumentReference", related_name="GenomicStudy_analysis_input_file", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='GenomicStudy_analysis_input_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    generatedBy = models.OneToOneField("FHIR_GP_Identifier", related_name='GenomicStudy_analysis_input_generatedBy', null=True, blank=True, on_delete=models.SET_NULL)
-    generatedBy = models.ForeignKey("FHIR_GenomicStudy", related_name="GenomicStudy_analysis_input_generatedBy", null=True, blank=True, on_delete=models.SET_NULL)
+    generatedBy_Identifier = models.OneToOneField("FHIR_GP_Identifier", related_name='GenomicStudy_analysis_input_generatedBy_Identifier', null=True, blank=True, on_delete=models.SET_NULL)
+    generatedBy_Reference = models.ForeignKey("FHIR_GenomicStudy", related_name="GenomicStudy_analysis_input_generatedBy_Reference", null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_GenomicStudy_analysis_output(models.Model):
     GenomicStudy_analysis = models.ForeignKey(FHIR_GenomicStudy_analysis, related_name='GenomicStudy_analysis_output', null=False, on_delete=models.CASCADE)
     file = models.ForeignKey("FHIR_DocumentReference", related_name="GenomicStudy_analysis_output_file", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='GenomicStudy_analysis_output_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
@@ -102,13 +102,13 @@ class FHIR_GenomicStudy_analysis_performer(models.Model):
     actor_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="GenomicStudy_analysis_performer_actor", null=True, blank=True, on_delete=models.SET_NULL)
     actor_Organization = models.ForeignKey("FHIR_Organization", related_name="GenomicStudy_analysis_performer_actor", null=True, blank=True, on_delete=models.SET_NULL)
     actor_Device = models.ForeignKey("FHIR_Device", related_name="GenomicStudy_analysis_performer_actor", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_role = 'TODO'
+    BINDING_role = "TODO"
     role_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_role}, related_name='GenomicStudy_analysis_performer_role', blank=True)
     role_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
 class FHIR_GenomicStudy_analysis_device(models.Model):
     GenomicStudy_analysis = models.ForeignKey(FHIR_GenomicStudy_analysis, related_name='GenomicStudy_analysis_device', null=False, on_delete=models.CASCADE)
     device = models.ForeignKey("FHIR_Device", related_name="GenomicStudy_analysis_device_device", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_function = 'TODO'
+    BINDING_function = "TODO"
     function_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_function}, related_name='GenomicStudy_analysis_device_function', blank=True)
     function_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)

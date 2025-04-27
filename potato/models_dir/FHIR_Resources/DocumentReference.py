@@ -27,16 +27,16 @@ class FHIR_DocumentReference(models.Model):
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
     class DocstatusChoices(models.TextChoices): REGISTERED = 'registered', 'Registered'; PARTIAL = 'partial', 'Partial'; PRELIMINARY = 'preliminary', 'Preliminary'; FINAL = 'final', 'Final'; AMENDED = 'amended', 'Amended'; CORRECTED = 'corrected', 'Corrected'; APPENDED = 'appended', 'Appended'; CANCELLED = 'cancelled', 'Cancelled'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; DEPRECATED = 'deprecated', 'Deprecated'; UNKNOWN = 'unknown', 'Unknown'; 
     docStatus = FHIR_primitive_CodeField(choices=DocstatusChoices.choices, null=True, blank=True, )
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='DocumentReference_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     context_Appointment = models.ManyToManyField("FHIR_Appointment", related_name="DocumentReference_context", blank=True)
     context_Encounter = models.ManyToManyField("FHIR_Encounter", related_name="DocumentReference_context", blank=True)
     context_EpisodeOfCare = models.ManyToManyField("FHIR_EpisodeOfCare", related_name="DocumentReference_context", blank=True)
-    BINDING_facilityType = 'TODO'
+    BINDING_facilityType = "TODO"
     facilityType_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_facilityType}, related_name='DocumentReference_facilityType', blank=True)
     facilityType_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_practiceSetting = 'TODO'
+    BINDING_practiceSetting = "TODO"
     practiceSetting_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_practiceSetting}, related_name='DocumentReference_practiceSetting', blank=True)
     practiceSetting_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     period = models.OneToOneField("FHIR_GP_Period", related_name='DocumentReference_period', null=True, blank=True, on_delete=models.SET_NULL)
@@ -57,32 +57,32 @@ class FHIR_DocumentReference_identifier(FHIR_GP_Identifier):
 
 class FHIR_DocumentReference_modality(models.Model):
     DocumentReference = models.ForeignKey(FHIR_DocumentReference, related_name='DocumentReference_modality', null=False, on_delete=models.CASCADE)
-    BINDING_modality = 'TODO'
+    BINDING_modality = "TODO"
     modality_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_modality}, related_name='DocumentReference_modality', blank=True)
     modality_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_DocumentReference_category(models.Model):
     DocumentReference = models.ForeignKey(FHIR_DocumentReference, related_name='DocumentReference_category', null=False, on_delete=models.CASCADE)
-    BINDING_category = 'TODO'
+    BINDING_category = "TODO"
     category_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_category}, related_name='DocumentReference_category', blank=True)
     category_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_DocumentReference_event(models.Model):
     DocumentReference = models.ForeignKey(FHIR_DocumentReference, related_name='DocumentReference_event', null=False, on_delete=models.CASCADE)
-    BINDING_event = 'TODO'
+    BINDING_event = "TODO"
     event_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_event}, related_name='DocumentReference_event', blank=True)
     event_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
 class FHIR_DocumentReference_bodySite(models.Model):
     DocumentReference = models.ForeignKey(FHIR_DocumentReference, related_name='DocumentReference_bodySite', null=False, on_delete=models.CASCADE)
-    BINDING_bodySite = 'TODO'
+    BINDING_bodySite = "TODO"
     bodySite_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_bodySite}, related_name='DocumentReference_bodySite', blank=True)
     bodySite_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     bodySite_BodyStructure_ref = models.ForeignKey("FHIR_BodyStructure", related_name="DocumentReference_bodySite_BodyStructure", null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_DocumentReference_attester(models.Model):
     DocumentReference = models.ForeignKey(FHIR_DocumentReference, related_name='DocumentReference_attester', null=False, on_delete=models.CASCADE)
-    BINDING_mode = 'TODO'
+    BINDING_mode = "TODO"
     mode_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_mode}, related_name='DocumentReference_attester_mode', blank=True)
     mode_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     time = FHIR_primitive_DateTimeField(null=True, blank=True, )
@@ -95,14 +95,14 @@ class FHIR_DocumentReference_attester(models.Model):
 
 class FHIR_DocumentReference_relatesTo(models.Model):
     DocumentReference = models.ForeignKey(FHIR_DocumentReference, related_name='DocumentReference_relatesTo', null=False, on_delete=models.CASCADE)
-    BINDING_code = 'TODO'
+    BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='DocumentReference_relatesTo_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     target = models.ForeignKey("FHIR_DocumentReference", related_name="DocumentReference_relatesTo_target", null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_DocumentReference_securityLabel(models.Model):
     DocumentReference = models.ForeignKey(FHIR_DocumentReference, related_name='DocumentReference_securityLabel', null=False, on_delete=models.CASCADE)
-    BINDING_securityLabel = 'TODO'
+    BINDING_securityLabel = "TODO"
     securityLabel_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_securityLabel}, related_name='DocumentReference_securityLabel', blank=True)
     securityLabel_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -112,6 +112,6 @@ class FHIR_DocumentReference_content(models.Model):
 
 class FHIR_DocumentReference_content_profile(models.Model):
     DocumentReference_content = models.ForeignKey(FHIR_DocumentReference_content, related_name='DocumentReference_content_profile', null=False, on_delete=models.CASCADE)
-    value = models.OneToOneField("FHIR_GP_Coding", related_name='DocumentReference_content_profile_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = FHIR_primitive_URIField(null=True, blank=True, )
-    value = FHIR_primitive_CanonicalField(null=True, blank=True, )
+    value_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='DocumentReference_content_profile_value_Coding', null=True, blank=True, on_delete=models.SET_NULL)
+    value_uri = FHIR_primitive_URIField(null=True, blank=True, )
+    value_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )

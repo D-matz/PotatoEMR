@@ -16,11 +16,11 @@
             <button class="nav-link" hx-get="/encounter/orders" role="tab" aria-selected="false" aria-controls="tab-content">Orders</button>
         </li>
     </ul>
-    
+
     <div id="tab-content">
         <p>encounters idk</p>
-        <p>patient: {{ encounter.subject_patient }}</p>
-        <p>location: {{ encounter.location_ref }}</p>
+        <p>patient: {{ encounter.subject_Patient }}</p>
+        <p>location: {{ encounter.Encounter_location.first.location }}</p>
         <p>practitioner: {{ practitioner }}</p>
     </div>
 </div>

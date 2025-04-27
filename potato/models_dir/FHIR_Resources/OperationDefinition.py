@@ -8,8 +8,8 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 class FHIR_OperationDefinition(models.Model):
     url = FHIR_primitive_URIField(null=True, blank=True, )
     version = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = models.OneToOneField("FHIR_GP_Coding", related_name='OperationDefinition_versionAlgorithm', null=True, blank=True, on_delete=models.SET_NULL)
+    versionAlgorithm_string = FHIR_primitive_StringField(null=True, blank=True, )
+    versionAlgorithm_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='OperationDefinition_versionAlgorithm_Coding', null=True, blank=True, on_delete=models.SET_NULL)
     name = FHIR_primitive_StringField(null=True, blank=True, )
     title = FHIR_primitive_StringField(null=True, blank=True, )
     class StatusChoices(models.TextChoices): DRAFT = 'draft', 'Draft'; ACTIVE = 'active', 'Active'; RETIRED = 'retired', 'Retired'; UNKNOWN = 'unknown', 'Unknown'; 
@@ -41,7 +41,7 @@ class FHIR_OperationDefinition_identifier(FHIR_GP_Identifier):
 
 class FHIR_OperationDefinition_jurisdiction(models.Model):
     OperationDefinition = models.ForeignKey(FHIR_OperationDefinition, related_name='OperationDefinition_jurisdiction', null=False, on_delete=models.CASCADE)
-    BINDING_jurisdiction = 'TODO'
+    BINDING_jurisdiction = "TODO"
     jurisdiction_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_jurisdiction}, related_name='OperationDefinition_jurisdiction', blank=True)
     jurisdiction_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     

@@ -13,7 +13,7 @@ class FHIR_RequestOrchestration(models.Model):
     intent = FHIR_primitive_CodeField(choices=IntentChoices.choices, null=True, blank=True, )
     class PriorityChoices(models.TextChoices): ROUTINE = 'routine', 'Routine'; URGENT = 'urgent', 'Urgent'; ASAP = 'asap', 'Asap'; STAT = 'stat', 'Stat'; 
     priority = FHIR_primitive_CodeField(choices=PriorityChoices.choices, null=True, blank=True, )
-    BINDING_code = 'TODO'
+    BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='RequestOrchestration_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     subject_CareTeam = models.ForeignKey("FHIR_CareTeam", related_name="RequestOrchestration_subject", null=True, blank=True, on_delete=models.SET_NULL)
@@ -48,7 +48,7 @@ class FHIR_RequestOrchestration_instantiatesUri(models.Model):
     
 class FHIR_RequestOrchestration_reason(models.Model):
     RequestOrchestration = models.ForeignKey(FHIR_RequestOrchestration, related_name='RequestOrchestration_reason', null=False, on_delete=models.CASCADE)
-    BINDING_reason = 'TODO'
+    BINDING_reason = "TODO"
     reason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_reason}, related_name='RequestOrchestration_reason', blank=True)
     reason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     reason_Condition_ref = models.ForeignKey("FHIR_Condition", related_name="RequestOrchestration_reason_Condition", null=True, blank=True, on_delete=models.SET_NULL)
@@ -69,17 +69,17 @@ class FHIR_RequestOrchestration_action(models.Model):
     class PriorityChoices(models.TextChoices): ROUTINE = 'routine', 'Routine'; URGENT = 'urgent', 'Urgent'; ASAP = 'asap', 'Asap'; STAT = 'stat', 'Stat'; 
     priority = FHIR_primitive_CodeField(choices=PriorityChoices.choices, null=True, blank=True, )
     goal = models.ManyToManyField("FHIR_Goal", related_name="RequestOrchestration_action_goal", blank=True)
-    timing = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    timing = models.OneToOneField("FHIR_GP_Quantity_Age", related_name='RequestOrchestration_action_timing', null=True, blank=True, on_delete=models.SET_NULL)
-    timing = models.OneToOneField("FHIR_GP_Period", related_name='RequestOrchestration_action_timing', null=True, blank=True, on_delete=models.SET_NULL)
-    timing = models.OneToOneField("FHIR_GP_Quantity_Duration", related_name='RequestOrchestration_action_timing', null=True, blank=True, on_delete=models.SET_NULL)
-    timing = models.OneToOneField("FHIR_GP_Range", related_name='RequestOrchestration_action_timing', null=True, blank=True, on_delete=models.SET_NULL)
-    timing = models.OneToOneField("FHIR_GP_Timing", related_name='RequestOrchestration_action_timing', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_location = 'TODO'
+    timing_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    timing_Age = models.OneToOneField("FHIR_GP_Quantity_Age", related_name='RequestOrchestration_action_timing_Age', null=True, blank=True, on_delete=models.SET_NULL)
+    timing_Period = models.OneToOneField("FHIR_GP_Period", related_name='RequestOrchestration_action_timing_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    timing_Duration = models.OneToOneField("FHIR_GP_Quantity_Duration", related_name='RequestOrchestration_action_timing_Duration', null=True, blank=True, on_delete=models.SET_NULL)
+    timing_Range = models.OneToOneField("FHIR_GP_Range", related_name='RequestOrchestration_action_timing_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    timing_Timing = models.OneToOneField("FHIR_GP_Timing", related_name='RequestOrchestration_action_timing_Timing', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_location = "TODO"
     location_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_location}, related_name='RequestOrchestration_action_location', blank=True)
     location_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     location_Location_ref = models.ForeignKey("FHIR_Location", related_name="RequestOrchestration_action_location_Location", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='RequestOrchestration_action_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     class GroupingbehaviorChoices(models.TextChoices): VISUAL_GROUP = 'visual-group', 'Visual-group'; LOGICAL_GROUP = 'logical-group', 'Logical-group'; SENTENCE_GROUP = 'sentence-group', 'Sentence-group'; 
@@ -92,13 +92,13 @@ class FHIR_RequestOrchestration_action(models.Model):
     precheckBehavior = FHIR_primitive_CodeField(choices=PrecheckbehaviorChoices.choices, null=True, blank=True, )
     class CardinalitybehaviorChoices(models.TextChoices): SINGLE = 'single', 'Single'; MULTIPLE = 'multiple', 'Multiple'; 
     cardinalityBehavior = FHIR_primitive_CodeField(choices=CardinalitybehaviorChoices.choices, null=True, blank=True, )
-    definition = FHIR_primitive_CanonicalField(null=True, blank=True, )
-    definition = FHIR_primitive_URIField(null=True, blank=True, )
+    definition_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
+    definition_uri = FHIR_primitive_URIField(null=True, blank=True, )
     transform = FHIR_primitive_CanonicalField(null=True, blank=True, )
 
 class FHIR_RequestOrchestration_action_code(models.Model):
     RequestOrchestration_action = models.ForeignKey(FHIR_RequestOrchestration_action, related_name='RequestOrchestration_action_code', null=False, on_delete=models.CASCADE)
-    BINDING_code = 'TODO'
+    BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='RequestOrchestration_action_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -124,8 +124,8 @@ class FHIR_RequestOrchestration_action_relatedAction(models.Model):
     relationship = FHIR_primitive_CodeField(choices=RelationshipChoices.choices, null=True, blank=True, )
     class EndrelationshipChoices(models.TextChoices): BEFORE = 'before', 'Before'; BEFORE_START = 'before-start', 'Before-start'; BEFORE_END = 'before-end', 'Before-end'; CONCURRENT = 'concurrent', 'Concurrent'; CONCURRENT_WITH_START = 'concurrent-with-start', 'Concurrent-with-start'; CONCURRENT_WITH_END = 'concurrent-with-end', 'Concurrent-with-end'; AFTER = 'after', 'After'; AFTER_START = 'after-start', 'After-start'; AFTER_END = 'after-end', 'After-end'; 
     endRelationship = FHIR_primitive_CodeField(choices=EndrelationshipChoices.choices, null=True, blank=True, )
-    offset = models.OneToOneField("FHIR_GP_Quantity_Duration", related_name='RequestOrchestration_action_relatedAction_offset', null=True, blank=True, on_delete=models.SET_NULL)
-    offset = models.OneToOneField("FHIR_GP_Range", related_name='RequestOrchestration_action_relatedAction_offset', null=True, blank=True, on_delete=models.SET_NULL)
+    offset_Duration = models.OneToOneField("FHIR_GP_Quantity_Duration", related_name='RequestOrchestration_action_relatedAction_offset_Duration', null=True, blank=True, on_delete=models.SET_NULL)
+    offset_Range = models.OneToOneField("FHIR_GP_Range", related_name='RequestOrchestration_action_relatedAction_offset_Range', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_RequestOrchestration_action_participant(models.Model):
     RequestOrchestration_action = models.ForeignKey(FHIR_RequestOrchestration_action, related_name='RequestOrchestration_action_participant', null=False, on_delete=models.CASCADE)
@@ -144,25 +144,25 @@ class FHIR_RequestOrchestration_action_participant(models.Model):
     typeReference_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="RequestOrchestration_action_participant_typeReference", null=True, blank=True, on_delete=models.SET_NULL)
     typeReference_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="RequestOrchestration_action_participant_typeReference", null=True, blank=True, on_delete=models.SET_NULL)
     typeReference_RelatedPerson = models.ForeignKey("FHIR_RelatedPerson", related_name="RequestOrchestration_action_participant_typeReference", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_role = 'TODO'
+    BINDING_role = "TODO"
     role_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_role}, related_name='RequestOrchestration_action_participant_role', blank=True)
     role_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_function = 'TODO'
+    BINDING_function = "TODO"
     function_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_function}, related_name='RequestOrchestration_action_participant_function', blank=True)
     function_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    actor = FHIR_primitive_CanonicalField(null=True, blank=True, )
-    actor_CareTeam = models.ForeignKey("FHIR_CareTeam", related_name="RequestOrchestration_action_participant_actor", null=True, blank=True, on_delete=models.SET_NULL)
-    actor_Device = models.ForeignKey("FHIR_Device", related_name="RequestOrchestration_action_participant_actor", null=True, blank=True, on_delete=models.SET_NULL)
-    actor_DeviceDefinition = models.ForeignKey("FHIR_DeviceDefinition", related_name="RequestOrchestration_action_participant_actor", null=True, blank=True, on_delete=models.SET_NULL)
-    actor_Endpoint = models.ForeignKey("FHIR_Endpoint", related_name="RequestOrchestration_action_participant_actor", null=True, blank=True, on_delete=models.SET_NULL)
-    actor_Group = models.ForeignKey("FHIR_Group", related_name="RequestOrchestration_action_participant_actor", null=True, blank=True, on_delete=models.SET_NULL)
-    actor_HealthcareService = models.ForeignKey("FHIR_HealthcareService", related_name="RequestOrchestration_action_participant_actor", null=True, blank=True, on_delete=models.SET_NULL)
-    actor_Location = models.ForeignKey("FHIR_Location", related_name="RequestOrchestration_action_participant_actor", null=True, blank=True, on_delete=models.SET_NULL)
-    actor_Organization = models.ForeignKey("FHIR_Organization", related_name="RequestOrchestration_action_participant_actor", null=True, blank=True, on_delete=models.SET_NULL)
-    actor_Patient = models.ForeignKey("FHIR_Patient", related_name="RequestOrchestration_action_participant_actor", null=True, blank=True, on_delete=models.SET_NULL)
-    actor_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="RequestOrchestration_action_participant_actor", null=True, blank=True, on_delete=models.SET_NULL)
-    actor_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="RequestOrchestration_action_participant_actor", null=True, blank=True, on_delete=models.SET_NULL)
-    actor_RelatedPerson = models.ForeignKey("FHIR_RelatedPerson", related_name="RequestOrchestration_action_participant_actor", null=True, blank=True, on_delete=models.SET_NULL)
+    actor_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
+    actor_Reference_CareTeam = models.ForeignKey("FHIR_CareTeam", related_name="RequestOrchestration_action_participant_actor_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    actor_Reference_Device = models.ForeignKey("FHIR_Device", related_name="RequestOrchestration_action_participant_actor_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    actor_Reference_DeviceDefinition = models.ForeignKey("FHIR_DeviceDefinition", related_name="RequestOrchestration_action_participant_actor_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    actor_Reference_Endpoint = models.ForeignKey("FHIR_Endpoint", related_name="RequestOrchestration_action_participant_actor_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    actor_Reference_Group = models.ForeignKey("FHIR_Group", related_name="RequestOrchestration_action_participant_actor_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    actor_Reference_HealthcareService = models.ForeignKey("FHIR_HealthcareService", related_name="RequestOrchestration_action_participant_actor_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    actor_Reference_Location = models.ForeignKey("FHIR_Location", related_name="RequestOrchestration_action_participant_actor_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    actor_Reference_Organization = models.ForeignKey("FHIR_Organization", related_name="RequestOrchestration_action_participant_actor_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    actor_Reference_Patient = models.ForeignKey("FHIR_Patient", related_name="RequestOrchestration_action_participant_actor_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    actor_Reference_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="RequestOrchestration_action_participant_actor_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    actor_Reference_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="RequestOrchestration_action_participant_actor_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    actor_Reference_RelatedPerson = models.ForeignKey("FHIR_RelatedPerson", related_name="RequestOrchestration_action_participant_actor_Reference", null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_RequestOrchestration_action_dynamicValue(models.Model):
     RequestOrchestration_action = models.ForeignKey(FHIR_RequestOrchestration_action, related_name='RequestOrchestration_action_dynamicValue', null=False, on_delete=models.CASCADE)

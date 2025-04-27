@@ -35,24 +35,18 @@
                   {% endif %}
               </td>
               <td class="text-wrap small">
-                  {% if allergy.reactions.all %}
-                  {% with reaction=allergy.reactions.first %}
-                      {% if reaction.manifestations.all %}
-                          {% if reaction.manifestations.first.manifestation_cc.all %}
-                              {{ reaction.manifestations.first.manifestation_cc.first.display }}
-                          {% endif %}
-                      {% endif %}
-                  {% endwith %}
-                  {% endif %}
+                {% if allergy.AllergyIntolerance_reaction.first.AllergyIntolerance_reaction_manifestation.first %}
+                  {{ allergy.AllergyIntolerance_reaction.first.AllergyIntolerance_reaction_manifestation.first.manifestation_cc.first.display }}
+                {% endif %}
               </td>
               <td class="text-wrap small">
-                  {% if allergy.reactions.all %}
-                  {% with reaction=allergy.reactions.first %}
-                      {% if reaction.severity %}
-                      {{ reaction.severity.display }}
-                      {% endif %}
+                {% if allergy.AllergyIntolerance_reaction.first %}
+                  {% with reaction=allergy.AllergyIntolerance_reaction.first %}
+                    {% if reaction.severity %}
+                      {{ reaction.severity }}
+                    {% endif %}
                   {% endwith %}
-                  {% endif %}
+                {% endif %}
               </td>
               <td class="text-wrap small">
                   {% if allergy.type_cc.all %}

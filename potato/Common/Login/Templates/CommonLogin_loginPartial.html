@@ -7,13 +7,13 @@
       {% endfor %}
   {% endif %}
 
-  <input style="background-color: #f8f9fa;" type="text" name="login" class="form-control mb-2" value="{{ form.login.value }}" placeholder="{{ form.login.label }}">
+  <input style="background-color: #f8f9fa;" type="text" name="login" class="form-control mb-2" value="{{ form.login.value|default_if_none:'' }}" placeholder="{{ form.login.label }}">
     {% for error in form.login.errors %}
     <p class="text-danger small mt-0 mb-3">{{ error }}</p>
     {% endfor %}
 
 
-  <input style="background-color: #f8f9fa;" type="password" name="password" class="form-control mb-2" value="{{ form.password.value }}" placeholder="{{ form.password.label }}">
+  <input style="background-color: #f8f9fa;" type="password" name="password" class="form-control mb-2" value="{{ form.password.value|default_if_none:'' }}" placeholder="{{ form.password.label }}">
     {% for error in form.password.errors %}
       <p class="text-danger small mt-0 mb-3">{{ error }}</p>
     {% endfor %}

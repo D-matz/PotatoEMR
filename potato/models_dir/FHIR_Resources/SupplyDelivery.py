@@ -12,15 +12,15 @@ class FHIR_SupplyDelivery(models.Model):
     class StatusChoices(models.TextChoices): IN_PROGRESS = 'in-progress', 'In-progress'; COMPLETED = 'completed', 'Completed'; ABANDONED = 'abandoned', 'Abandoned'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; 
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
     patient = models.ForeignKey("FHIR_Patient", related_name="SupplyDelivery_patient", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='SupplyDelivery_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_stage = 'TODO'
+    BINDING_stage = "TODO"
     stage_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_stage}, related_name='SupplyDelivery_stage', blank=True)
     stage_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    occurrence = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    occurrence = models.OneToOneField("FHIR_GP_Period", related_name='SupplyDelivery_occurrence', null=True, blank=True, on_delete=models.SET_NULL)
-    occurrence = models.OneToOneField("FHIR_GP_Timing", related_name='SupplyDelivery_occurrence', null=True, blank=True, on_delete=models.SET_NULL)
+    occurrence_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    occurrence_Period = models.OneToOneField("FHIR_GP_Period", related_name='SupplyDelivery_occurrence_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    occurrence_Timing = models.OneToOneField("FHIR_GP_Timing", related_name='SupplyDelivery_occurrence_Timing', null=True, blank=True, on_delete=models.SET_NULL)
     supplier_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="SupplyDelivery_supplier", null=True, blank=True, on_delete=models.SET_NULL)
     supplier_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="SupplyDelivery_supplier", null=True, blank=True, on_delete=models.SET_NULL)
     supplier_Organization = models.ForeignKey("FHIR_Organization", related_name="SupplyDelivery_supplier", null=True, blank=True, on_delete=models.SET_NULL)
@@ -38,15 +38,15 @@ class FHIR_SupplyDelivery_identifier(FHIR_GP_Identifier):
 class FHIR_SupplyDelivery_suppliedItem(models.Model):
     SupplyDelivery = models.ForeignKey(FHIR_SupplyDelivery, related_name='SupplyDelivery_suppliedItem', null=False, on_delete=models.CASCADE)
     quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='SupplyDelivery_suppliedItem_quantity', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_condition = 'TODO'
+    BINDING_condition = "TODO"
     condition_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_condition}, related_name='SupplyDelivery_suppliedItem_condition', blank=True)
     condition_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_item = 'TODO'
-    item_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_item}, related_name='SupplyDelivery_suppliedItem_item', blank=True)
-    item_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    item_Medication = models.ForeignKey("FHIR_Medication", related_name="SupplyDelivery_suppliedItem_item", null=True, blank=True, on_delete=models.SET_NULL)
-    item_Substance = models.ForeignKey("FHIR_Substance", related_name="SupplyDelivery_suppliedItem_item", null=True, blank=True, on_delete=models.SET_NULL)
-    item_Device = models.ForeignKey("FHIR_Device", related_name="SupplyDelivery_suppliedItem_item", null=True, blank=True, on_delete=models.SET_NULL)
-    item_BiologicallyDerivedProduct = models.ForeignKey("FHIR_BiologicallyDerivedProduct", related_name="SupplyDelivery_suppliedItem_item", null=True, blank=True, on_delete=models.SET_NULL)
-    item_NutritionProduct = models.ForeignKey("FHIR_NutritionProduct", related_name="SupplyDelivery_suppliedItem_item", null=True, blank=True, on_delete=models.SET_NULL)
-    item_InventoryItem = models.ForeignKey("FHIR_InventoryItem", related_name="SupplyDelivery_suppliedItem_item", null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_item_CodeableConcept = "TODO"
+    item_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_item_CodeableConcept}, related_name='SupplyDelivery_suppliedItem_item_CodeableConcept', blank=True)
+    item_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    item_Reference_Medication = models.ForeignKey("FHIR_Medication", related_name="SupplyDelivery_suppliedItem_item_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    item_Reference_Substance = models.ForeignKey("FHIR_Substance", related_name="SupplyDelivery_suppliedItem_item_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    item_Reference_Device = models.ForeignKey("FHIR_Device", related_name="SupplyDelivery_suppliedItem_item_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    item_Reference_BiologicallyDerivedProduct = models.ForeignKey("FHIR_BiologicallyDerivedProduct", related_name="SupplyDelivery_suppliedItem_item_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    item_Reference_NutritionProduct = models.ForeignKey("FHIR_NutritionProduct", related_name="SupplyDelivery_suppliedItem_item_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    item_Reference_InventoryItem = models.ForeignKey("FHIR_InventoryItem", related_name="SupplyDelivery_suppliedItem_item_Reference", null=True, blank=True, on_delete=models.SET_NULL)

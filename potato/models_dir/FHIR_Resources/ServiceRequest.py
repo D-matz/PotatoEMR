@@ -20,22 +20,22 @@ class FHIR_ServiceRequest(models.Model):
     class PriorityChoices(models.TextChoices): ROUTINE = 'routine', 'Routine'; URGENT = 'urgent', 'Urgent'; ASAP = 'asap', 'Asap'; STAT = 'stat', 'Stat'; 
     priority = FHIR_primitive_CodeField(choices=PriorityChoices.choices, null=True, blank=True, )
     doNotPerform = FHIR_primitive_BooleanField(null=True, blank=True, )
-    BINDING_code = 'TODO'
+    BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='ServiceRequest_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     code_ActivityDefinition_ref = models.ForeignKey("FHIR_ActivityDefinition", related_name="ServiceRequest_code_ActivityDefinition", null=True, blank=True, on_delete=models.SET_NULL)
     code_PlanDefinition_ref = models.ForeignKey("FHIR_PlanDefinition", related_name="ServiceRequest_code_PlanDefinition", null=True, blank=True, on_delete=models.SET_NULL)
-    quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='ServiceRequest_quantity', null=True, blank=True, on_delete=models.SET_NULL)
-    quantity = models.OneToOneField("FHIR_GP_Ratio", related_name='ServiceRequest_quantity', null=True, blank=True, on_delete=models.SET_NULL)
-    quantity = models.OneToOneField("FHIR_GP_Range", related_name='ServiceRequest_quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    quantity_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='ServiceRequest_quantity_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    quantity_Ratio = models.OneToOneField("FHIR_GP_Ratio", related_name='ServiceRequest_quantity_Ratio', null=True, blank=True, on_delete=models.SET_NULL)
+    quantity_Range = models.OneToOneField("FHIR_GP_Range", related_name='ServiceRequest_quantity_Range', null=True, blank=True, on_delete=models.SET_NULL)
     subject_Patient = models.ForeignKey("FHIR_Patient", related_name="ServiceRequest_subject", null=True, blank=True, on_delete=models.SET_NULL)
     subject_Group = models.ForeignKey("FHIR_Group", related_name="ServiceRequest_subject", null=True, blank=True, on_delete=models.SET_NULL)
     subject_Location = models.ForeignKey("FHIR_Location", related_name="ServiceRequest_subject", null=True, blank=True, on_delete=models.SET_NULL)
     subject_Device = models.ForeignKey("FHIR_Device", related_name="ServiceRequest_subject", null=True, blank=True, on_delete=models.SET_NULL)
     encounter = models.ForeignKey("FHIR_Encounter", related_name="ServiceRequest_encounter", null=True, blank=True, on_delete=models.SET_NULL)
-    occurrence = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    occurrence = models.OneToOneField("FHIR_GP_Period", related_name='ServiceRequest_occurrence', null=True, blank=True, on_delete=models.SET_NULL)
-    occurrence = models.OneToOneField("FHIR_GP_Timing", related_name='ServiceRequest_occurrence', null=True, blank=True, on_delete=models.SET_NULL)
+    occurrence_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    occurrence_Period = models.OneToOneField("FHIR_GP_Period", related_name='ServiceRequest_occurrence_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    occurrence_Timing = models.OneToOneField("FHIR_GP_Timing", related_name='ServiceRequest_occurrence_Timing', null=True, blank=True, on_delete=models.SET_NULL)
     asNeeded = FHIR_primitive_BooleanField(null=True, blank=True, )
     authoredOn = FHIR_primitive_DateTimeField(null=True, blank=True, )
     requester_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="ServiceRequest_requester", null=True, blank=True, on_delete=models.SET_NULL)
@@ -45,7 +45,7 @@ class FHIR_ServiceRequest(models.Model):
     requester_RelatedPerson = models.ForeignKey("FHIR_RelatedPerson", related_name="ServiceRequest_requester", null=True, blank=True, on_delete=models.SET_NULL)
     requester_Device = models.ForeignKey("FHIR_Device", related_name="ServiceRequest_requester", null=True, blank=True, on_delete=models.SET_NULL)
     requester_Group = models.ForeignKey("FHIR_Group", related_name="ServiceRequest_requester", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_performerType = 'TODO'
+    BINDING_performerType = "TODO"
     performerType_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_performerType}, related_name='ServiceRequest_performerType', blank=True)
     performerType_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     performer_Practitioner = models.ManyToManyField("FHIR_Practitioner", related_name="ServiceRequest_performer", blank=True)
@@ -78,13 +78,13 @@ class FHIR_ServiceRequest_instantiatesUri(models.Model):
     
 class FHIR_ServiceRequest_category(models.Model):
     ServiceRequest = models.ForeignKey(FHIR_ServiceRequest, related_name='ServiceRequest_category', null=False, on_delete=models.CASCADE)
-    BINDING_category = 'TODO'
+    BINDING_category = "TODO"
     category_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_category}, related_name='ServiceRequest_category', blank=True)
     category_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_ServiceRequest_orderDetail(models.Model):
     ServiceRequest = models.ForeignKey(FHIR_ServiceRequest, related_name='ServiceRequest_orderDetail', null=False, on_delete=models.CASCADE)
-    BINDING_parameterFocus = 'TODO'
+    BINDING_parameterFocus = "TODO"
     parameterFocus_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_parameterFocus}, related_name='ServiceRequest_orderDetail_parameterFocus', blank=True)
     parameterFocus_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     parameterFocus_Device_ref = models.ForeignKey("FHIR_Device", related_name="ServiceRequest_orderDetail_parameterFocus_Device", null=True, blank=True, on_delete=models.SET_NULL)
@@ -98,35 +98,35 @@ class FHIR_ServiceRequest_orderDetail(models.Model):
 
 class FHIR_ServiceRequest_orderDetail_parameter(models.Model):
     ServiceRequest_orderDetail = models.ForeignKey(FHIR_ServiceRequest_orderDetail, related_name='ServiceRequest_orderDetail_parameter', null=False, on_delete=models.CASCADE)
-    BINDING_code = 'TODO'
+    BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='ServiceRequest_orderDetail_parameter_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='ServiceRequest_orderDetail_parameter_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Ratio", related_name='ServiceRequest_orderDetail_parameter_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Range", related_name='ServiceRequest_orderDetail_parameter_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
-    BINDING_value = 'TODO'
-    value_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value}, related_name='ServiceRequest_orderDetail_parameter_value', blank=True)
-    value_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = FHIR_primitive_StringField(null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Period", related_name='ServiceRequest_orderDetail_parameter_value', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='ServiceRequest_orderDetail_parameter_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Ratio = models.OneToOneField("FHIR_GP_Ratio", related_name='ServiceRequest_orderDetail_parameter_value_Ratio', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Range = models.OneToOneField("FHIR_GP_Range", related_name='ServiceRequest_orderDetail_parameter_value_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    BINDING_value_CodeableConcept = "TODO"
+    value_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value_CodeableConcept}, related_name='ServiceRequest_orderDetail_parameter_value_CodeableConcept', blank=True)
+    value_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    value_string = FHIR_primitive_StringField(null=True, blank=True, )
+    value_Period = models.OneToOneField("FHIR_GP_Period", related_name='ServiceRequest_orderDetail_parameter_value_Period', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_ServiceRequest_asNeededFor(models.Model):
     ServiceRequest = models.ForeignKey(FHIR_ServiceRequest, related_name='ServiceRequest_asNeededFor', null=False, on_delete=models.CASCADE)
-    BINDING_asNeededFor = 'TODO'
+    BINDING_asNeededFor = "TODO"
     asNeededFor_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_asNeededFor}, related_name='ServiceRequest_asNeededFor', blank=True)
     asNeededFor_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_ServiceRequest_location(models.Model):
     ServiceRequest = models.ForeignKey(FHIR_ServiceRequest, related_name='ServiceRequest_location', null=False, on_delete=models.CASCADE)
-    BINDING_location = 'TODO'
+    BINDING_location = "TODO"
     location_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_location}, related_name='ServiceRequest_location', blank=True)
     location_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     location_Location_ref = models.ForeignKey("FHIR_Location", related_name="ServiceRequest_location_Location", null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_ServiceRequest_reason(models.Model):
     ServiceRequest = models.ForeignKey(FHIR_ServiceRequest, related_name='ServiceRequest_reason', null=False, on_delete=models.CASCADE)
-    BINDING_reason = 'TODO'
+    BINDING_reason = "TODO"
     reason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_reason}, related_name='ServiceRequest_reason', blank=True)
     reason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     reason_Condition_ref = models.ForeignKey("FHIR_Condition", related_name="ServiceRequest_reason_Condition", null=True, blank=True, on_delete=models.SET_NULL)
@@ -138,13 +138,13 @@ class FHIR_ServiceRequest_reason(models.Model):
 
 class FHIR_ServiceRequest_supportingInfo(models.Model):
     ServiceRequest = models.ForeignKey(FHIR_ServiceRequest, related_name='ServiceRequest_supportingInfo', null=False, on_delete=models.CASCADE)
-    BINDING_supportingInfo = 'TODO'
+    BINDING_supportingInfo = "TODO"
     supportingInfo_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_supportingInfo}, related_name='ServiceRequest_supportingInfo', blank=True)
     supportingInfo_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
 class FHIR_ServiceRequest_bodySite(models.Model):
     ServiceRequest = models.ForeignKey(FHIR_ServiceRequest, related_name='ServiceRequest_bodySite', null=False, on_delete=models.CASCADE)
-    BINDING_bodySite = 'TODO'
+    BINDING_bodySite = "TODO"
     bodySite_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_bodySite}, related_name='ServiceRequest_bodySite', blank=True)
     bodySite_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -153,5 +153,5 @@ class FHIR_ServiceRequest_note(FHIR_GP_Annotation):
 
 class FHIR_ServiceRequest_patientInstruction(models.Model):
     ServiceRequest = models.ForeignKey(FHIR_ServiceRequest, related_name='ServiceRequest_patientInstruction', null=False, on_delete=models.CASCADE)
-    instruction = FHIR_primitive_MarkdownField(null=True, blank=True, )
-    instruction = models.ForeignKey("FHIR_DocumentReference", related_name="ServiceRequest_patientInstruction_instruction", null=True, blank=True, on_delete=models.SET_NULL)
+    instruction_markdown = FHIR_primitive_MarkdownField(null=True, blank=True, )
+    instruction_Reference = models.ForeignKey("FHIR_DocumentReference", related_name="ServiceRequest_patientInstruction_instruction_Reference", null=True, blank=True, on_delete=models.SET_NULL)

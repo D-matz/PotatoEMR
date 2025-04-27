@@ -8,12 +8,12 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 class FHIR_CoverageEligibilityRequest(models.Model):
     class StatusChoices(models.TextChoices): ACTIVE = 'active', 'Active'; CANCELLED = 'cancelled', 'Cancelled'; DRAFT = 'draft', 'Draft'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; 
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
-    BINDING_priority = 'TODO'
+    BINDING_priority = "TODO"
     priority_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_priority}, related_name='CoverageEligibilityRequest_priority', blank=True)
     priority_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     patient = models.ForeignKey("FHIR_Patient", related_name="CoverageEligibilityRequest_patient", null=True, blank=True, on_delete=models.SET_NULL)
-    serviced = FHIR_primitive_DateField(null=True, blank=True, )
-    serviced = models.OneToOneField("FHIR_GP_Period", related_name='CoverageEligibilityRequest_serviced', null=True, blank=True, on_delete=models.SET_NULL)
+    serviced_date = FHIR_primitive_DateField(null=True, blank=True, )
+    serviced_Period = models.OneToOneField("FHIR_GP_Period", related_name='CoverageEligibilityRequest_serviced_Period', null=True, blank=True, on_delete=models.SET_NULL)
     created = FHIR_primitive_DateTimeField(null=True, blank=True, )
     enterer_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="CoverageEligibilityRequest_enterer", null=True, blank=True, on_delete=models.SET_NULL)
     enterer_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="CoverageEligibilityRequest_enterer", null=True, blank=True, on_delete=models.SET_NULL)
@@ -34,11 +34,11 @@ class FHIR_CoverageEligibilityRequest_purpose(models.Model):
     
 class FHIR_CoverageEligibilityRequest_event(models.Model):
     CoverageEligibilityRequest = models.ForeignKey(FHIR_CoverageEligibilityRequest, related_name='CoverageEligibilityRequest_event', null=False, on_delete=models.CASCADE)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='CoverageEligibilityRequest_event_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    when = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    when = models.OneToOneField("FHIR_GP_Period", related_name='CoverageEligibilityRequest_event_when', null=True, blank=True, on_delete=models.SET_NULL)
+    when_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    when_Period = models.OneToOneField("FHIR_GP_Period", related_name='CoverageEligibilityRequest_event_when_Period', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_CoverageEligibilityRequest_supportingInfo(models.Model):
     CoverageEligibilityRequest = models.ForeignKey(FHIR_CoverageEligibilityRequest, related_name='CoverageEligibilityRequest_supportingInfo', null=False, on_delete=models.CASCADE)
@@ -53,10 +53,10 @@ class FHIR_CoverageEligibilityRequest_insurance(models.Model):
 
 class FHIR_CoverageEligibilityRequest_item(models.Model):
     CoverageEligibilityRequest = models.ForeignKey(FHIR_CoverageEligibilityRequest, related_name='CoverageEligibilityRequest_item', null=False, on_delete=models.CASCADE)
-    BINDING_category = 'TODO'
+    BINDING_category = "TODO"
     category_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_category}, related_name='CoverageEligibilityRequest_item_category', blank=True)
     category_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_productOrService = 'TODO'
+    BINDING_productOrService = "TODO"
     productOrService_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_productOrService}, related_name='CoverageEligibilityRequest_item_productOrService', blank=True)
     productOrService_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     provider_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="CoverageEligibilityRequest_item_provider", null=True, blank=True, on_delete=models.SET_NULL)
@@ -73,13 +73,13 @@ class FHIR_CoverageEligibilityRequest_item_supportingInfoSequence(models.Model):
     
 class FHIR_CoverageEligibilityRequest_item_modifier(models.Model):
     CoverageEligibilityRequest_item = models.ForeignKey(FHIR_CoverageEligibilityRequest_item, related_name='CoverageEligibilityRequest_item_modifier', null=False, on_delete=models.CASCADE)
-    BINDING_modifier = 'TODO'
+    BINDING_modifier = "TODO"
     modifier_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_modifier}, related_name='CoverageEligibilityRequest_item_modifier', blank=True)
     modifier_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_CoverageEligibilityRequest_item_diagnosis(models.Model):
     CoverageEligibilityRequest_item = models.ForeignKey(FHIR_CoverageEligibilityRequest_item, related_name='CoverageEligibilityRequest_item_diagnosis', null=False, on_delete=models.CASCADE)
-    BINDING_diagnosis = 'TODO'
-    diagnosis_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_diagnosis}, related_name='CoverageEligibilityRequest_item_diagnosis_diagnosis', blank=True)
-    diagnosis_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    diagnosis = models.ForeignKey("FHIR_Condition", related_name="CoverageEligibilityRequest_item_diagnosis_diagnosis", null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_diagnosis_CodeableConcept = "TODO"
+    diagnosis_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_diagnosis_CodeableConcept}, related_name='CoverageEligibilityRequest_item_diagnosis_diagnosis_CodeableConcept', blank=True)
+    diagnosis_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    diagnosis_Reference = models.ForeignKey("FHIR_Condition", related_name="CoverageEligibilityRequest_item_diagnosis_diagnosis_Reference", null=True, blank=True, on_delete=models.SET_NULL)

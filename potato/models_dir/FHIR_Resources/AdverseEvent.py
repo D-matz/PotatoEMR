@@ -10,7 +10,7 @@ class FHIR_AdverseEvent(models.Model):
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
     class ActualityChoices(models.TextChoices): ACTUAL = 'actual', 'Actual'; POTENTIAL = 'potential', 'Potential'; 
     actuality = FHIR_primitive_CodeField(choices=ActualityChoices.choices, null=True, blank=True, )
-    BINDING_code = 'TODO'
+    BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='AdverseEvent_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     subject_Patient = models.ForeignKey("FHIR_Patient", related_name="AdverseEvent_subject", null=True, blank=True, on_delete=models.SET_NULL)
@@ -18,14 +18,14 @@ class FHIR_AdverseEvent(models.Model):
     subject_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="AdverseEvent_subject", null=True, blank=True, on_delete=models.SET_NULL)
     subject_RelatedPerson = models.ForeignKey("FHIR_RelatedPerson", related_name="AdverseEvent_subject", null=True, blank=True, on_delete=models.SET_NULL)
     encounter = models.ForeignKey("FHIR_Encounter", related_name="AdverseEvent_encounter", null=True, blank=True, on_delete=models.SET_NULL)
-    cause = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    cause = models.OneToOneField("FHIR_GP_Period", related_name='AdverseEvent_cause', null=True, blank=True, on_delete=models.SET_NULL)
-    effect = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    effect = models.OneToOneField("FHIR_GP_Period", related_name='AdverseEvent_effect', null=True, blank=True, on_delete=models.SET_NULL)
+    cause_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    cause_Period = models.OneToOneField("FHIR_GP_Period", related_name='AdverseEvent_cause_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    effect_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    effect_Period = models.OneToOneField("FHIR_GP_Period", related_name='AdverseEvent_effect_Period', null=True, blank=True, on_delete=models.SET_NULL)
     detected = FHIR_primitive_DateTimeField(null=True, blank=True, )
     recordedDate = FHIR_primitive_DateTimeField(null=True, blank=True, )
     location = models.ForeignKey("FHIR_Location", related_name="AdverseEvent_location", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_seriousness = 'TODO'
+    BINDING_seriousness = "TODO"
     seriousness_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_seriousness}, related_name='AdverseEvent_seriousness', blank=True)
     seriousness_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     recorder_Patient = models.ForeignKey("FHIR_Patient", related_name="AdverseEvent_recorder", null=True, blank=True, on_delete=models.SET_NULL)
@@ -40,13 +40,13 @@ class FHIR_AdverseEvent_identifier(FHIR_GP_Identifier):
 
 class FHIR_AdverseEvent_category(models.Model):
     AdverseEvent = models.ForeignKey(FHIR_AdverseEvent, related_name='AdverseEvent_category', null=False, on_delete=models.CASCADE)
-    BINDING_category = 'TODO'
+    BINDING_category = "TODO"
     category_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_category}, related_name='AdverseEvent_category', blank=True)
     category_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_AdverseEvent_resultingEffect(models.Model):
     AdverseEvent = models.ForeignKey(FHIR_AdverseEvent, related_name='AdverseEvent_resultingEffect', null=False, on_delete=models.CASCADE)
-    BINDING_resultingEffect = 'TODO'
+    BINDING_resultingEffect = "TODO"
     resultingEffect_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_resultingEffect}, related_name='AdverseEvent_resultingEffect', blank=True)
     resultingEffect_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     resultingEffect_Condition_ref = models.ForeignKey("FHIR_Condition", related_name="AdverseEvent_resultingEffect_Condition", null=True, blank=True, on_delete=models.SET_NULL)
@@ -54,13 +54,13 @@ class FHIR_AdverseEvent_resultingEffect(models.Model):
 
 class FHIR_AdverseEvent_outcome(models.Model):
     AdverseEvent = models.ForeignKey(FHIR_AdverseEvent, related_name='AdverseEvent_outcome', null=False, on_delete=models.CASCADE)
-    BINDING_outcome = 'TODO'
+    BINDING_outcome = "TODO"
     outcome_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_outcome}, related_name='AdverseEvent_outcome', blank=True)
     outcome_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_AdverseEvent_participant(models.Model):
     AdverseEvent = models.ForeignKey(FHIR_AdverseEvent, related_name='AdverseEvent_participant', null=False, on_delete=models.CASCADE)
-    BINDING_function = 'TODO'
+    BINDING_function = "TODO"
     function_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_function}, related_name='AdverseEvent_participant_function', blank=True)
     function_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     actor_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="AdverseEvent_participant_actor", null=True, blank=True, on_delete=models.SET_NULL)
@@ -74,7 +74,7 @@ class FHIR_AdverseEvent_participant(models.Model):
 
 class FHIR_AdverseEvent_suspectEntity(models.Model):
     AdverseEvent = models.ForeignKey(FHIR_AdverseEvent, related_name='AdverseEvent_suspectEntity', null=False, on_delete=models.CASCADE)
-    BINDING_instance = 'TODO'
+    BINDING_instance = "TODO"
     instance_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_instance}, related_name='AdverseEvent_suspectEntity_instance', blank=True)
     instance_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     instance_Immunization_ref = models.ForeignKey("FHIR_Immunization", related_name="AdverseEvent_suspectEntity_instance_Immunization", null=True, blank=True, on_delete=models.SET_NULL)
@@ -89,10 +89,10 @@ class FHIR_AdverseEvent_suspectEntity(models.Model):
 
 class FHIR_AdverseEvent_suspectEntity_causality(models.Model):
     AdverseEvent_suspectEntity = models.ForeignKey(FHIR_AdverseEvent_suspectEntity, related_name='AdverseEvent_suspectEntity_causality', null=False, on_delete=models.CASCADE)
-    BINDING_assessmentMethod = 'TODO'
+    BINDING_assessmentMethod = "TODO"
     assessmentMethod_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_assessmentMethod}, related_name='AdverseEvent_suspectEntity_causality_assessmentMethod', blank=True)
     assessmentMethod_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_entityRelatedness = 'TODO'
+    BINDING_entityRelatedness = "TODO"
     entityRelatedness_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_entityRelatedness}, related_name='AdverseEvent_suspectEntity_causality_entityRelatedness', blank=True)
     entityRelatedness_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     author_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="AdverseEvent_suspectEntity_causality_author", null=True, blank=True, on_delete=models.SET_NULL)
@@ -102,7 +102,7 @@ class FHIR_AdverseEvent_suspectEntity_causality(models.Model):
 
 class FHIR_AdverseEvent_contributingFactor(models.Model):
     AdverseEvent = models.ForeignKey(FHIR_AdverseEvent, related_name='AdverseEvent_contributingFactor', null=False, on_delete=models.CASCADE)
-    BINDING_contributingFactor = 'TODO'
+    BINDING_contributingFactor = "TODO"
     contributingFactor_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_contributingFactor}, related_name='AdverseEvent_contributingFactor', blank=True)
     contributingFactor_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     contributingFactor_Condition_ref = models.ForeignKey("FHIR_Condition", related_name="AdverseEvent_contributingFactor_Condition", null=True, blank=True, on_delete=models.SET_NULL)
@@ -119,7 +119,7 @@ class FHIR_AdverseEvent_contributingFactor(models.Model):
 
 class FHIR_AdverseEvent_preventiveAction(models.Model):
     AdverseEvent = models.ForeignKey(FHIR_AdverseEvent, related_name='AdverseEvent_preventiveAction', null=False, on_delete=models.CASCADE)
-    BINDING_preventiveAction = 'TODO'
+    BINDING_preventiveAction = "TODO"
     preventiveAction_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_preventiveAction}, related_name='AdverseEvent_preventiveAction', blank=True)
     preventiveAction_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     preventiveAction_Immunization_ref = models.ForeignKey("FHIR_Immunization", related_name="AdverseEvent_preventiveAction_Immunization", null=True, blank=True, on_delete=models.SET_NULL)
@@ -130,7 +130,7 @@ class FHIR_AdverseEvent_preventiveAction(models.Model):
 
 class FHIR_AdverseEvent_mitigatingAction(models.Model):
     AdverseEvent = models.ForeignKey(FHIR_AdverseEvent, related_name='AdverseEvent_mitigatingAction', null=False, on_delete=models.CASCADE)
-    BINDING_mitigatingAction = 'TODO'
+    BINDING_mitigatingAction = "TODO"
     mitigatingAction_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_mitigatingAction}, related_name='AdverseEvent_mitigatingAction', blank=True)
     mitigatingAction_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     mitigatingAction_Procedure_ref = models.ForeignKey("FHIR_Procedure", related_name="AdverseEvent_mitigatingAction_Procedure", null=True, blank=True, on_delete=models.SET_NULL)
@@ -140,7 +140,7 @@ class FHIR_AdverseEvent_mitigatingAction(models.Model):
 
 class FHIR_AdverseEvent_supportingInfo(models.Model):
     AdverseEvent = models.ForeignKey(FHIR_AdverseEvent, related_name='AdverseEvent_supportingInfo', null=False, on_delete=models.CASCADE)
-    BINDING_supportingInfo = 'TODO'
+    BINDING_supportingInfo = "TODO"
     supportingInfo_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_supportingInfo}, related_name='AdverseEvent_supportingInfo', blank=True)
     supportingInfo_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     supportingInfo_Condition_ref = models.ForeignKey("FHIR_Condition", related_name="AdverseEvent_supportingInfo_Condition", null=True, blank=True, on_delete=models.SET_NULL)

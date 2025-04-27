@@ -19,13 +19,13 @@ class FHIR_CareTeam_identifier(FHIR_GP_Identifier):
 
 class FHIR_CareTeam_category(models.Model):
     CareTeam = models.ForeignKey(FHIR_CareTeam, related_name='CareTeam_category', null=False, on_delete=models.CASCADE)
-    BINDING_category = 'TODO'
+    BINDING_category = "TODO"
     category_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_category}, related_name='CareTeam_category', blank=True)
     category_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_CareTeam_participant(models.Model):
     CareTeam = models.ForeignKey(FHIR_CareTeam, related_name='CareTeam_participant', null=False, on_delete=models.CASCADE)
-    BINDING_role = 'TODO'
+    BINDING_role = "TODO"
     role_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_role}, related_name='CareTeam_participant_role', blank=True)
     role_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     member_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="CareTeam_participant_member", null=True, blank=True, on_delete=models.SET_NULL)
@@ -42,12 +42,12 @@ class FHIR_CareTeam_participant(models.Model):
     onBehalfOf_Organization = models.ForeignKey("FHIR_Organization", related_name="CareTeam_participant_onBehalfOf", null=True, blank=True, on_delete=models.SET_NULL)
     onBehalfOf_CareTeam = models.ForeignKey("FHIR_CareTeam", related_name="CareTeam_participant_onBehalfOf", null=True, blank=True, on_delete=models.SET_NULL)
     onBehalfOf_Group = models.ForeignKey("FHIR_Group", related_name="CareTeam_participant_onBehalfOf", null=True, blank=True, on_delete=models.SET_NULL)
-    effective = models.OneToOneField("FHIR_GP_Period", related_name='CareTeam_participant_effective', null=True, blank=True, on_delete=models.SET_NULL)
-    effective = models.OneToOneField("FHIR_GP_Timing", related_name='CareTeam_participant_effective', null=True, blank=True, on_delete=models.SET_NULL)
+    effective_Period = models.OneToOneField("FHIR_GP_Period", related_name='CareTeam_participant_effective_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    effective_Timing = models.OneToOneField("FHIR_GP_Timing", related_name='CareTeam_participant_effective_Timing', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_CareTeam_reason(models.Model):
     CareTeam = models.ForeignKey(FHIR_CareTeam, related_name='CareTeam_reason', null=False, on_delete=models.CASCADE)
-    BINDING_reason = 'TODO'
+    BINDING_reason = "TODO"
     reason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_reason}, related_name='CareTeam_reason', blank=True)
     reason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     reason_Condition_ref = models.ForeignKey("FHIR_Condition", related_name="CareTeam_reason_Condition", null=True, blank=True, on_delete=models.SET_NULL)

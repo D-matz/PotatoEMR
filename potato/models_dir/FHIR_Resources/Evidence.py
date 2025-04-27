@@ -8,8 +8,8 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 class FHIR_Evidence(models.Model):
     url = FHIR_primitive_URIField(null=True, blank=True, )
     version = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = models.OneToOneField("FHIR_GP_Coding", related_name='Evidence_versionAlgorithm', null=True, blank=True, on_delete=models.SET_NULL)
+    versionAlgorithm_string = FHIR_primitive_StringField(null=True, blank=True, )
+    versionAlgorithm_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='Evidence_versionAlgorithm_Coding', null=True, blank=True, on_delete=models.SET_NULL)
     name = FHIR_primitive_StringField(null=True, blank=True, )
     title = FHIR_primitive_StringField(null=True, blank=True, )
     citeAs = FHIR_primitive_MarkdownField(null=True, blank=True, )
@@ -33,10 +33,10 @@ class FHIR_Evidence_relatesTo(models.Model):
     Evidence = models.ForeignKey(FHIR_Evidence, related_name='Evidence_relatesTo', null=False, on_delete=models.CASCADE)
     class TypeChoices(models.TextChoices): DOCUMENTATION = 'documentation', 'Documentation'; JUSTIFICATION = 'justification', 'Justification'; PREDECESSOR = 'predecessor', 'Predecessor'; SUCCESSOR = 'successor', 'Successor'; DERIVED_FROM = 'derived-from', 'Derived-from'; DEPENDS_ON = 'depends-on', 'Depends-on'; COMPOSED_OF = 'composed-of', 'Composed-of'; PART_OF = 'part-of', 'Part-of'; AMENDS = 'amends', 'Amends'; AMENDED_WITH = 'amended-with', 'Amended-with'; APPENDS = 'appends', 'Appends'; APPENDED_WITH = 'appended-with', 'Appended-with'; CITES = 'cites', 'Cites'; CITED_BY = 'cited-by', 'Cited-by'; COMMENTS_ON = 'comments-on', 'Comments-on'; COMMENT_IN = 'comment-in', 'Comment-in'; CONTAINS = 'contains', 'Contains'; CONTAINED_IN = 'contained-in', 'Contained-in'; CORRECTS = 'corrects', 'Corrects'; CORRECTION_IN = 'correction-in', 'Correction-in'; REPLACES = 'replaces', 'Replaces'; REPLACED_WITH = 'replaced-with', 'Replaced-with'; RETRACTS = 'retracts', 'Retracts'; RETRACTED_BY = 'retracted-by', 'Retracted-by'; SIGNS = 'signs', 'Signs'; SIMILAR_TO = 'similar-to', 'Similar-to'; SUPPORTS = 'supports', 'Supports'; SUPPORTED_WITH = 'supported-with', 'Supported-with'; TRANSFORMS = 'transforms', 'Transforms'; TRANSFORMED_INTO = 'transformed-into', 'Transformed-into'; TRANSFORMED_WITH = 'transformed-with', 'Transformed-with'; SPECIFICATION_OF = 'specification-of', 'Specification-of'; CREATED_WITH = 'created-with', 'Created-with'; CITE_AS = 'cite-as', 'Cite-as'; SUMMARIZES = 'summarizes', 'Summarizes'; 
     type = FHIR_primitive_CodeField(choices=TypeChoices.choices, null=True, blank=True, )
-    target = FHIR_primitive_URIField(null=True, blank=True, )
-    target = models.OneToOneField("FHIR_GP_Attachment", related_name='Evidence_relatesTo_target', null=True, blank=True, on_delete=models.SET_NULL)
-    target = FHIR_primitive_CanonicalField(null=True, blank=True, )
-    target = FHIR_primitive_MarkdownField(null=True, blank=True, )
+    target_uri = FHIR_primitive_URIField(null=True, blank=True, )
+    target_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='Evidence_relatesTo_target_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
+    target_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
+    target_markdown = FHIR_primitive_MarkdownField(null=True, blank=True, )
 
 class FHIR_Evidence_note(FHIR_GP_Annotation):
     Evidence = models.ForeignKey(FHIR_Evidence, related_name='Evidence_note', null=False, on_delete=models.CASCADE)
@@ -46,7 +46,7 @@ class FHIR_Evidence_variableDefinition(models.Model):
     description = FHIR_primitive_MarkdownField(null=True, blank=True, )
     class VariableroleChoices(models.TextChoices): POPULATION = 'population', 'Population'; EXPOSURE = 'exposure', 'Exposure'; OUTCOME = 'outcome', 'Outcome'; COVARIATE = 'covariate', 'Covariate'; 
     variableRole = FHIR_primitive_CodeField(choices=VariableroleChoices.choices, null=True, blank=True, )
-    BINDING_roleSubtype = 'TODO'
+    BINDING_roleSubtype = "TODO"
     roleSubtype_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_roleSubtype}, related_name='Evidence_variableDefinition_roleSubtype', blank=True)
     roleSubtype_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     comparatorCategory = FHIR_primitive_StringField(null=True, blank=True, )
@@ -54,7 +54,7 @@ class FHIR_Evidence_variableDefinition(models.Model):
     observed_EvidenceVariable = models.ForeignKey("FHIR_EvidenceVariable", related_name="Evidence_variableDefinition_observed", null=True, blank=True, on_delete=models.SET_NULL)
     intended_Group = models.ForeignKey("FHIR_Group", related_name="Evidence_variableDefinition_intended", null=True, blank=True, on_delete=models.SET_NULL)
     intended_EvidenceVariable = models.ForeignKey("FHIR_EvidenceVariable", related_name="Evidence_variableDefinition_intended", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_directnessMatch = 'TODO'
+    BINDING_directnessMatch = "TODO"
     directnessMatch_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_directnessMatch}, related_name='Evidence_variableDefinition_directnessMatch', blank=True)
     directnessMatch_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
@@ -63,23 +63,23 @@ class FHIR_Evidence_variableDefinition_note(FHIR_GP_Annotation):
 
 class FHIR_Evidence_synthesisType(models.Model):
     Evidence = models.ForeignKey(FHIR_Evidence, related_name='Evidence_synthesisType', null=False, on_delete=models.CASCADE)
-    BINDING_synthesisType = 'TODO'
+    BINDING_synthesisType = "TODO"
     synthesisType_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_synthesisType}, related_name='Evidence_synthesisType', blank=True)
     synthesisType_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_Evidence_studyDesign(models.Model):
     Evidence = models.ForeignKey(FHIR_Evidence, related_name='Evidence_studyDesign', null=False, on_delete=models.CASCADE)
-    BINDING_studyDesign = 'TODO'
+    BINDING_studyDesign = "TODO"
     studyDesign_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_studyDesign}, related_name='Evidence_studyDesign', blank=True)
     studyDesign_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_Evidence_statistic(models.Model):
     Evidence = models.ForeignKey(FHIR_Evidence, related_name='Evidence_statistic', null=False, on_delete=models.CASCADE)
     description = FHIR_primitive_MarkdownField(null=True, blank=True, )
-    BINDING_statisticType = 'TODO'
+    BINDING_statisticType = "TODO"
     statisticType_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_statisticType}, related_name='Evidence_statistic_statisticType', blank=True)
     statisticType_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_category = 'TODO'
+    BINDING_category = "TODO"
     category_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_category}, related_name='Evidence_statistic_category', blank=True)
     category_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Evidence_statistic_quantity', null=True, blank=True, on_delete=models.SET_NULL)
@@ -102,7 +102,7 @@ class FHIR_Evidence_statistic_sampleSize_note(FHIR_GP_Annotation):
 class FHIR_Evidence_statistic_attributeEstimate(models.Model):
     Evidence_statistic = models.ForeignKey(FHIR_Evidence_statistic, related_name='Evidence_statistic_attributeEstimate', null=False, on_delete=models.CASCADE)
     description = FHIR_primitive_MarkdownField(null=True, blank=True, )
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='Evidence_statistic_attributeEstimate_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Evidence_statistic_attributeEstimate_quantity', null=True, blank=True, on_delete=models.SET_NULL)
@@ -114,14 +114,14 @@ class FHIR_Evidence_statistic_attributeEstimate_note(FHIR_GP_Annotation):
 
 class FHIR_Evidence_statistic_modelCharacteristic(models.Model):
     Evidence_statistic = models.ForeignKey(FHIR_Evidence_statistic, related_name='Evidence_statistic_modelCharacteristic', null=False, on_delete=models.CASCADE)
-    BINDING_code = 'TODO'
+    BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='Evidence_statistic_modelCharacteristic_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='Evidence_statistic_modelCharacteristic_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Range", related_name='Evidence_statistic_modelCharacteristic_value', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_value = 'TODO'
-    value_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value}, related_name='Evidence_statistic_modelCharacteristic_value', blank=True)
-    value_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Evidence_statistic_modelCharacteristic_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Range = models.OneToOneField("FHIR_GP_Range", related_name='Evidence_statistic_modelCharacteristic_value_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_value_CodeableConcept = "TODO"
+    value_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value_CodeableConcept}, related_name='Evidence_statistic_modelCharacteristic_value_CodeableConcept', blank=True)
+    value_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     intended = FHIR_primitive_BooleanField(null=True, blank=True, )
     applied = FHIR_primitive_BooleanField(null=True, blank=True, )
 
@@ -134,7 +134,7 @@ class FHIR_Evidence_statistic_modelCharacteristic_variable(models.Model):
 
 class FHIR_Evidence_statistic_modelCharacteristic_variable_valueCategory(models.Model):
     Evidence_statistic_modelCharacteristic_variable = models.ForeignKey(FHIR_Evidence_statistic_modelCharacteristic_variable, related_name='Evidence_statistic_modelCharacteristic_variable_valueCategory', null=False, on_delete=models.CASCADE)
-    BINDING_valueCategory = 'TODO'
+    BINDING_valueCategory = "TODO"
     valueCategory_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_valueCategory}, related_name='Evidence_statistic_modelCharacteristic_variable_valueCategory', blank=True)
     valueCategory_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -147,10 +147,10 @@ class FHIR_Evidence_statistic_modelCharacteristic_variable_valueRange(FHIR_GP_Ra
 class FHIR_Evidence_certainty(models.Model):
     Evidence = models.ForeignKey(FHIR_Evidence, related_name='Evidence_certainty', null=False, on_delete=models.CASCADE)
     description = FHIR_primitive_MarkdownField(null=True, blank=True, )
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='Evidence_certainty_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_rating = 'TODO'
+    BINDING_rating = "TODO"
     rating_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_rating}, related_name='Evidence_certainty_rating', blank=True)
     rating_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 

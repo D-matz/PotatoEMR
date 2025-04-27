@@ -37,9 +37,9 @@ class AllergyIntolerance_Combined_Form(forms.Form):
         widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control form-control-sm'})
     )
 
-    severity = forms.ModelChoiceField(
+    severity = forms.ChoiceField(
         required=False,
-        queryset=FHIR_GP_Coding.objects.filter(codings__binding_rule="TODO"),
+        choices=FHIR_AllergyIntolerance_reaction.SeverityChoices.choices,
         widget=forms.Select(attrs={'class': 'form-select form-select-sm'})
     )
 

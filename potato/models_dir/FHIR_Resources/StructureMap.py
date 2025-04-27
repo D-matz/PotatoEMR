@@ -8,8 +8,8 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 class FHIR_StructureMap(models.Model):
     url = FHIR_primitive_URIField(null=True, blank=True, )
     version = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = models.OneToOneField("FHIR_GP_Coding", related_name='StructureMap_versionAlgorithm', null=True, blank=True, on_delete=models.SET_NULL)
+    versionAlgorithm_string = FHIR_primitive_StringField(null=True, blank=True, )
+    versionAlgorithm_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='StructureMap_versionAlgorithm_Coding', null=True, blank=True, on_delete=models.SET_NULL)
     name = FHIR_primitive_StringField(null=True, blank=True, )
     title = FHIR_primitive_StringField(null=True, blank=True, )
     class StatusChoices(models.TextChoices): DRAFT = 'draft', 'Draft'; ACTIVE = 'active', 'Active'; RETIRED = 'retired', 'Retired'; UNKNOWN = 'unknown', 'Unknown'; 
@@ -27,7 +27,7 @@ class FHIR_StructureMap_identifier(FHIR_GP_Identifier):
 
 class FHIR_StructureMap_jurisdiction(models.Model):
     StructureMap = models.ForeignKey(FHIR_StructureMap, related_name='StructureMap_jurisdiction', null=False, on_delete=models.CASCADE)
-    BINDING_jurisdiction = 'TODO'
+    BINDING_jurisdiction = "TODO"
     jurisdiction_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_jurisdiction}, related_name='StructureMap_jurisdiction', blank=True)
     jurisdiction_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -102,13 +102,13 @@ class FHIR_StructureMap_group_rule_target_listMode(models.Model):
     
 class FHIR_StructureMap_group_rule_target_parameter(models.Model):
     StructureMap_group_rule_target = models.ForeignKey(FHIR_StructureMap_group_rule_target, related_name='StructureMap_group_rule_target_parameter', null=False, on_delete=models.CASCADE)
-    value = FHIR_primitive_IdField(null=True, blank=True, )
-    value = FHIR_primitive_StringField(null=True, blank=True, )
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
-    value = FHIR_primitive_DecimalField(null=True, blank=True, )
-    value = FHIR_primitive_DateField(null=True, blank=True, )
-    value = FHIR_primitive_TimeField(null=True, blank=True, )
-    value = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    value_id = FHIR_primitive_IdField(null=True, blank=True, )
+    value_string = FHIR_primitive_StringField(null=True, blank=True, )
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    value_decimal = FHIR_primitive_DecimalField(null=True, blank=True, )
+    value_date = FHIR_primitive_DateField(null=True, blank=True, )
+    value_time = FHIR_primitive_TimeField(null=True, blank=True, )
+    value_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
 
 class FHIR_StructureMap_group_rule_dependent(models.Model):
     StructureMap_group_rule = models.ForeignKey(FHIR_StructureMap_group_rule, related_name='StructureMap_group_rule_dependent', null=False, on_delete=models.CASCADE)

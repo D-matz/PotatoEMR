@@ -69,12 +69,20 @@ FHIR_to_Model_generalpurpose = {
 lower_FHIR_to_Model_primitive = {k.lower(): v for k, v in FHIR_to_Model_primitive.items()}
 lower_FHIR_to_Model_generalpurpose = {k.lower(): v for k, v in FHIR_to_Model_generalpurpose.items()}
 
-#codegen in PotatoEMR/potato/management/commands/codegen_models.py
-#run with: python manage.py codegen_models
+default_bindings = {
+    "AllergyIntolerance": {
+        "BINDING_clinicalStatus": 'https://www.hl7.org/fhir/valueset-allergyintolerance-clinical.html',
+        "BINDING_verificationStatus": 'https://www.hl7.org/fhir/valueset-allergyintolerance-verification.html',
+        "BINDING_type": 'https://www.hl7.org/fhir/valueset-allergy-intolerance-type.html',
+        "BINDING_code": 'https://www.hl7.org/fhir/valueset-allergyintolerance-code.html',
+        "BINDING_substance": 'https://www.hl7.org/fhir/valueset-substance-code.html',
+        "BINDING_exposureRoute": 'https://www.hl7.org/fhir/valueset-route-codes.html',
+        "BINDING_manifestation": 'https://www.hl7.org/fhir/valueset-clinical-findings.html',
+    }
+}
 
 
-
-def elementArray_to_ModelString(element_array):
+def elementArray_to_ModelString(element_array, FHIR_Resource_name):
     #print("call with num elements", len(element_array))
     this_model_lines = ""
     related_model_lines = ""
@@ -94,14 +102,16 @@ def elementArray_to_ModelString(element_array):
             use_max = field['max']
         if 'type' in field:
             field_type = field['type']
-            
+
             #in cases like allowed[x] one field can have multiple types
             #split these into multiple fields
             if len(field_type) > 1:
                 new_fields = []
-                for a_type in field_type:
+                for possible_type in field_type:
                     new_field = field.copy()
-                    new_field['type'] = [a_type]
+                    new_field['type'] = [possible_type]
+                    new_field['id'] = new_field['id'][:-3] + "_" + possible_type['code']
+                    #onset[x] to onset_dateTime, onset_Age, etc
                     new_fields.append(new_field)
                 element_array[i+1:i+1] = new_fields
                 i = i + 1
@@ -134,6 +144,7 @@ def elementArray_to_ModelString(element_array):
             field_name = id_split[-1]
             if field_name.endswith('[x]'):
                 field_name = field_name[:-3]
+                #TODO maybe dont need this
                 #we already split cases like allowed[x] into multiple fields
             related_name = use_id.replace('.', '_')
             if related_name.endswith('[x]'):
@@ -149,11 +160,11 @@ class FHIR_{"_".join(id_split)}(models.Model):
                     backbone_array.append(element_array[i])
                     i = i + 1
                 #recurse for all elements in backbone
-                all_model_lines_in_backbone = elementArray_to_ModelString(backbone_array)
+                all_model_lines_in_backbone = elementArray_to_ModelString(backbone_array, FHIR_Resource_name)
                 #print("backbone", all_model_lines_in_backbone)
                 related_model_lines += all_model_lines_in_backbone
                 continue
-                
+
             #primitive types implemented as a single field
             elif use_type in lower_FHIR_to_Model_primitive:
                 code_choices = ""
@@ -181,7 +192,7 @@ class FHIR_{"_".join(id_split)}(models.Model):
                 else:
                     this_model_lines += f'''{code_choices}
     {field_name} = {lower_FHIR_to_Model_primitive[use_type]}({field_options}{field_null})'''
-    
+
             #general purpose types implemented as a model
             elif use_type in lower_FHIR_to_Model_generalpurpose:
                 use_type_model = lower_FHIR_to_Model_generalpurpose[use_type]
@@ -196,7 +207,7 @@ class FHIR_{"_".join(id_split)}({use_type_model}):
                 else:
                     this_model_lines += f'''
     {field_name} = models.OneToOneField("{use_type_model}", related_name='{related_name}', {oneToOne_null})'''
-                    
+
             #reference to another model representing a FHIR resource
             elif use_type == "reference":
                 #not going to do anything with Reference(<no target resource here)
@@ -214,12 +225,16 @@ class FHIR_{"_".join(id_split)}({use_type_model}):
                         else:
                             this_model_lines += f'''
     {ref_field_name} = models.ForeignKey("FHIR_{model_target}", related_name="{related_name}", null=True, blank=True, on_delete=models.SET_NULL)'''
-    
+
             #codeableconcept has set of codings from its binding set, and a text field
             #codeablereference has that plus reference(s) to another model representing a FHIR resource
-            elif use_type == "codeableconcept" or use_type == "codeablereference":                
+            elif use_type == "codeableconcept" or use_type == "codeablereference":
+                binding_str = "BINDING_" + field_name
+                binding_chosen = "TODO"
+                if FHIR_Resource_name in default_bindings and binding_str in default_bindings[FHIR_Resource_name]:
+                    binding_chosen = default_bindings[FHIR_Resource_name][binding_str]
                 cc = f'''
-    BINDING_{field_name} = 'TODO'
+    {binding_str} = "{binding_chosen}"
     {field_name}_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={{"codings__binding_rule": BINDING_{field_name}}}, related_name='{related_name}', blank=True)
     {field_name}_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)'''
                 if use_type == 'codeableconcept':
@@ -240,7 +255,7 @@ class FHIR_{"_".join(id_split)}(models.Model):
                             if model_target == "Resource": continue #skip "Any" fields that can be any fhir resource
                             reference_list += f'''
     {field_name}_{model_target}_ref = models.ForeignKey("FHIR_{model_target}", related_name="{related_name}_{model_target}", null=True, blank=True, on_delete=models.SET_NULL)'''
-                        
+
                         if use_max == '*':
                             related_model_lines += f'''
 class FHIR_{"_".join(id_split)}(models.Model):
@@ -250,7 +265,7 @@ class FHIR_{"_".join(id_split)}(models.Model):
 
             else:
                 print("unknown type", use_type, field_name)
-            
+
         i = i + 1
 
     return this_model_lines + "\n" + related_model_lines
@@ -276,14 +291,14 @@ for FHIR_Resource_name in FHIR_resource_list:
     #need to put 0..* elements at end, in own model with foreign key to this model
     #but if backboneElement is 0..*, need to recurse for all elements in it
 
-    all_model_lines = elementArray_to_ModelString(FHIR_Resource)
-    
+    all_model_lines = elementArray_to_ModelString(FHIR_Resource, FHIR_Resource_name)
+
     if FHIR_Resource_name in ["OperationOutcome", "Parameters"]:
         all_model_lines = "pass" + all_model_lines
     #These are empty on top level
     #can't make all empty classes pass because empty backbone elements have foreign key in them
     all_model_lines = all_model_lines.replace("import = ", "import_field = ").replace("check = ", "check_field = ")
-    
+
     all_model_lines = all_model_lines.replace(f'''    observation = models.ForeignKey("FHIR_Observation", related_name="Observation_triggeredBy_observation", null=True, blank=True, on_delete=models.SET_NULL)''',
                                               f'''    triggeredBy_observation = models.ForeignKey("FHIR_Observation", related_name="Observation_triggeredBy_observation", null=True, blank=True, on_delete=models.SET_NULL)''')
     #case where backbone element has foreign key to resource type

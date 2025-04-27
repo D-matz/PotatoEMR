@@ -8,8 +8,8 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 class FHIR_ConceptMap(models.Model):
     url = FHIR_primitive_URIField(null=True, blank=True, )
     version = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = models.OneToOneField("FHIR_GP_Coding", related_name='ConceptMap_versionAlgorithm', null=True, blank=True, on_delete=models.SET_NULL)
+    versionAlgorithm_string = FHIR_primitive_StringField(null=True, blank=True, )
+    versionAlgorithm_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='ConceptMap_versionAlgorithm_Coding', null=True, blank=True, on_delete=models.SET_NULL)
     name = FHIR_primitive_StringField(null=True, blank=True, )
     title = FHIR_primitive_StringField(null=True, blank=True, )
     class StatusChoices(models.TextChoices): DRAFT = 'draft', 'Draft'; ACTIVE = 'active', 'Active'; RETIRED = 'retired', 'Retired'; UNKNOWN = 'unknown', 'Unknown'; 
@@ -24,23 +24,23 @@ class FHIR_ConceptMap(models.Model):
     approvalDate = FHIR_primitive_DateField(null=True, blank=True, )
     lastReviewDate = FHIR_primitive_DateField(null=True, blank=True, )
     effectivePeriod = models.OneToOneField("FHIR_GP_Period", related_name='ConceptMap_effectivePeriod', null=True, blank=True, on_delete=models.SET_NULL)
-    sourceScope = FHIR_primitive_URIField(null=True, blank=True, )
-    sourceScope = FHIR_primitive_CanonicalField(null=True, blank=True, )
-    targetScope = FHIR_primitive_URIField(null=True, blank=True, )
-    targetScope = FHIR_primitive_CanonicalField(null=True, blank=True, )
+    sourceScope_uri = FHIR_primitive_URIField(null=True, blank=True, )
+    sourceScope_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
+    targetScope_uri = FHIR_primitive_URIField(null=True, blank=True, )
+    targetScope_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
 
 class FHIR_ConceptMap_identifier(FHIR_GP_Identifier):
     ConceptMap = models.ForeignKey(FHIR_ConceptMap, related_name='ConceptMap_identifier', null=False, on_delete=models.CASCADE)
 
 class FHIR_ConceptMap_jurisdiction(models.Model):
     ConceptMap = models.ForeignKey(FHIR_ConceptMap, related_name='ConceptMap_jurisdiction', null=False, on_delete=models.CASCADE)
-    BINDING_jurisdiction = 'TODO'
+    BINDING_jurisdiction = "TODO"
     jurisdiction_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_jurisdiction}, related_name='ConceptMap_jurisdiction', blank=True)
     jurisdiction_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_ConceptMap_topic(models.Model):
     ConceptMap = models.ForeignKey(FHIR_ConceptMap, related_name='ConceptMap_topic', null=False, on_delete=models.CASCADE)
-    BINDING_topic = 'TODO'
+    BINDING_topic = "TODO"
     topic_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_topic}, related_name='ConceptMap_topic', blank=True)
     topic_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -90,24 +90,24 @@ class FHIR_ConceptMap_group_element_target_property(models.Model):
     ConceptMap_group_element_target = models.ForeignKey(FHIR_ConceptMap_group_element_target, related_name='ConceptMap_group_element_target_property', null=False, on_delete=models.CASCADE)
     class CodeChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
     code = FHIR_primitive_CodeField(choices=CodeChoices.choices, null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Coding", related_name='ConceptMap_group_element_target_property_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = FHIR_primitive_StringField(null=True, blank=True, )
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
-    value = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    value = FHIR_primitive_DecimalField(null=True, blank=True, )
-    class ValueChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
-    value = FHIR_primitive_CodeField(choices=ValueChoices.choices, null=True, blank=True, )
+    value_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='ConceptMap_group_element_target_property_value_Coding', null=True, blank=True, on_delete=models.SET_NULL)
+    value_string = FHIR_primitive_StringField(null=True, blank=True, )
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    value_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    value_decimal = FHIR_primitive_DecimalField(null=True, blank=True, )
+    class Value_codeChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
+    value_code = FHIR_primitive_CodeField(choices=Value_codeChoices.choices, null=True, blank=True, )
 
 class FHIR_ConceptMap_group_element_target_dependsOn(models.Model):
     ConceptMap_group_element_target = models.ForeignKey(FHIR_ConceptMap_group_element_target, related_name='ConceptMap_group_element_target_dependsOn', null=False, on_delete=models.CASCADE)
     class AttributeChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
     attribute = FHIR_primitive_CodeField(choices=AttributeChoices.choices, null=True, blank=True, )
-    class ValueChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
-    value = FHIR_primitive_CodeField(choices=ValueChoices.choices, null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Coding", related_name='ConceptMap_group_element_target_dependsOn_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = FHIR_primitive_StringField(null=True, blank=True, )
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='ConceptMap_group_element_target_dependsOn_value', null=True, blank=True, on_delete=models.SET_NULL)
+    class Value_codeChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
+    value_code = FHIR_primitive_CodeField(choices=Value_codeChoices.choices, null=True, blank=True, )
+    value_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='ConceptMap_group_element_target_dependsOn_value_Coding', null=True, blank=True, on_delete=models.SET_NULL)
+    value_string = FHIR_primitive_StringField(null=True, blank=True, )
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='ConceptMap_group_element_target_dependsOn_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
     valueSet = FHIR_primitive_CanonicalField(null=True, blank=True, )
 
 class FHIR_ConceptMap_group_unmapped(models.Model):

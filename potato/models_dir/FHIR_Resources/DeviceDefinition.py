@@ -8,8 +8,8 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 class FHIR_DeviceDefinition(models.Model):
     url = FHIR_primitive_URIField(null=True, blank=True, )
     version = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = models.OneToOneField("FHIR_GP_Coding", related_name='DeviceDefinition_versionAlgorithm', null=True, blank=True, on_delete=models.SET_NULL)
+    versionAlgorithm_string = FHIR_primitive_StringField(null=True, blank=True, )
+    versionAlgorithm_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='DeviceDefinition_versionAlgorithm_Coding', null=True, blank=True, on_delete=models.SET_NULL)
     name = FHIR_primitive_StringField(null=True, blank=True, )
     title = FHIR_primitive_StringField(null=True, blank=True, )
     class StatusChoices(models.TextChoices): DRAFT = 'draft', 'Draft'; ACTIVE = 'active', 'Active'; RETIRED = 'retired', 'Retired'; UNKNOWN_ = 'unknown ', 'Unknown '; 
@@ -29,7 +29,7 @@ class FHIR_DeviceDefinition_identifier(FHIR_GP_Identifier):
 
 class FHIR_DeviceDefinition_jurisdiction(models.Model):
     DeviceDefinition = models.ForeignKey(FHIR_DeviceDefinition, related_name='DeviceDefinition_jurisdiction', null=False, on_delete=models.CASCADE)
-    BINDING_jurisdiction = 'TODO'
+    BINDING_jurisdiction = "TODO"
     jurisdiction_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_jurisdiction}, related_name='DeviceDefinition_jurisdiction', blank=True)
     jurisdiction_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -55,22 +55,22 @@ class FHIR_DeviceDefinition_regulatoryIdentifier(models.Model):
 class FHIR_DeviceDefinition_deviceName(models.Model):
     DeviceDefinition = models.ForeignKey(FHIR_DeviceDefinition, related_name='DeviceDefinition_deviceName', null=False, on_delete=models.CASCADE)
     name = FHIR_primitive_StringField(null=True, blank=True, )
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='DeviceDefinition_deviceName_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
 class FHIR_DeviceDefinition_classification(models.Model):
     DeviceDefinition = models.ForeignKey(FHIR_DeviceDefinition, related_name='DeviceDefinition_classification', null=False, on_delete=models.CASCADE)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='DeviceDefinition_classification_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
 class FHIR_DeviceDefinition_conformsTo(models.Model):
     DeviceDefinition = models.ForeignKey(FHIR_DeviceDefinition, related_name='DeviceDefinition_conformsTo', null=False, on_delete=models.CASCADE)
-    BINDING_category = 'TODO'
+    BINDING_category = "TODO"
     category_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_category}, related_name='DeviceDefinition_conformsTo_category', blank=True)
     category_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_specification = 'TODO'
+    BINDING_specification = "TODO"
     specification_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_specification}, related_name='DeviceDefinition_conformsTo_specification', blank=True)
     specification_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
@@ -86,7 +86,7 @@ class FHIR_DeviceDefinition_hasPart(models.Model):
 class FHIR_DeviceDefinition_packaging(models.Model):
     DeviceDefinition = models.ForeignKey(FHIR_DeviceDefinition, related_name='DeviceDefinition_packaging', null=False, on_delete=models.CASCADE)
     identifier = models.OneToOneField("FHIR_GP_Identifier", related_name='DeviceDefinition_packaging_identifier', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='DeviceDefinition_packaging_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
@@ -97,7 +97,7 @@ class FHIR_DeviceDefinition_packaging_distributor(models.Model):
 
 class FHIR_DeviceDefinition_deviceVersion(models.Model):
     DeviceDefinition = models.ForeignKey(FHIR_DeviceDefinition, related_name='DeviceDefinition_deviceVersion', null=False, on_delete=models.CASCADE)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='DeviceDefinition_deviceVersion_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     component = models.OneToOneField("FHIR_GP_Identifier", related_name='DeviceDefinition_deviceVersion_component', null=True, blank=True, on_delete=models.SET_NULL)
@@ -105,7 +105,7 @@ class FHIR_DeviceDefinition_deviceVersion(models.Model):
 
 class FHIR_DeviceDefinition_safety(models.Model):
     DeviceDefinition = models.ForeignKey(FHIR_DeviceDefinition, related_name='DeviceDefinition_safety', null=False, on_delete=models.CASCADE)
-    BINDING_safety = 'TODO'
+    BINDING_safety = "TODO"
     safety_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_safety}, related_name='DeviceDefinition_safety', blank=True)
     safety_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -117,22 +117,22 @@ class FHIR_DeviceDefinition_outputLanguage(models.Model):
     
 class FHIR_DeviceDefinition_property(models.Model):
     DeviceDefinition = models.ForeignKey(FHIR_DeviceDefinition, related_name='DeviceDefinition_property', null=False, on_delete=models.CASCADE)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='DeviceDefinition_property_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='DeviceDefinition_property_value', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_value = 'TODO'
-    value_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value}, related_name='DeviceDefinition_property_value', blank=True)
-    value_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = FHIR_primitive_StringField(null=True, blank=True, )
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Range", related_name='DeviceDefinition_property_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Attachment", related_name='DeviceDefinition_property_value', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='DeviceDefinition_property_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_value_CodeableConcept = "TODO"
+    value_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value_CodeableConcept}, related_name='DeviceDefinition_property_value_CodeableConcept', blank=True)
+    value_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    value_string = FHIR_primitive_StringField(null=True, blank=True, )
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    value_Range = models.OneToOneField("FHIR_GP_Range", related_name='DeviceDefinition_property_value_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='DeviceDefinition_property_value_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_DeviceDefinition_link(models.Model):
     DeviceDefinition = models.ForeignKey(FHIR_DeviceDefinition, related_name='DeviceDefinition_link', null=False, on_delete=models.CASCADE)
     relation = models.OneToOneField("FHIR_GP_Coding", related_name='DeviceDefinition_link_relation', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_relatedDevice = 'TODO'
+    BINDING_relatedDevice = "TODO"
     relatedDevice_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_relatedDevice}, related_name='DeviceDefinition_link_relatedDevice', blank=True)
     relatedDevice_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     relatedDevice_DeviceDefinition_ref = models.ForeignKey("FHIR_DeviceDefinition", related_name="DeviceDefinition_link_relatedDevice_DeviceDefinition", null=True, blank=True, on_delete=models.SET_NULL)
@@ -142,7 +142,7 @@ class FHIR_DeviceDefinition_note(FHIR_GP_Annotation):
 
 class FHIR_DeviceDefinition_material(models.Model):
     DeviceDefinition = models.ForeignKey(FHIR_DeviceDefinition, related_name='DeviceDefinition_material', null=False, on_delete=models.CASCADE)
-    BINDING_substance = 'TODO'
+    BINDING_substance = "TODO"
     substance_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_substance}, related_name='DeviceDefinition_material_substance', blank=True)
     substance_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     alternate = FHIR_primitive_BooleanField(null=True, blank=True, )
@@ -150,7 +150,7 @@ class FHIR_DeviceDefinition_material(models.Model):
 
 class FHIR_DeviceDefinition_productionIdentifierInUDI(models.Model):
     DeviceDefinition = models.ForeignKey(FHIR_DeviceDefinition, related_name='DeviceDefinition_productionIdentifierInUDI', null=False, on_delete=models.CASCADE)
-    BINDING_productionIdentifierInUDI = 'TODO'
+    BINDING_productionIdentifierInUDI = "TODO"
     productionIdentifierInUDI_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_productionIdentifierInUDI}, related_name='DeviceDefinition_productionIdentifierInUDI', blank=True)
     productionIdentifierInUDI_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -161,19 +161,19 @@ class FHIR_DeviceDefinition_guideline(models.Model):
 
 class FHIR_DeviceDefinition_guideline_indication(models.Model):
     DeviceDefinition_guideline = models.ForeignKey(FHIR_DeviceDefinition_guideline, related_name='DeviceDefinition_guideline_indication', null=False, on_delete=models.CASCADE)
-    BINDING_indication = 'TODO'
+    BINDING_indication = "TODO"
     indication_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_indication}, related_name='DeviceDefinition_guideline_indication', blank=True)
     indication_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_DeviceDefinition_guideline_contraindication(models.Model):
     DeviceDefinition_guideline = models.ForeignKey(FHIR_DeviceDefinition_guideline, related_name='DeviceDefinition_guideline_contraindication', null=False, on_delete=models.CASCADE)
-    BINDING_contraindication = 'TODO'
+    BINDING_contraindication = "TODO"
     contraindication_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_contraindication}, related_name='DeviceDefinition_guideline_contraindication', blank=True)
     contraindication_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_DeviceDefinition_guideline_warning(models.Model):
     DeviceDefinition_guideline = models.ForeignKey(FHIR_DeviceDefinition_guideline, related_name='DeviceDefinition_guideline_warning', null=False, on_delete=models.CASCADE)
-    BINDING_warning = 'TODO'
+    BINDING_warning = "TODO"
     warning_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_warning}, related_name='DeviceDefinition_guideline_warning', blank=True)
     warning_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -186,7 +186,7 @@ class FHIR_DeviceDefinition_correctiveAction(models.Model):
 
 class FHIR_DeviceDefinition_chargeItem(models.Model):
     DeviceDefinition = models.ForeignKey(FHIR_DeviceDefinition, related_name='DeviceDefinition_chargeItem', null=False, on_delete=models.CASCADE)
-    BINDING_chargeItemCode = 'TODO'
+    BINDING_chargeItemCode = "TODO"
     chargeItemCode_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_chargeItemCode}, related_name='DeviceDefinition_chargeItem_chargeItemCode', blank=True)
     chargeItemCode_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     chargeItemCode_ChargeItemDefinition_ref = models.ForeignKey("FHIR_ChargeItemDefinition", related_name="DeviceDefinition_chargeItem_chargeItemCode_ChargeItemDefinition", null=True, blank=True, on_delete=models.SET_NULL)

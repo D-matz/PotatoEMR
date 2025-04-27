@@ -15,7 +15,7 @@ class FHIR_DeviceRequest(models.Model):
     class PriorityChoices(models.TextChoices): ROUTINE = 'routine', 'Routine'; URGENT = 'urgent', 'Urgent'; ASAP = 'asap', 'Asap'; STAT = 'stat', 'Stat'; 
     priority = FHIR_primitive_CodeField(choices=PriorityChoices.choices, null=True, blank=True, )
     doNotPerform = FHIR_primitive_BooleanField(null=True, blank=True, )
-    BINDING_code = 'TODO'
+    BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='DeviceRequest_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     code_Device_ref = models.ForeignKey("FHIR_Device", related_name="DeviceRequest_code_Device", null=True, blank=True, on_delete=models.SET_NULL)
@@ -25,15 +25,15 @@ class FHIR_DeviceRequest(models.Model):
     subject_Location = models.ForeignKey("FHIR_Location", related_name="DeviceRequest_subject", null=True, blank=True, on_delete=models.SET_NULL)
     subject_Device = models.ForeignKey("FHIR_Device", related_name="DeviceRequest_subject", null=True, blank=True, on_delete=models.SET_NULL)
     encounter = models.ForeignKey("FHIR_Encounter", related_name="DeviceRequest_encounter", null=True, blank=True, on_delete=models.SET_NULL)
-    occurrence = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    occurrence = models.OneToOneField("FHIR_GP_Period", related_name='DeviceRequest_occurrence', null=True, blank=True, on_delete=models.SET_NULL)
-    occurrence = models.OneToOneField("FHIR_GP_Timing", related_name='DeviceRequest_occurrence', null=True, blank=True, on_delete=models.SET_NULL)
+    occurrence_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    occurrence_Period = models.OneToOneField("FHIR_GP_Period", related_name='DeviceRequest_occurrence_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    occurrence_Timing = models.OneToOneField("FHIR_GP_Timing", related_name='DeviceRequest_occurrence_Timing', null=True, blank=True, on_delete=models.SET_NULL)
     authoredOn = FHIR_primitive_DateTimeField(null=True, blank=True, )
     requester_Device = models.ForeignKey("FHIR_Device", related_name="DeviceRequest_requester", null=True, blank=True, on_delete=models.SET_NULL)
     requester_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="DeviceRequest_requester", null=True, blank=True, on_delete=models.SET_NULL)
     requester_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="DeviceRequest_requester", null=True, blank=True, on_delete=models.SET_NULL)
     requester_Organization = models.ForeignKey("FHIR_Organization", related_name="DeviceRequest_requester", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_performer = 'TODO'
+    BINDING_performer = "TODO"
     performer_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_performer}, related_name='DeviceRequest_performer', blank=True)
     performer_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     performer_Practitioner_ref = models.ForeignKey("FHIR_Practitioner", related_name="DeviceRequest_performer_Practitioner", null=True, blank=True, on_delete=models.SET_NULL)
@@ -45,7 +45,7 @@ class FHIR_DeviceRequest(models.Model):
     performer_Device_ref = models.ForeignKey("FHIR_Device", related_name="DeviceRequest_performer_Device", null=True, blank=True, on_delete=models.SET_NULL)
     performer_RelatedPerson_ref = models.ForeignKey("FHIR_RelatedPerson", related_name="DeviceRequest_performer_RelatedPerson", null=True, blank=True, on_delete=models.SET_NULL)
     asNeeded = FHIR_primitive_BooleanField(null=True, blank=True, )
-    BINDING_asNeededFor = 'TODO'
+    BINDING_asNeededFor = "TODO"
     asNeededFor_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_asNeededFor}, related_name='DeviceRequest_asNeededFor', blank=True)
     asNeededFor_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     insurance_Coverage = models.ManyToManyField("FHIR_Coverage", related_name="DeviceRequest_insurance", blank=True)
@@ -67,19 +67,19 @@ class FHIR_DeviceRequest_instantiatesUri(models.Model):
     
 class FHIR_DeviceRequest_parameter(models.Model):
     DeviceRequest = models.ForeignKey(FHIR_DeviceRequest, related_name='DeviceRequest_parameter', null=False, on_delete=models.CASCADE)
-    BINDING_code = 'TODO'
+    BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='DeviceRequest_parameter_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_value = 'TODO'
-    value_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value}, related_name='DeviceRequest_parameter_value', blank=True)
-    value_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='DeviceRequest_parameter_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Range", related_name='DeviceRequest_parameter_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
+    BINDING_value_CodeableConcept = "TODO"
+    value_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value_CodeableConcept}, related_name='DeviceRequest_parameter_value_CodeableConcept', blank=True)
+    value_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='DeviceRequest_parameter_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Range = models.OneToOneField("FHIR_GP_Range", related_name='DeviceRequest_parameter_value_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
 
 class FHIR_DeviceRequest_reason(models.Model):
     DeviceRequest = models.ForeignKey(FHIR_DeviceRequest, related_name='DeviceRequest_reason', null=False, on_delete=models.CASCADE)
-    BINDING_reason = 'TODO'
+    BINDING_reason = "TODO"
     reason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_reason}, related_name='DeviceRequest_reason', blank=True)
     reason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     reason_Condition_ref = models.ForeignKey("FHIR_Condition", related_name="DeviceRequest_reason_Condition", null=True, blank=True, on_delete=models.SET_NULL)

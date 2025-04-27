@@ -54,8 +54,8 @@ class FHIR_TestReport_setup_action_assert(models.Model):
 
 class FHIR_TestReport_setup_action_assert_requirement(models.Model):
     TestReport_setup_action_assert = models.ForeignKey(FHIR_TestReport_setup_action_assert, related_name='TestReport_setup_action_assert_requirement', null=False, on_delete=models.CASCADE)
-    link = FHIR_primitive_URIField(null=True, blank=True, )
-    link = FHIR_primitive_CanonicalField(null=True, blank=True, )
+    link_uri = FHIR_primitive_URIField(null=True, blank=True, )
+    link_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
 
 class FHIR_TestReport_test(models.Model):
     TestReport = models.ForeignKey(FHIR_TestReport, related_name='TestReport_test', null=False, on_delete=models.CASCADE)

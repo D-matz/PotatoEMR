@@ -6,12 +6,12 @@ from ..FHIR_DataTypes.FHIR_metadata import *
 from ..FHIR_DataTypes.FHIR_primitive import *
 
 class FHIR_PaymentReconciliation(models.Model):
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='PaymentReconciliation_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     class StatusChoices(models.TextChoices): ACTIVE = 'active', 'Active'; CANCELLED = 'cancelled', 'Cancelled'; DRAFT = 'draft', 'Draft'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; 
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
-    BINDING_kind = 'TODO'
+    BINDING_kind = "TODO"
     kind_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_kind}, related_name='PaymentReconciliation_kind', blank=True)
     kind_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     period = models.OneToOneField("FHIR_GP_Period", related_name='PaymentReconciliation_period', null=True, blank=True, on_delete=models.SET_NULL)
@@ -19,7 +19,7 @@ class FHIR_PaymentReconciliation(models.Model):
     enterer_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="PaymentReconciliation_enterer", null=True, blank=True, on_delete=models.SET_NULL)
     enterer_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="PaymentReconciliation_enterer", null=True, blank=True, on_delete=models.SET_NULL)
     enterer_Organization = models.ForeignKey("FHIR_Organization", related_name="PaymentReconciliation_enterer", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_issuerType = 'TODO'
+    BINDING_issuerType = "TODO"
     issuerType_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_issuerType}, related_name='PaymentReconciliation_issuerType', blank=True)
     issuerType_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     paymentIssuer_Organization = models.ForeignKey("FHIR_Organization", related_name="PaymentReconciliation_paymentIssuer", null=True, blank=True, on_delete=models.SET_NULL)
@@ -34,7 +34,7 @@ class FHIR_PaymentReconciliation(models.Model):
     disposition = FHIR_primitive_StringField(null=True, blank=True, )
     date = FHIR_primitive_DateField(null=True, blank=True, )
     location = models.ForeignKey("FHIR_Location", related_name="PaymentReconciliation_location", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_method = 'TODO'
+    BINDING_method = "TODO"
     method_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_method}, related_name='PaymentReconciliation_method', blank=True)
     method_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     cardBrand = FHIR_primitive_StringField(null=True, blank=True, )
@@ -47,7 +47,7 @@ class FHIR_PaymentReconciliation(models.Model):
     returnedAmount = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='PaymentReconciliation_returnedAmount', null=True, blank=True, on_delete=models.SET_NULL)
     amount = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='PaymentReconciliation_amount', null=True, blank=True, on_delete=models.SET_NULL)
     paymentIdentifier = models.OneToOneField("FHIR_GP_Identifier", related_name='PaymentReconciliation_paymentIdentifier', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_formCode = 'TODO'
+    BINDING_formCode = "TODO"
     formCode_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_formCode}, related_name='PaymentReconciliation_formCode', blank=True)
     formCode_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
@@ -64,12 +64,12 @@ class FHIR_PaymentReconciliation_allocation(models.Model):
     target_ChargeItem = models.ForeignKey("FHIR_ChargeItem", related_name="PaymentReconciliation_allocation_target", null=True, blank=True, on_delete=models.SET_NULL)
     target_Encounter = models.ForeignKey("FHIR_Encounter", related_name="PaymentReconciliation_allocation_target", null=True, blank=True, on_delete=models.SET_NULL)
     target_Contract = models.ForeignKey("FHIR_Contract", related_name="PaymentReconciliation_allocation_target", null=True, blank=True, on_delete=models.SET_NULL)
-    targetItem = FHIR_primitive_StringField(null=True, blank=True, )
-    targetItem = models.OneToOneField("FHIR_GP_Identifier", related_name='PaymentReconciliation_allocation_targetItem', null=True, blank=True, on_delete=models.SET_NULL)
-    targetItem = FHIR_primitive_PositiveIntField(null=True, blank=True, )
+    targetItem_string = FHIR_primitive_StringField(null=True, blank=True, )
+    targetItem_Identifier = models.OneToOneField("FHIR_GP_Identifier", related_name='PaymentReconciliation_allocation_targetItem_Identifier', null=True, blank=True, on_delete=models.SET_NULL)
+    targetItem_positiveInt = FHIR_primitive_PositiveIntField(null=True, blank=True, )
     encounter = models.ForeignKey("FHIR_Encounter", related_name="PaymentReconciliation_allocation_encounter", null=True, blank=True, on_delete=models.SET_NULL)
     account = models.ForeignKey("FHIR_Account", related_name="PaymentReconciliation_allocation_account", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_type = 'TODO'
+    BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='PaymentReconciliation_allocation_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     submitter_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="PaymentReconciliation_allocation_submitter", null=True, blank=True, on_delete=models.SET_NULL)

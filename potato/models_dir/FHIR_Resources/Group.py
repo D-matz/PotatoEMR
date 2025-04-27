@@ -8,8 +8,8 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 class FHIR_Group(models.Model):
     url = FHIR_primitive_URIField(null=True, blank=True, )
     version = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = models.OneToOneField("FHIR_GP_Coding", related_name='Group_versionAlgorithm', null=True, blank=True, on_delete=models.SET_NULL)
+    versionAlgorithm_string = FHIR_primitive_StringField(null=True, blank=True, )
+    versionAlgorithm_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='Group_versionAlgorithm_Coding', null=True, blank=True, on_delete=models.SET_NULL)
     name = FHIR_primitive_StringField(null=True, blank=True, )
     title = FHIR_primitive_StringField(null=True, blank=True, )
     class StatusChoices(models.TextChoices): DRAFT = 'draft', 'Draft'; ACTIVE = 'active', 'Active'; RETIRED = 'retired', 'Retired'; UNKNOWN = 'unknown', 'Unknown'; 
@@ -25,7 +25,7 @@ class FHIR_Group(models.Model):
     type = FHIR_primitive_CodeField(choices=TypeChoices.choices, null=True, blank=True, )
     class MembershipChoices(models.TextChoices): DEFINITIONAL = 'definitional', 'Definitional'; CONCEPTUAL = 'conceptual', 'Conceptual'; ENUMERATED = 'enumerated', 'Enumerated'; 
     membership = FHIR_primitive_CodeField(choices=MembershipChoices.choices, null=True, blank=True, )
-    BINDING_code = 'TODO'
+    BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='Group_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     quantity = FHIR_primitive_UnsignedIntField(null=True, blank=True, )
@@ -42,33 +42,33 @@ class FHIR_Group_identifier(FHIR_GP_Identifier):
 
 class FHIR_Group_characteristic(models.Model):
     Group = models.ForeignKey(FHIR_Group, related_name='Group_characteristic', null=False, on_delete=models.CASCADE)
-    BINDING_code = 'TODO'
+    BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='Group_characteristic_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_value = 'TODO'
-    value_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value}, related_name='Group_characteristic_value', blank=True)
-    value_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='Group_characteristic_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Range", related_name='Group_characteristic_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = FHIR_primitive_URIField(null=True, blank=True, )
+    BINDING_value_CodeableConcept = "TODO"
+    value_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value_CodeableConcept}, related_name='Group_characteristic_value_CodeableConcept', blank=True)
+    value_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Group_characteristic_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Range = models.OneToOneField("FHIR_GP_Range", related_name='Group_characteristic_value_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    value_uri = FHIR_primitive_URIField(null=True, blank=True, )
     exclude = FHIR_primitive_BooleanField(null=True, blank=True, )
     description = FHIR_primitive_MarkdownField(null=True, blank=True, )
-    determinedBy_Device = models.ForeignKey("FHIR_Device", related_name="Group_characteristic_determinedBy", null=True, blank=True, on_delete=models.SET_NULL)
-    determinedBy_DeviceDefinition = models.ForeignKey("FHIR_DeviceDefinition", related_name="Group_characteristic_determinedBy", null=True, blank=True, on_delete=models.SET_NULL)
-    determinedBy_DeviceMetric = models.ForeignKey("FHIR_DeviceMetric", related_name="Group_characteristic_determinedBy", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_offset = 'TODO'
+    determinedBy_Reference_Device = models.ForeignKey("FHIR_Device", related_name="Group_characteristic_determinedBy_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    determinedBy_Reference_DeviceDefinition = models.ForeignKey("FHIR_DeviceDefinition", related_name="Group_characteristic_determinedBy_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    determinedBy_Reference_DeviceMetric = models.ForeignKey("FHIR_DeviceMetric", related_name="Group_characteristic_determinedBy_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_offset = "TODO"
     offset_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_offset}, related_name='Group_characteristic_offset', blank=True)
     offset_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    instances = FHIR_primitive_UnsignedIntField(null=True, blank=True, )
-    instances = models.OneToOneField("FHIR_GP_Range", related_name='Group_characteristic_instances', null=True, blank=True, on_delete=models.SET_NULL)
-    duration = models.OneToOneField("FHIR_GP_Quantity_Duration", related_name='Group_characteristic_duration', null=True, blank=True, on_delete=models.SET_NULL)
-    duration = models.OneToOneField("FHIR_GP_Range", related_name='Group_characteristic_duration', null=True, blank=True, on_delete=models.SET_NULL)
+    instances_unsignedInt = FHIR_primitive_UnsignedIntField(null=True, blank=True, )
+    instances_Range = models.OneToOneField("FHIR_GP_Range", related_name='Group_characteristic_instances_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    duration_Duration = models.OneToOneField("FHIR_GP_Quantity_Duration", related_name='Group_characteristic_duration_Duration', null=True, blank=True, on_delete=models.SET_NULL)
+    duration_Range = models.OneToOneField("FHIR_GP_Range", related_name='Group_characteristic_duration_Range', null=True, blank=True, on_delete=models.SET_NULL)
     period = models.OneToOneField("FHIR_GP_Period", related_name='Group_characteristic_period', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_Group_characteristic_method(models.Model):
     Group_characteristic = models.ForeignKey(FHIR_Group_characteristic, related_name='Group_characteristic_method', null=False, on_delete=models.CASCADE)
-    BINDING_method = 'TODO'
+    BINDING_method = "TODO"
     method_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_method}, related_name='Group_characteristic_method', blank=True)
     method_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
@@ -94,7 +94,7 @@ class FHIR_Group_member(models.Model):
 
 class FHIR_Group_member_involvement(models.Model):
     Group_member = models.ForeignKey(FHIR_Group_member, related_name='Group_member_involvement', null=False, on_delete=models.CASCADE)
-    BINDING_involvement = 'TODO'
+    BINDING_involvement = "TODO"
     involvement_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_involvement}, related_name='Group_member_involvement', blank=True)
     involvement_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     

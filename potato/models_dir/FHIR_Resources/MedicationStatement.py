@@ -10,16 +10,16 @@ class FHIR_MedicationStatement(models.Model):
     partOf_MedicationStatement = models.ManyToManyField("FHIR_MedicationStatement", related_name="MedicationStatement_partOf", blank=True)
     class StatusChoices(models.TextChoices): RECORDED = 'recorded', 'Recorded'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; DRAFT = 'draft', 'Draft'; 
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
-    BINDING_medication = 'TODO'
+    BINDING_medication = "TODO"
     medication_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_medication}, related_name='MedicationStatement_medication', blank=True)
     medication_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     medication_Medication_ref = models.ForeignKey("FHIR_Medication", related_name="MedicationStatement_medication_Medication", null=True, blank=True, on_delete=models.SET_NULL)
     subject_Patient = models.ForeignKey("FHIR_Patient", related_name="MedicationStatement_subject", null=True, blank=True, on_delete=models.SET_NULL)
     subject_Group = models.ForeignKey("FHIR_Group", related_name="MedicationStatement_subject", null=True, blank=True, on_delete=models.SET_NULL)
     encounter = models.ForeignKey("FHIR_Encounter", related_name="MedicationStatement_encounter", null=True, blank=True, on_delete=models.SET_NULL)
-    effective = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    effective = models.OneToOneField("FHIR_GP_Period", related_name='MedicationStatement_effective', null=True, blank=True, on_delete=models.SET_NULL)
-    effective = models.OneToOneField("FHIR_GP_Timing", related_name='MedicationStatement_effective', null=True, blank=True, on_delete=models.SET_NULL)
+    effective_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    effective_Period = models.OneToOneField("FHIR_GP_Period", related_name='MedicationStatement_effective_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    effective_Timing = models.OneToOneField("FHIR_GP_Timing", related_name='MedicationStatement_effective_Timing', null=True, blank=True, on_delete=models.SET_NULL)
     dateAsserted = FHIR_primitive_DateTimeField(null=True, blank=True, )
     author_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="MedicationStatement_author", null=True, blank=True, on_delete=models.SET_NULL)
     author_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="MedicationStatement_author", null=True, blank=True, on_delete=models.SET_NULL)
@@ -43,13 +43,13 @@ class FHIR_MedicationStatement_identifier(FHIR_GP_Identifier):
 
 class FHIR_MedicationStatement_category(models.Model):
     MedicationStatement = models.ForeignKey(FHIR_MedicationStatement, related_name='MedicationStatement_category', null=False, on_delete=models.CASCADE)
-    BINDING_category = 'TODO'
+    BINDING_category = "TODO"
     category_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_category}, related_name='MedicationStatement_category', blank=True)
     category_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     
 class FHIR_MedicationStatement_reason(models.Model):
     MedicationStatement = models.ForeignKey(FHIR_MedicationStatement, related_name='MedicationStatement_reason', null=False, on_delete=models.CASCADE)
-    BINDING_reason = 'TODO'
+    BINDING_reason = "TODO"
     reason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_reason}, related_name='MedicationStatement_reason', blank=True)
     reason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     reason_Condition_ref = models.ForeignKey("FHIR_Condition", related_name="MedicationStatement_reason_Condition", null=True, blank=True, on_delete=models.SET_NULL)
@@ -65,9 +65,9 @@ class FHIR_MedicationStatement_dosage(FHIR_SP_Dosage):
 
 class FHIR_MedicationStatement_adherence(models.Model):
     MedicationStatement = models.ForeignKey(FHIR_MedicationStatement, related_name='MedicationStatement_adherence', null=False, on_delete=models.CASCADE)
-    BINDING_code = 'TODO'
+    BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='MedicationStatement_adherence_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_reason = 'TODO'
+    BINDING_reason = "TODO"
     reason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_reason}, related_name='MedicationStatement_adherence_reason', blank=True)
     reason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
