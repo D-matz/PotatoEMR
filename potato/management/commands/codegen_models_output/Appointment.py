@@ -6,7 +6,7 @@ from ..FHIR_DataTypes.FHIR_metadata import *
 from ..FHIR_DataTypes.FHIR_primitive import *
 
 class FHIR_Appointment(models.Model):
-    class StatusChoices(models.TextChoices): PROPOSED = 'proposed', 'Proposed'; PENDING = 'pending', 'Pending'; BOOKED = 'booked', 'Booked'; ARRIVED = 'arrived', 'Arrived'; FULFILLED = 'fulfilled', 'Fulfilled'; CANCELLED = 'cancelled', 'Cancelled'; NOSHOW = 'noshow', 'Noshow'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; CHECKED_IN = 'checked-in', 'Checked-in'; WAITLIST = 'waitlist', 'Waitlist'; 
+    class StatusChoices(models.TextChoices): PROPOSED = 'proposed', 'Proposed'; PENDING = 'pending', 'Pending'; BOOKED = 'booked', 'Booked'; ARRIVED = 'arrived', 'Arrived'; FULFILLED = 'fulfilled', 'Fulfilled'; CANCELLED = 'cancelled', 'Cancelled'; NOSHOW = 'noshow', 'Noshow'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; CHECKED_IN = 'checked-in', 'Checked-in'; WAITLIST = 'waitlist', 'Waitlist';
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
     BINDING_cancellationReason = 'TODO'
     cancellationReason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_cancellationReason}, related_name='Appointment_cancellationReason', blank=True)
@@ -49,13 +49,13 @@ class FHIR_Appointment_class(models.Model):
     BINDING_class = 'TODO'
     class_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_class}, related_name='Appointment_class', blank=True)
     class_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    
+
 class FHIR_Appointment_serviceCategory(models.Model):
     Appointment = models.ForeignKey(FHIR_Appointment, related_name='Appointment_serviceCategory', null=False, on_delete=models.CASCADE)
     BINDING_serviceCategory = 'TODO'
     serviceCategory_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_serviceCategory}, related_name='Appointment_serviceCategory', blank=True)
     serviceCategory_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    
+
 class FHIR_Appointment_serviceType(models.Model):
     Appointment = models.ForeignKey(FHIR_Appointment, related_name='Appointment_serviceType', null=False, on_delete=models.CASCADE)
     BINDING_serviceType = 'TODO'
@@ -68,7 +68,7 @@ class FHIR_Appointment_specialty(models.Model):
     BINDING_specialty = 'TODO'
     specialty_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_specialty}, related_name='Appointment_specialty', blank=True)
     specialty_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    
+
 class FHIR_Appointment_reason(models.Model):
     Appointment = models.ForeignKey(FHIR_Appointment, related_name='Appointment_reason', null=False, on_delete=models.CASCADE)
     BINDING_reason = 'TODO'
@@ -111,7 +111,7 @@ class FHIR_Appointment_participant(models.Model):
     actor_HealthcareService = models.ForeignKey("FHIR_HealthcareService", related_name="Appointment_participant_actor", null=True, blank=True, on_delete=models.SET_NULL)
     actor_Location = models.ForeignKey("FHIR_Location", related_name="Appointment_participant_actor", null=True, blank=True, on_delete=models.SET_NULL)
     required = FHIR_primitive_BooleanField(null=True, blank=True, )
-    class StatusChoices(models.TextChoices): ACCEPTED = 'accepted', 'Accepted'; DECLINED = 'declined', 'Declined'; TENTATIVE = 'tentative', 'Tentative'; NEEDS_ACTION = 'needs-action', 'Needs-action'; 
+    class StatusChoices(models.TextChoices): ACCEPTED = 'accepted', 'Accepted'; DECLINED = 'declined', 'Declined'; TENTATIVE = 'tentative', 'Tentative'; NEEDS_ACTION = 'needs-action', 'Needs-action';
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
 
 class FHIR_Appointment_participant_type(models.Model):
@@ -119,7 +119,7 @@ class FHIR_Appointment_participant_type(models.Model):
     BINDING_type = 'TODO'
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='Appointment_participant_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    
+
 class FHIR_Appointment_recurrenceTemplate(models.Model):
     Appointment = models.ForeignKey(FHIR_Appointment, related_name='Appointment_recurrenceTemplate', null=False, on_delete=models.CASCADE)
     BINDING_timezone = 'TODO'
@@ -133,9 +133,9 @@ class FHIR_Appointment_recurrenceTemplate(models.Model):
 
 class FHIR_Appointment_recurrenceTemplate_occurrenceDate(models.Model):
     Appointment_recurrenceTemplate = models.ForeignKey(FHIR_Appointment_recurrenceTemplate, related_name='Appointment_recurrenceTemplate_occurrenceDate', null=False, on_delete=models.CASCADE)
-    
+
     occurrenceDate = FHIR_primitive_DateField(null=True, blank=True, )
-    
+
 class FHIR_Appointment_recurrenceTemplate_weeklyTemplate(models.Model):
     Appointment_recurrenceTemplate = models.ForeignKey(FHIR_Appointment_recurrenceTemplate, related_name='Appointment_recurrenceTemplate_weeklyTemplate', null=False, on_delete=models.CASCADE)
     monday = FHIR_primitive_BooleanField(null=True, blank=True, )
@@ -160,11 +160,10 @@ class FHIR_Appointment_recurrenceTemplate_yearlyTemplate(models.Model):
 
 class FHIR_Appointment_recurrenceTemplate_excludingDate(models.Model):
     Appointment_recurrenceTemplate = models.ForeignKey(FHIR_Appointment_recurrenceTemplate, related_name='Appointment_recurrenceTemplate_excludingDate', null=False, on_delete=models.CASCADE)
-    
+
     excludingDate = FHIR_primitive_DateField(null=True, blank=True, )
-    
+
 class FHIR_Appointment_recurrenceTemplate_excludingRecurrenceId(models.Model):
     Appointment_recurrenceTemplate = models.ForeignKey(FHIR_Appointment_recurrenceTemplate, related_name='Appointment_recurrenceTemplate_excludingRecurrenceId', null=False, on_delete=models.CASCADE)
-    
+
     excludingRecurrenceId = FHIR_primitive_PositiveIntField(null=True, blank=True, )
-    

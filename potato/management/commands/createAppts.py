@@ -36,19 +36,19 @@ class Command(BaseCommand):
             practitioner_model_list = FHIR_Practitioner.objects.filter(practitioner_roles__location=loc_model).distinct()
             pract_model = random.choice(practitioner_model_list)
 
-            FHIR_Appointment_Participant.objects.create(
-                appointment=appt_model,
-                actor_location=loc_model
+            FHIR_Appointment_participant.objects.create(
+                Appointment=appt_model,
+                actor_Location=loc_model
             )
-            FHIR_Appointment_Participant.objects.create(
-                appointment=appt_model,
-                actor_practitioner=pract_model
+            FHIR_Appointment_participant.objects.create(
+                Appointment=appt_model,
+                actor_Practitioner=pract_model
             )
-            FHIR_Appointment_Note.objects.create(
-                appointment=appt_model,
+            FHIR_Appointment_note.objects.create(
+                Appointment=appt_model,
                 text=''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(13))
             )
-            appt_model.subject_patient = random.choice(patient_model_list)
+            appt_model.subject_Patient = random.choice(patient_model_list)
             appt_model.status = random.choice(FHIR_Appointment.StatusChoices.values)
             random_seconds = random.randint(0, 3 * 24 * 60 * 60)
             random_seconds_duration = (15 * 60) + random.randint(0, 30 * 60)

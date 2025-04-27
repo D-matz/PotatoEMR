@@ -45,4 +45,7 @@ calendar -> appointment, because calendar links to specific encounter
     so when creating encounter, use appointment and its location/status
     for now, going to say when you click on an appointment, it either gets first associated encounter or creates new encounter
 
-calendar double click not working?
+dark mode switcher doesn't work after clicking patient pages, something with idiomorph replacement maybe
+putting None in login default instead of blank
+error in calendar if appointment has no patient subject - should maybe set patient none gracefully
+back button broken when calendar -> double click appointment
