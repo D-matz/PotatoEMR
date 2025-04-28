@@ -6,8 +6,8 @@ from ..FHIR_DataTypes.FHIR_metadata import *
 from ..FHIR_DataTypes.FHIR_primitive import *
 
 class FHIR_Provenance(models.Model):
-    occurred = models.OneToOneField("FHIR_GP_Period", related_name='Provenance_occurred', null=True, blank=True, on_delete=models.SET_NULL)
-    occurred = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    occurred_Period = models.OneToOneField("FHIR_GP_Period", related_name='Provenance_occurred_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    occurred_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
     recorded = FHIR_primitive_InstantField(null=True, blank=True, )
     location = models.ForeignKey("FHIR_Location", related_name="Provenance_location", null=True, blank=True, on_delete=models.SET_NULL)
     why = FHIR_primitive_MarkdownField(null=True, blank=True, )

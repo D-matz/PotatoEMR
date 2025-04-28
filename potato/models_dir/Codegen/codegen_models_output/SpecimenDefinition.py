@@ -9,17 +9,17 @@ class FHIR_SpecimenDefinition(models.Model):
     url = FHIR_primitive_URIField(null=True, blank=True, )
     identifier = models.OneToOneField("FHIR_GP_Identifier", related_name='SpecimenDefinition_identifier', null=True, blank=True, on_delete=models.SET_NULL)
     version = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = models.OneToOneField("FHIR_GP_Coding", related_name='SpecimenDefinition_versionAlgorithm', null=True, blank=True, on_delete=models.SET_NULL)
+    versionAlgorithm_string = FHIR_primitive_StringField(null=True, blank=True, )
+    versionAlgorithm_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='SpecimenDefinition_versionAlgorithm_Coding', null=True, blank=True, on_delete=models.SET_NULL)
     name = FHIR_primitive_StringField(null=True, blank=True, )
     title = FHIR_primitive_StringField(null=True, blank=True, )
     class StatusChoices(models.TextChoices): DRAFT = 'draft', 'Draft'; ACTIVE = 'active', 'Active'; RETIRED = 'retired', 'Retired'; UNKNOWN = 'unknown', 'Unknown'; 
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
     experimental = FHIR_primitive_BooleanField(null=True, blank=True, )
-    BINDING_subject = "TODO"
-    subject_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_subject}, related_name='SpecimenDefinition_subject', blank=True)
-    subject_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    subject = models.ForeignKey("FHIR_Group", related_name="SpecimenDefinition_subject", null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_subject_CodeableConcept = "TODO"
+    subject_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_subject_CodeableConcept}, related_name='SpecimenDefinition_subject_CodeableConcept', blank=True)
+    subject_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    subject_Reference = models.ForeignKey("FHIR_Group", related_name="SpecimenDefinition_subject_Reference", null=True, blank=True, on_delete=models.SET_NULL)
     date = FHIR_primitive_DateTimeField(null=True, blank=True, )
     publisher = FHIR_primitive_StringField(null=True, blank=True, )
     description = FHIR_primitive_MarkdownField(null=True, blank=True, )
@@ -87,16 +87,16 @@ class FHIR_SpecimenDefinition_typeTested_container(models.Model):
     cap_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     description = FHIR_primitive_MarkdownField(null=True, blank=True, )
     capacity = models.OneToOneField("FHIR_GP_Quantity", related_name='SpecimenDefinition_typeTested_container_capacity', null=True, blank=True, on_delete=models.SET_NULL)
-    minimumVolume = models.OneToOneField("FHIR_GP_Quantity", related_name='SpecimenDefinition_typeTested_container_minimumVolume', null=True, blank=True, on_delete=models.SET_NULL)
-    minimumVolume = FHIR_primitive_StringField(null=True, blank=True, )
+    minimumVolume_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='SpecimenDefinition_typeTested_container_minimumVolume_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    minimumVolume_string = FHIR_primitive_StringField(null=True, blank=True, )
     preparation = FHIR_primitive_MarkdownField(null=True, blank=True, )
 
 class FHIR_SpecimenDefinition_typeTested_container_additive(models.Model):
     SpecimenDefinition_typeTested_container = models.ForeignKey(FHIR_SpecimenDefinition_typeTested_container, related_name='SpecimenDefinition_typeTested_container_additive', null=False, on_delete=models.CASCADE)
-    BINDING_additive = "TODO"
-    additive_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_additive}, related_name='SpecimenDefinition_typeTested_container_additive_additive', blank=True)
-    additive_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    additive = models.ForeignKey("FHIR_SubstanceDefinition", related_name="SpecimenDefinition_typeTested_container_additive_additive", null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_additive_CodeableConcept = "TODO"
+    additive_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_additive_CodeableConcept}, related_name='SpecimenDefinition_typeTested_container_additive_additive_CodeableConcept', blank=True)
+    additive_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    additive_Reference = models.ForeignKey("FHIR_SubstanceDefinition", related_name="SpecimenDefinition_typeTested_container_additive_additive_Reference", null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_SpecimenDefinition_typeTested_rejectionCriterion(models.Model):
     SpecimenDefinition_typeTested = models.ForeignKey(FHIR_SpecimenDefinition_typeTested, related_name='SpecimenDefinition_typeTested_rejectionCriterion', null=False, on_delete=models.CASCADE)

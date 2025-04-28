@@ -58,8 +58,8 @@ class FHIR_ClaimResponse_event(models.Model):
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='ClaimResponse_event_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    when = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    when = models.OneToOneField("FHIR_GP_Period", related_name='ClaimResponse_event_when', null=True, blank=True, on_delete=models.SET_NULL)
+    when_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    when_Period = models.OneToOneField("FHIR_GP_Period", related_name='ClaimResponse_event_when_Period', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_ClaimResponse_item(models.Model):
     ClaimResponse = models.ForeignKey(FHIR_ClaimResponse, related_name='ClaimResponse_item', null=False, on_delete=models.CASCADE)
@@ -142,13 +142,13 @@ class FHIR_ClaimResponse_addItem(models.Model):
     request_ServiceRequest = models.ManyToManyField("FHIR_ServiceRequest", related_name="ClaimResponse_addItem_request", blank=True)
     request_SupplyRequest = models.ManyToManyField("FHIR_SupplyRequest", related_name="ClaimResponse_addItem_request", blank=True)
     request_VisionPrescription = models.ManyToManyField("FHIR_VisionPrescription", related_name="ClaimResponse_addItem_request", blank=True)
-    serviced = FHIR_primitive_DateField(null=True, blank=True, )
-    serviced = models.OneToOneField("FHIR_GP_Period", related_name='ClaimResponse_addItem_serviced', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_location = "TODO"
-    location_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_location}, related_name='ClaimResponse_addItem_location', blank=True)
-    location_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    location = models.OneToOneField("FHIR_GP_Address", related_name='ClaimResponse_addItem_location', null=True, blank=True, on_delete=models.SET_NULL)
-    location = models.ForeignKey("FHIR_Location", related_name="ClaimResponse_addItem_location", null=True, blank=True, on_delete=models.SET_NULL)
+    serviced_date = FHIR_primitive_DateField(null=True, blank=True, )
+    serviced_Period = models.OneToOneField("FHIR_GP_Period", related_name='ClaimResponse_addItem_serviced_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_location_CodeableConcept = "TODO"
+    location_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_location_CodeableConcept}, related_name='ClaimResponse_addItem_location_CodeableConcept', blank=True)
+    location_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    location_Address = models.OneToOneField("FHIR_GP_Address", related_name='ClaimResponse_addItem_location_Address', null=True, blank=True, on_delete=models.SET_NULL)
+    location_Reference = models.ForeignKey("FHIR_Location", related_name="ClaimResponse_addItem_location_Reference", null=True, blank=True, on_delete=models.SET_NULL)
     quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='ClaimResponse_addItem_quantity', null=True, blank=True, on_delete=models.SET_NULL)
     unitPrice = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='ClaimResponse_addItem_unitPrice', null=True, blank=True, on_delete=models.SET_NULL)
     factor = FHIR_primitive_DecimalField(null=True, blank=True, )

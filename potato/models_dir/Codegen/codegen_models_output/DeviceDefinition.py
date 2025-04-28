@@ -8,8 +8,8 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 class FHIR_DeviceDefinition(models.Model):
     url = FHIR_primitive_URIField(null=True, blank=True, )
     version = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = models.OneToOneField("FHIR_GP_Coding", related_name='DeviceDefinition_versionAlgorithm', null=True, blank=True, on_delete=models.SET_NULL)
+    versionAlgorithm_string = FHIR_primitive_StringField(null=True, blank=True, )
+    versionAlgorithm_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='DeviceDefinition_versionAlgorithm_Coding', null=True, blank=True, on_delete=models.SET_NULL)
     name = FHIR_primitive_StringField(null=True, blank=True, )
     title = FHIR_primitive_StringField(null=True, blank=True, )
     class StatusChoices(models.TextChoices): DRAFT = 'draft', 'Draft'; ACTIVE = 'active', 'Active'; RETIRED = 'retired', 'Retired'; UNKNOWN_ = 'unknown ', 'Unknown '; 
@@ -120,14 +120,14 @@ class FHIR_DeviceDefinition_property(models.Model):
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='DeviceDefinition_property_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='DeviceDefinition_property_value', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_value = "TODO"
-    value_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value}, related_name='DeviceDefinition_property_value', blank=True)
-    value_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = FHIR_primitive_StringField(null=True, blank=True, )
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Range", related_name='DeviceDefinition_property_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Attachment", related_name='DeviceDefinition_property_value', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='DeviceDefinition_property_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_value_CodeableConcept = "TODO"
+    value_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value_CodeableConcept}, related_name='DeviceDefinition_property_value_CodeableConcept', blank=True)
+    value_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    value_string = FHIR_primitive_StringField(null=True, blank=True, )
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    value_Range = models.OneToOneField("FHIR_GP_Range", related_name='DeviceDefinition_property_value_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='DeviceDefinition_property_value_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_DeviceDefinition_link(models.Model):
     DeviceDefinition = models.ForeignKey(FHIR_DeviceDefinition, related_name='DeviceDefinition_link', null=False, on_delete=models.CASCADE)

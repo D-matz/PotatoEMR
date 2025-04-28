@@ -36,18 +36,18 @@ class FHIR_Contract(models.Model):
     BINDING_scope = "TODO"
     scope_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_scope}, related_name='Contract_scope', blank=True)
     scope_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_topic = "TODO"
-    topic_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_topic}, related_name='Contract_topic', blank=True)
-    topic_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    BINDING_topic_CodeableConcept = "TODO"
+    topic_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_topic_CodeableConcept}, related_name='Contract_topic_CodeableConcept', blank=True)
+    topic_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='Contract_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     relevantHistory = models.ManyToManyField("FHIR_Provenance", related_name="Contract_relevantHistory", blank=True)
-    legallyBinding = models.OneToOneField("FHIR_GP_Attachment", related_name='Contract_legallyBinding', null=True, blank=True, on_delete=models.SET_NULL)
-    legallyBinding_Composition = models.ForeignKey("FHIR_Composition", related_name="Contract_legallyBinding", null=True, blank=True, on_delete=models.SET_NULL)
-    legallyBinding_DocumentReference = models.ForeignKey("FHIR_DocumentReference", related_name="Contract_legallyBinding", null=True, blank=True, on_delete=models.SET_NULL)
-    legallyBinding_QuestionnaireResponse = models.ForeignKey("FHIR_QuestionnaireResponse", related_name="Contract_legallyBinding", null=True, blank=True, on_delete=models.SET_NULL)
-    legallyBinding_Contract = models.ForeignKey("FHIR_Contract", related_name="Contract_legallyBinding", null=True, blank=True, on_delete=models.SET_NULL)
+    legallyBinding_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='Contract_legallyBinding_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
+    legallyBinding_Reference_Composition = models.ForeignKey("FHIR_Composition", related_name="Contract_legallyBinding_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    legallyBinding_Reference_DocumentReference = models.ForeignKey("FHIR_DocumentReference", related_name="Contract_legallyBinding_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    legallyBinding_Reference_QuestionnaireResponse = models.ForeignKey("FHIR_QuestionnaireResponse", related_name="Contract_legallyBinding_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    legallyBinding_Reference_Contract = models.ForeignKey("FHIR_Contract", related_name="Contract_legallyBinding_Reference", null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_Contract_identifier(FHIR_GP_Identifier):
     Contract = models.ForeignKey(FHIR_Contract, related_name='Contract_identifier', null=False, on_delete=models.CASCADE)
@@ -84,9 +84,9 @@ class FHIR_Contract_term(models.Model):
     identifier = models.OneToOneField("FHIR_GP_Identifier", related_name='Contract_term_identifier', null=True, blank=True, on_delete=models.SET_NULL)
     issued = FHIR_primitive_DateTimeField(null=True, blank=True, )
     applies = models.OneToOneField("FHIR_GP_Period", related_name='Contract_term_applies', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_topic = "TODO"
-    topic_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_topic}, related_name='Contract_term_topic', blank=True)
-    topic_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    BINDING_topic_CodeableConcept = "TODO"
+    topic_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_topic_CodeableConcept}, related_name='Contract_term_topic_CodeableConcept', blank=True)
+    topic_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='Contract_term_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
@@ -144,16 +144,16 @@ class FHIR_Contract_term_offer_decisionMode(models.Model):
     
 class FHIR_Contract_term_offer_answer(models.Model):
     Contract_term_offer = models.ForeignKey(FHIR_Contract_term_offer, related_name='Contract_term_offer_answer', null=False, on_delete=models.CASCADE)
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
-    value = FHIR_primitive_DecimalField(null=True, blank=True, )
-    value = FHIR_primitive_DateField(null=True, blank=True, )
-    value = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    value = FHIR_primitive_TimeField(null=True, blank=True, )
-    value = FHIR_primitive_StringField(null=True, blank=True, )
-    value = FHIR_primitive_URIField(null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Attachment", related_name='Contract_term_offer_answer_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Coding", related_name='Contract_term_offer_answer_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='Contract_term_offer_answer_value', null=True, blank=True, on_delete=models.SET_NULL)
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    value_decimal = FHIR_primitive_DecimalField(null=True, blank=True, )
+    value_date = FHIR_primitive_DateField(null=True, blank=True, )
+    value_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    value_time = FHIR_primitive_TimeField(null=True, blank=True, )
+    value_string = FHIR_primitive_StringField(null=True, blank=True, )
+    value_uri = FHIR_primitive_URIField(null=True, blank=True, )
+    value_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='Contract_term_offer_answer_value_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='Contract_term_offer_answer_value_Coding', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Contract_term_offer_answer_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_Contract_term_offer_linkId(models.Model):
     Contract_term_offer = models.ForeignKey(FHIR_Contract_term_offer, related_name='Contract_term_offer_linkId', null=False, on_delete=models.CASCADE)
@@ -220,9 +220,9 @@ class FHIR_Contract_term_asset_securityLabelNumber(models.Model):
     
 class FHIR_Contract_term_asset_valuedItem(models.Model):
     Contract_term_asset = models.ForeignKey(FHIR_Contract_term_asset, related_name='Contract_term_asset_valuedItem', null=False, on_delete=models.CASCADE)
-    BINDING_entity = "TODO"
-    entity_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_entity}, related_name='Contract_term_asset_valuedItem_entity', blank=True)
-    entity_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    BINDING_entity_CodeableConcept = "TODO"
+    entity_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_entity_CodeableConcept}, related_name='Contract_term_asset_valuedItem_entity_CodeableConcept', blank=True)
+    entity_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     identifier = models.OneToOneField("FHIR_GP_Identifier", related_name='Contract_term_asset_valuedItem_identifier', null=True, blank=True, on_delete=models.SET_NULL)
     effectiveTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
     quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Contract_term_asset_valuedItem_quantity', null=True, blank=True, on_delete=models.SET_NULL)
@@ -267,9 +267,9 @@ class FHIR_Contract_term_action(models.Model):
     status_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     context_Encounter = models.ForeignKey("FHIR_Encounter", related_name="Contract_term_action_context", null=True, blank=True, on_delete=models.SET_NULL)
     context_EpisodeOfCare = models.ForeignKey("FHIR_EpisodeOfCare", related_name="Contract_term_action_context", null=True, blank=True, on_delete=models.SET_NULL)
-    occurrence = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    occurrence = models.OneToOneField("FHIR_GP_Period", related_name='Contract_term_action_occurrence', null=True, blank=True, on_delete=models.SET_NULL)
-    occurrence = models.OneToOneField("FHIR_GP_Timing", related_name='Contract_term_action_occurrence', null=True, blank=True, on_delete=models.SET_NULL)
+    occurrence_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    occurrence_Period = models.OneToOneField("FHIR_GP_Period", related_name='Contract_term_action_occurrence_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    occurrence_Timing = models.OneToOneField("FHIR_GP_Timing", related_name='Contract_term_action_occurrence_Timing', null=True, blank=True, on_delete=models.SET_NULL)
     requester_Patient = models.ManyToManyField("FHIR_Patient", related_name="Contract_term_action_requester", blank=True)
     requester_RelatedPerson = models.ManyToManyField("FHIR_RelatedPerson", related_name="Contract_term_action_requester", blank=True)
     requester_Practitioner = models.ManyToManyField("FHIR_Practitioner", related_name="Contract_term_action_requester", blank=True)
@@ -368,19 +368,19 @@ class FHIR_Contract_signer_signature(FHIR_GP_Signature):
 
 class FHIR_Contract_friendly(models.Model):
     Contract = models.ForeignKey(FHIR_Contract, related_name='Contract_friendly', null=False, on_delete=models.CASCADE)
-    content = models.OneToOneField("FHIR_GP_Attachment", related_name='Contract_friendly_content', null=True, blank=True, on_delete=models.SET_NULL)
-    content_Composition = models.ForeignKey("FHIR_Composition", related_name="Contract_friendly_content", null=True, blank=True, on_delete=models.SET_NULL)
-    content_DocumentReference = models.ForeignKey("FHIR_DocumentReference", related_name="Contract_friendly_content", null=True, blank=True, on_delete=models.SET_NULL)
-    content_QuestionnaireResponse = models.ForeignKey("FHIR_QuestionnaireResponse", related_name="Contract_friendly_content", null=True, blank=True, on_delete=models.SET_NULL)
+    content_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='Contract_friendly_content_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
+    content_Reference_Composition = models.ForeignKey("FHIR_Composition", related_name="Contract_friendly_content_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    content_Reference_DocumentReference = models.ForeignKey("FHIR_DocumentReference", related_name="Contract_friendly_content_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    content_Reference_QuestionnaireResponse = models.ForeignKey("FHIR_QuestionnaireResponse", related_name="Contract_friendly_content_Reference", null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_Contract_legal(models.Model):
     Contract = models.ForeignKey(FHIR_Contract, related_name='Contract_legal', null=False, on_delete=models.CASCADE)
-    content = models.OneToOneField("FHIR_GP_Attachment", related_name='Contract_legal_content', null=True, blank=True, on_delete=models.SET_NULL)
-    content_Composition = models.ForeignKey("FHIR_Composition", related_name="Contract_legal_content", null=True, blank=True, on_delete=models.SET_NULL)
-    content_DocumentReference = models.ForeignKey("FHIR_DocumentReference", related_name="Contract_legal_content", null=True, blank=True, on_delete=models.SET_NULL)
-    content_QuestionnaireResponse = models.ForeignKey("FHIR_QuestionnaireResponse", related_name="Contract_legal_content", null=True, blank=True, on_delete=models.SET_NULL)
+    content_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='Contract_legal_content_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
+    content_Reference_Composition = models.ForeignKey("FHIR_Composition", related_name="Contract_legal_content_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    content_Reference_DocumentReference = models.ForeignKey("FHIR_DocumentReference", related_name="Contract_legal_content_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    content_Reference_QuestionnaireResponse = models.ForeignKey("FHIR_QuestionnaireResponse", related_name="Contract_legal_content_Reference", null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_Contract_rule(models.Model):
     Contract = models.ForeignKey(FHIR_Contract, related_name='Contract_rule', null=False, on_delete=models.CASCADE)
-    content = models.OneToOneField("FHIR_GP_Attachment", related_name='Contract_rule_content', null=True, blank=True, on_delete=models.SET_NULL)
-    content = models.ForeignKey("FHIR_DocumentReference", related_name="Contract_rule_content", null=True, blank=True, on_delete=models.SET_NULL)
+    content_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='Contract_rule_content_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
+    content_Reference = models.ForeignKey("FHIR_DocumentReference", related_name="Contract_rule_content_Reference", null=True, blank=True, on_delete=models.SET_NULL)

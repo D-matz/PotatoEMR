@@ -79,8 +79,8 @@ class FHIR_ClinicalUseDefinition_indication(models.Model):
     intendedEffect_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_intendedEffect}, related_name='ClinicalUseDefinition_indication_intendedEffect', blank=True)
     intendedEffect_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     intendedEffect_ObservationDefinition_ref = models.ForeignKey("FHIR_ObservationDefinition", related_name="ClinicalUseDefinition_indication_intendedEffect_ObservationDefinition", null=True, blank=True, on_delete=models.SET_NULL)
-    duration = models.OneToOneField("FHIR_GP_Range", related_name='ClinicalUseDefinition_indication_duration', null=True, blank=True, on_delete=models.SET_NULL)
-    duration = FHIR_primitive_StringField(null=True, blank=True, )
+    duration_Range = models.OneToOneField("FHIR_GP_Range", related_name='ClinicalUseDefinition_indication_duration_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    duration_string = FHIR_primitive_StringField(null=True, blank=True, )
     undesirableEffect = models.ManyToManyField("FHIR_ClinicalUseDefinition", related_name="ClinicalUseDefinition_indication_undesirableEffect", blank=True)
 
 class FHIR_ClinicalUseDefinition_indication_comorbidity(models.Model):
@@ -105,15 +105,15 @@ class FHIR_ClinicalUseDefinition_interaction(models.Model):
 
 class FHIR_ClinicalUseDefinition_interaction_interactant(models.Model):
     ClinicalUseDefinition_interaction = models.ForeignKey(FHIR_ClinicalUseDefinition_interaction, related_name='ClinicalUseDefinition_interaction_interactant', null=False, on_delete=models.CASCADE)
-    item_MedicinalProductDefinition = models.ForeignKey("FHIR_MedicinalProductDefinition", related_name="ClinicalUseDefinition_interaction_interactant_item", null=True, blank=True, on_delete=models.SET_NULL)
-    item_Medication = models.ForeignKey("FHIR_Medication", related_name="ClinicalUseDefinition_interaction_interactant_item", null=True, blank=True, on_delete=models.SET_NULL)
-    item_SubstanceDefinition = models.ForeignKey("FHIR_SubstanceDefinition", related_name="ClinicalUseDefinition_interaction_interactant_item", null=True, blank=True, on_delete=models.SET_NULL)
-    item_NutritionProduct = models.ForeignKey("FHIR_NutritionProduct", related_name="ClinicalUseDefinition_interaction_interactant_item", null=True, blank=True, on_delete=models.SET_NULL)
-    item_BiologicallyDerivedProduct = models.ForeignKey("FHIR_BiologicallyDerivedProduct", related_name="ClinicalUseDefinition_interaction_interactant_item", null=True, blank=True, on_delete=models.SET_NULL)
-    item_ObservationDefinition = models.ForeignKey("FHIR_ObservationDefinition", related_name="ClinicalUseDefinition_interaction_interactant_item", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_item = "TODO"
-    item_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_item}, related_name='ClinicalUseDefinition_interaction_interactant_item', blank=True)
-    item_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    item_Reference_MedicinalProductDefinition = models.ForeignKey("FHIR_MedicinalProductDefinition", related_name="ClinicalUseDefinition_interaction_interactant_item_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    item_Reference_Medication = models.ForeignKey("FHIR_Medication", related_name="ClinicalUseDefinition_interaction_interactant_item_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    item_Reference_SubstanceDefinition = models.ForeignKey("FHIR_SubstanceDefinition", related_name="ClinicalUseDefinition_interaction_interactant_item_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    item_Reference_NutritionProduct = models.ForeignKey("FHIR_NutritionProduct", related_name="ClinicalUseDefinition_interaction_interactant_item_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    item_Reference_BiologicallyDerivedProduct = models.ForeignKey("FHIR_BiologicallyDerivedProduct", related_name="ClinicalUseDefinition_interaction_interactant_item_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    item_Reference_ObservationDefinition = models.ForeignKey("FHIR_ObservationDefinition", related_name="ClinicalUseDefinition_interaction_interactant_item_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_item_CodeableConcept = "TODO"
+    item_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_item_CodeableConcept}, related_name='ClinicalUseDefinition_interaction_interactant_item_CodeableConcept', blank=True)
+    item_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
 class FHIR_ClinicalUseDefinition_interaction_management(models.Model):
     ClinicalUseDefinition_interaction = models.ForeignKey(FHIR_ClinicalUseDefinition_interaction, related_name='ClinicalUseDefinition_interaction_management', null=False, on_delete=models.CASCADE)

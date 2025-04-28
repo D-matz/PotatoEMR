@@ -75,10 +75,10 @@ class FHIR_Communication_reason(models.Model):
 
 class FHIR_Communication_payload(models.Model):
     Communication = models.ForeignKey(FHIR_Communication, related_name='Communication_payload', null=False, on_delete=models.CASCADE)
-    content = models.OneToOneField("FHIR_GP_Attachment", related_name='Communication_payload_content', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_content = "TODO"
-    content_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_content}, related_name='Communication_payload_content', blank=True)
-    content_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    content_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='Communication_payload_content_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_content_CodeableConcept = "TODO"
+    content_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_content_CodeableConcept}, related_name='Communication_payload_content_CodeableConcept', blank=True)
+    content_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
 class FHIR_Communication_note(FHIR_GP_Annotation):
     Communication = models.ForeignKey(FHIR_Communication, related_name='Communication_note', null=False, on_delete=models.CASCADE)

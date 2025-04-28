@@ -79,8 +79,8 @@ class FHIR_Claim_event(models.Model):
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='Claim_event_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    when = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    when = models.OneToOneField("FHIR_GP_Period", related_name='Claim_event_when', null=True, blank=True, on_delete=models.SET_NULL)
+    when_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    when_Period = models.OneToOneField("FHIR_GP_Period", related_name='Claim_event_when_Period', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_Claim_careTeam(models.Model):
     Claim = models.ForeignKey(FHIR_Claim, related_name='Claim_careTeam', null=False, on_delete=models.CASCADE)
@@ -105,13 +105,13 @@ class FHIR_Claim_supportingInfo(models.Model):
     BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='Claim_supportingInfo_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    timing = FHIR_primitive_DateField(null=True, blank=True, )
-    timing = models.OneToOneField("FHIR_GP_Period", related_name='Claim_supportingInfo_timing', null=True, blank=True, on_delete=models.SET_NULL)
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
-    value = FHIR_primitive_StringField(null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='Claim_supportingInfo_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Attachment", related_name='Claim_supportingInfo_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Identifier", related_name='Claim_supportingInfo_value', null=True, blank=True, on_delete=models.SET_NULL)
+    timing_date = FHIR_primitive_DateField(null=True, blank=True, )
+    timing_Period = models.OneToOneField("FHIR_GP_Period", related_name='Claim_supportingInfo_timing_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    value_string = FHIR_primitive_StringField(null=True, blank=True, )
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Claim_supportingInfo_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='Claim_supportingInfo_value_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Identifier = models.OneToOneField("FHIR_GP_Identifier", related_name='Claim_supportingInfo_value_Identifier', null=True, blank=True, on_delete=models.SET_NULL)
     BINDING_reason = "TODO"
     reason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_reason}, related_name='Claim_supportingInfo_reason', blank=True)
     reason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
@@ -119,10 +119,10 @@ class FHIR_Claim_supportingInfo(models.Model):
 class FHIR_Claim_diagnosis(models.Model):
     Claim = models.ForeignKey(FHIR_Claim, related_name='Claim_diagnosis', null=False, on_delete=models.CASCADE)
     sequence = FHIR_primitive_PositiveIntField(null=True, blank=True, )
-    BINDING_diagnosis = "TODO"
-    diagnosis_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_diagnosis}, related_name='Claim_diagnosis_diagnosis', blank=True)
-    diagnosis_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    diagnosis = models.ForeignKey("FHIR_Condition", related_name="Claim_diagnosis_diagnosis", null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_diagnosis_CodeableConcept = "TODO"
+    diagnosis_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_diagnosis_CodeableConcept}, related_name='Claim_diagnosis_diagnosis_CodeableConcept', blank=True)
+    diagnosis_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    diagnosis_Reference = models.ForeignKey("FHIR_Condition", related_name="Claim_diagnosis_diagnosis_Reference", null=True, blank=True, on_delete=models.SET_NULL)
     BINDING_onAdmission = "TODO"
     onAdmission_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_onAdmission}, related_name='Claim_diagnosis_onAdmission', blank=True)
     onAdmission_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
@@ -137,10 +137,10 @@ class FHIR_Claim_procedure(models.Model):
     Claim = models.ForeignKey(FHIR_Claim, related_name='Claim_procedure', null=False, on_delete=models.CASCADE)
     sequence = FHIR_primitive_PositiveIntField(null=True, blank=True, )
     date = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    BINDING_procedure = "TODO"
-    procedure_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_procedure}, related_name='Claim_procedure_procedure', blank=True)
-    procedure_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    procedure = models.ForeignKey("FHIR_Procedure", related_name="Claim_procedure_procedure", null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_procedure_CodeableConcept = "TODO"
+    procedure_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_procedure_CodeableConcept}, related_name='Claim_procedure_procedure_CodeableConcept', blank=True)
+    procedure_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    procedure_Reference = models.ForeignKey("FHIR_Procedure", related_name="Claim_procedure_procedure_Reference", null=True, blank=True, on_delete=models.SET_NULL)
     udi = models.ManyToManyField("FHIR_Device", related_name="Claim_procedure_udi", blank=True)
 
 class FHIR_Claim_procedure_type(models.Model):
@@ -169,8 +169,8 @@ class FHIR_Claim_accident(models.Model):
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='Claim_accident_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    location = models.OneToOneField("FHIR_GP_Address", related_name='Claim_accident_location', null=True, blank=True, on_delete=models.SET_NULL)
-    location = models.ForeignKey("FHIR_Location", related_name="Claim_accident_location", null=True, blank=True, on_delete=models.SET_NULL)
+    location_Address = models.OneToOneField("FHIR_GP_Address", related_name='Claim_accident_location_Address', null=True, blank=True, on_delete=models.SET_NULL)
+    location_Reference = models.ForeignKey("FHIR_Location", related_name="Claim_accident_location_Reference", null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_Claim_item(models.Model):
     Claim = models.ForeignKey(FHIR_Claim, related_name='Claim_item', null=False, on_delete=models.CASCADE)
@@ -193,13 +193,13 @@ class FHIR_Claim_item(models.Model):
     request_ServiceRequest = models.ManyToManyField("FHIR_ServiceRequest", related_name="Claim_item_request", blank=True)
     request_SupplyRequest = models.ManyToManyField("FHIR_SupplyRequest", related_name="Claim_item_request", blank=True)
     request_VisionPrescription = models.ManyToManyField("FHIR_VisionPrescription", related_name="Claim_item_request", blank=True)
-    serviced = FHIR_primitive_DateField(null=True, blank=True, )
-    serviced = models.OneToOneField("FHIR_GP_Period", related_name='Claim_item_serviced', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_location = "TODO"
-    location_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_location}, related_name='Claim_item_location', blank=True)
-    location_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    location = models.OneToOneField("FHIR_GP_Address", related_name='Claim_item_location', null=True, blank=True, on_delete=models.SET_NULL)
-    location = models.ForeignKey("FHIR_Location", related_name="Claim_item_location", null=True, blank=True, on_delete=models.SET_NULL)
+    serviced_date = FHIR_primitive_DateField(null=True, blank=True, )
+    serviced_Period = models.OneToOneField("FHIR_GP_Period", related_name='Claim_item_serviced_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_location_CodeableConcept = "TODO"
+    location_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_location_CodeableConcept}, related_name='Claim_item_location_CodeableConcept', blank=True)
+    location_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    location_Address = models.OneToOneField("FHIR_GP_Address", related_name='Claim_item_location_Address', null=True, blank=True, on_delete=models.SET_NULL)
+    location_Reference = models.ForeignKey("FHIR_Location", related_name="Claim_item_location_Reference", null=True, blank=True, on_delete=models.SET_NULL)
     patientPaid = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='Claim_item_patientPaid', null=True, blank=True, on_delete=models.SET_NULL)
     quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Claim_item_quantity', null=True, blank=True, on_delete=models.SET_NULL)
     unitPrice = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='Claim_item_unitPrice', null=True, blank=True, on_delete=models.SET_NULL)

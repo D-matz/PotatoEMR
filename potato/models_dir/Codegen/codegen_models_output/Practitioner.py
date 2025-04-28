@@ -10,8 +10,8 @@ class FHIR_Practitioner(models.Model):
     class GenderChoices(models.TextChoices): MALE = 'male', 'Male'; FEMALE = 'female', 'Female'; OTHER = 'other', 'Other'; UNKNOWN = 'unknown', 'Unknown'; 
     gender = FHIR_primitive_CodeField(choices=GenderChoices.choices, null=True, blank=True, )
     birthDate = FHIR_primitive_DateField(null=True, blank=True, )
-    deceased = FHIR_primitive_BooleanField(null=True, blank=True, )
-    deceased = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    deceased_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    deceased_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
 
 class FHIR_Practitioner_identifier(FHIR_GP_Identifier):
     Practitioner = models.ForeignKey(FHIR_Practitioner, related_name='Practitioner_identifier', null=False, on_delete=models.CASCADE)

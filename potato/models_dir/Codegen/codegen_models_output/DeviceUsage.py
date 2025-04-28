@@ -18,9 +18,9 @@ class FHIR_DeviceUsage(models.Model):
     derivedFrom_DocumentReference = models.ManyToManyField("FHIR_DocumentReference", related_name="DeviceUsage_derivedFrom", blank=True)
     context_Encounter = models.ForeignKey("FHIR_Encounter", related_name="DeviceUsage_context", null=True, blank=True, on_delete=models.SET_NULL)
     context_EpisodeOfCare = models.ForeignKey("FHIR_EpisodeOfCare", related_name="DeviceUsage_context", null=True, blank=True, on_delete=models.SET_NULL)
-    timing = models.OneToOneField("FHIR_GP_Timing", related_name='DeviceUsage_timing', null=True, blank=True, on_delete=models.SET_NULL)
-    timing = models.OneToOneField("FHIR_GP_Period", related_name='DeviceUsage_timing', null=True, blank=True, on_delete=models.SET_NULL)
-    timing = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    timing_Timing = models.OneToOneField("FHIR_GP_Timing", related_name='DeviceUsage_timing_Timing', null=True, blank=True, on_delete=models.SET_NULL)
+    timing_Period = models.OneToOneField("FHIR_GP_Period", related_name='DeviceUsage_timing_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    timing_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
     dateAsserted = FHIR_primitive_DateTimeField(null=True, blank=True, )
     BINDING_usageStatus = "TODO"
     usageStatus_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_usageStatus}, related_name='DeviceUsage_usageStatus', blank=True)

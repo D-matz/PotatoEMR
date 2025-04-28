@@ -6,9 +6,9 @@ from ..FHIR_DataTypes.FHIR_metadata import *
 from ..FHIR_DataTypes.FHIR_primitive import *
 
 class FHIR_MessageHeader(models.Model):
-    event = models.OneToOneField("FHIR_GP_Coding", related_name='MessageHeader_event', null=True, blank=True, on_delete=models.SET_NULL)
-    event = FHIR_primitive_URIField(null=True, blank=True, )
-    event = FHIR_primitive_CanonicalField(null=True, blank=True, )
+    event_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='MessageHeader_event_Coding', null=True, blank=True, on_delete=models.SET_NULL)
+    event_uri = FHIR_primitive_URIField(null=True, blank=True, )
+    event_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
     BINDING_reason = "TODO"
     reason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_reason}, related_name='MessageHeader_reason', blank=True)
     reason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
@@ -16,8 +16,8 @@ class FHIR_MessageHeader(models.Model):
 
 class FHIR_MessageHeader_destination(models.Model):
     MessageHeader = models.ForeignKey(FHIR_MessageHeader, related_name='MessageHeader_destination', null=False, on_delete=models.CASCADE)
-    endpoint = FHIR_primitive_URLField(null=True, blank=True, )
-    endpoint = models.ForeignKey("FHIR_Endpoint", related_name="MessageHeader_destination_endpoint", null=True, blank=True, on_delete=models.SET_NULL)
+    endpoint_url = FHIR_primitive_URLField(null=True, blank=True, )
+    endpoint_Reference = models.ForeignKey("FHIR_Endpoint", related_name="MessageHeader_destination_endpoint_Reference", null=True, blank=True, on_delete=models.SET_NULL)
     name = FHIR_primitive_StringField(null=True, blank=True, )
     receiver_Device = models.ForeignKey("FHIR_Device", related_name="MessageHeader_destination_receiver", null=True, blank=True, on_delete=models.SET_NULL)
     receiver_Organization = models.ForeignKey("FHIR_Organization", related_name="MessageHeader_destination_receiver", null=True, blank=True, on_delete=models.SET_NULL)
@@ -28,8 +28,8 @@ class FHIR_MessageHeader_destination(models.Model):
 
 class FHIR_MessageHeader_source(models.Model):
     MessageHeader = models.ForeignKey(FHIR_MessageHeader, related_name='MessageHeader_source', null=False, on_delete=models.CASCADE)
-    endpoint = FHIR_primitive_URLField(null=True, blank=True, )
-    endpoint = models.ForeignKey("FHIR_Endpoint", related_name="MessageHeader_source_endpoint", null=True, blank=True, on_delete=models.SET_NULL)
+    endpoint_url = FHIR_primitive_URLField(null=True, blank=True, )
+    endpoint_Reference = models.ForeignKey("FHIR_Endpoint", related_name="MessageHeader_source_endpoint_Reference", null=True, blank=True, on_delete=models.SET_NULL)
     name = FHIR_primitive_StringField(null=True, blank=True, )
     software = FHIR_primitive_StringField(null=True, blank=True, )
     version = FHIR_primitive_StringField(null=True, blank=True, )

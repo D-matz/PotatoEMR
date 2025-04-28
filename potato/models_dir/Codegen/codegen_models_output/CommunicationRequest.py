@@ -21,8 +21,8 @@ class FHIR_CommunicationRequest(models.Model):
     subject_Patient = models.ForeignKey("FHIR_Patient", related_name="CommunicationRequest_subject", null=True, blank=True, on_delete=models.SET_NULL)
     subject_Group = models.ForeignKey("FHIR_Group", related_name="CommunicationRequest_subject", null=True, blank=True, on_delete=models.SET_NULL)
     encounter = models.ForeignKey("FHIR_Encounter", related_name="CommunicationRequest_encounter", null=True, blank=True, on_delete=models.SET_NULL)
-    occurrence = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    occurrence = models.OneToOneField("FHIR_GP_Period", related_name='CommunicationRequest_occurrence', null=True, blank=True, on_delete=models.SET_NULL)
+    occurrence_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    occurrence_Period = models.OneToOneField("FHIR_GP_Period", related_name='CommunicationRequest_occurrence_Period', null=True, blank=True, on_delete=models.SET_NULL)
     authoredOn = FHIR_primitive_DateTimeField(null=True, blank=True, )
     requester_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="CommunicationRequest_requester", null=True, blank=True, on_delete=models.SET_NULL)
     requester_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="CommunicationRequest_requester", null=True, blank=True, on_delete=models.SET_NULL)
@@ -68,10 +68,10 @@ class FHIR_CommunicationRequest_medium(models.Model):
     
 class FHIR_CommunicationRequest_payload(models.Model):
     CommunicationRequest = models.ForeignKey(FHIR_CommunicationRequest, related_name='CommunicationRequest_payload', null=False, on_delete=models.CASCADE)
-    content = models.OneToOneField("FHIR_GP_Attachment", related_name='CommunicationRequest_payload_content', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_content = "TODO"
-    content_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_content}, related_name='CommunicationRequest_payload_content', blank=True)
-    content_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    content_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='CommunicationRequest_payload_content_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_content_CodeableConcept = "TODO"
+    content_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_content_CodeableConcept}, related_name='CommunicationRequest_payload_content_CodeableConcept', blank=True)
+    content_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
 class FHIR_CommunicationRequest_reason(models.Model):
     CommunicationRequest = models.ForeignKey(FHIR_CommunicationRequest, related_name='CommunicationRequest_reason', null=False, on_delete=models.CASCADE)

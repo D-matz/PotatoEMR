@@ -8,8 +8,8 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 class FHIR_Evidence(models.Model):
     url = FHIR_primitive_URIField(null=True, blank=True, )
     version = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = models.OneToOneField("FHIR_GP_Coding", related_name='Evidence_versionAlgorithm', null=True, blank=True, on_delete=models.SET_NULL)
+    versionAlgorithm_string = FHIR_primitive_StringField(null=True, blank=True, )
+    versionAlgorithm_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='Evidence_versionAlgorithm_Coding', null=True, blank=True, on_delete=models.SET_NULL)
     name = FHIR_primitive_StringField(null=True, blank=True, )
     title = FHIR_primitive_StringField(null=True, blank=True, )
     citeAs = FHIR_primitive_MarkdownField(null=True, blank=True, )
@@ -33,10 +33,10 @@ class FHIR_Evidence_relatesTo(models.Model):
     Evidence = models.ForeignKey(FHIR_Evidence, related_name='Evidence_relatesTo', null=False, on_delete=models.CASCADE)
     class TypeChoices(models.TextChoices): DOCUMENTATION = 'documentation', 'Documentation'; JUSTIFICATION = 'justification', 'Justification'; PREDECESSOR = 'predecessor', 'Predecessor'; SUCCESSOR = 'successor', 'Successor'; DERIVED_FROM = 'derived-from', 'Derived-from'; DEPENDS_ON = 'depends-on', 'Depends-on'; COMPOSED_OF = 'composed-of', 'Composed-of'; PART_OF = 'part-of', 'Part-of'; AMENDS = 'amends', 'Amends'; AMENDED_WITH = 'amended-with', 'Amended-with'; APPENDS = 'appends', 'Appends'; APPENDED_WITH = 'appended-with', 'Appended-with'; CITES = 'cites', 'Cites'; CITED_BY = 'cited-by', 'Cited-by'; COMMENTS_ON = 'comments-on', 'Comments-on'; COMMENT_IN = 'comment-in', 'Comment-in'; CONTAINS = 'contains', 'Contains'; CONTAINED_IN = 'contained-in', 'Contained-in'; CORRECTS = 'corrects', 'Corrects'; CORRECTION_IN = 'correction-in', 'Correction-in'; REPLACES = 'replaces', 'Replaces'; REPLACED_WITH = 'replaced-with', 'Replaced-with'; RETRACTS = 'retracts', 'Retracts'; RETRACTED_BY = 'retracted-by', 'Retracted-by'; SIGNS = 'signs', 'Signs'; SIMILAR_TO = 'similar-to', 'Similar-to'; SUPPORTS = 'supports', 'Supports'; SUPPORTED_WITH = 'supported-with', 'Supported-with'; TRANSFORMS = 'transforms', 'Transforms'; TRANSFORMED_INTO = 'transformed-into', 'Transformed-into'; TRANSFORMED_WITH = 'transformed-with', 'Transformed-with'; SPECIFICATION_OF = 'specification-of', 'Specification-of'; CREATED_WITH = 'created-with', 'Created-with'; CITE_AS = 'cite-as', 'Cite-as'; SUMMARIZES = 'summarizes', 'Summarizes'; 
     type = FHIR_primitive_CodeField(choices=TypeChoices.choices, null=True, blank=True, )
-    target = FHIR_primitive_URIField(null=True, blank=True, )
-    target = models.OneToOneField("FHIR_GP_Attachment", related_name='Evidence_relatesTo_target', null=True, blank=True, on_delete=models.SET_NULL)
-    target = FHIR_primitive_CanonicalField(null=True, blank=True, )
-    target = FHIR_primitive_MarkdownField(null=True, blank=True, )
+    target_uri = FHIR_primitive_URIField(null=True, blank=True, )
+    target_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='Evidence_relatesTo_target_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
+    target_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
+    target_markdown = FHIR_primitive_MarkdownField(null=True, blank=True, )
 
 class FHIR_Evidence_note(FHIR_GP_Annotation):
     Evidence = models.ForeignKey(FHIR_Evidence, related_name='Evidence_note', null=False, on_delete=models.CASCADE)
@@ -117,11 +117,11 @@ class FHIR_Evidence_statistic_modelCharacteristic(models.Model):
     BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='Evidence_statistic_modelCharacteristic_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='Evidence_statistic_modelCharacteristic_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Range", related_name='Evidence_statistic_modelCharacteristic_value', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_value = "TODO"
-    value_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value}, related_name='Evidence_statistic_modelCharacteristic_value', blank=True)
-    value_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Evidence_statistic_modelCharacteristic_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Range = models.OneToOneField("FHIR_GP_Range", related_name='Evidence_statistic_modelCharacteristic_value_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_value_CodeableConcept = "TODO"
+    value_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value_CodeableConcept}, related_name='Evidence_statistic_modelCharacteristic_value_CodeableConcept', blank=True)
+    value_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     intended = FHIR_primitive_BooleanField(null=True, blank=True, )
     applied = FHIR_primitive_BooleanField(null=True, blank=True, )
 

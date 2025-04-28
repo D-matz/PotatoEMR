@@ -5,6 +5,7 @@ from .models_dir.FHIR_DataTypes.FHIR_metadata import *
 
 from .models_dir.FHIR_Resources.AllergyIntolerance import *
 from .models_dir.FHIR_Resources.Appointment import *
+from .models_dir.FHIR_Resources.Condition import *
 from .models_dir.FHIR_Resources.Encounter import *
 from .models_dir.FHIR_Resources.Immunization import *
 from .models_dir.FHIR_Resources.Location import *
@@ -44,7 +45,6 @@ class FHIR_CommunicationRequest(models.Model): pass
 class FHIR_CompartmentDefinition(models.Model): pass
 class FHIR_Composition(models.Model): pass
 class FHIR_ConceptMap(models.Model): pass
-class FHIR_Condition(models.Model): pass
 class FHIR_ConditionDefinition(models.Model): pass
 class FHIR_Consent(models.Model): pass
 class FHIR_Contract(models.Model): pass

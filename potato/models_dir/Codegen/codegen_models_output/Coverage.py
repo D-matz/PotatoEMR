@@ -69,8 +69,8 @@ class FHIR_Coverage_costToBeneficiary(models.Model):
     BINDING_term = "TODO"
     term_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_term}, related_name='Coverage_costToBeneficiary_term', blank=True)
     term_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='Coverage_costToBeneficiary_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='Coverage_costToBeneficiary_value', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Coverage_costToBeneficiary_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Money = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='Coverage_costToBeneficiary_value_Money', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_Coverage_costToBeneficiary_exception(models.Model):
     Coverage_costToBeneficiary = models.ForeignKey(FHIR_Coverage_costToBeneficiary, related_name='Coverage_costToBeneficiary_exception', null=False, on_delete=models.CASCADE)

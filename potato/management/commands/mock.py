@@ -14,6 +14,21 @@ class Command(BaseCommand):
         patient_model_list = FHIR_Patient.objects.all()
         print("patients", patient_model_list)
 
+        FHIR_Condition.objects.all().delete()
+        choices_clinicalStatus = FHIR_GP_Coding.objects.filter(codings__binding_rule=FHIR_Condition.BINDING_clinicalStatus)
+        choices_verificationStatus = FHIR_GP_Coding.objects.filter(codings__binding_rule=FHIR_Condition.BINDING_verificationStatus)
+        choices_severity = FHIR_GP_Coding.objects.filter(codings__binding_rule=FHIR_Condition.BINDING_severity)
+        choices_code = FHIR_GP_Coding.objects.filter(codings__binding_rule=FHIR_Condition.BINDING_code)
+        print("choices_clinicalStatus", FHIR_Condition.BINDING_clinicalStatus, choices_clinicalStatus)
+        for patient_model in patient_model_list:
+            for i in range(0, random.randint(3, 7)):
+                condition_model = FHIR_Condition.objects.create(subject_Patient=patient_model)
+                condition_model.clinicalStatus_cc.set([random.choice(choices_clinicalStatus)])
+                condition_model.verificationStatus_cc.set([random.choice(choices_verificationStatus)])
+                condition_model.severity_cc.set([random.choice(choices_severity)])
+                condition_model.code_cc.set([random.choice(choices_code)])
+        print(FHIR_Condition.objects.count(), "conditions created")
+
         FHIR_Appointment.objects.all().delete()
         FHIR_Practitioner.objects.all().delete()
         FHIR_Location.objects.all().delete()

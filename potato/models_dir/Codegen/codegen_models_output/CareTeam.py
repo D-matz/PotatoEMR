@@ -42,8 +42,8 @@ class FHIR_CareTeam_participant(models.Model):
     onBehalfOf_Organization = models.ForeignKey("FHIR_Organization", related_name="CareTeam_participant_onBehalfOf", null=True, blank=True, on_delete=models.SET_NULL)
     onBehalfOf_CareTeam = models.ForeignKey("FHIR_CareTeam", related_name="CareTeam_participant_onBehalfOf", null=True, blank=True, on_delete=models.SET_NULL)
     onBehalfOf_Group = models.ForeignKey("FHIR_Group", related_name="CareTeam_participant_onBehalfOf", null=True, blank=True, on_delete=models.SET_NULL)
-    effective = models.OneToOneField("FHIR_GP_Period", related_name='CareTeam_participant_effective', null=True, blank=True, on_delete=models.SET_NULL)
-    effective = models.OneToOneField("FHIR_GP_Timing", related_name='CareTeam_participant_effective', null=True, blank=True, on_delete=models.SET_NULL)
+    effective_Period = models.OneToOneField("FHIR_GP_Period", related_name='CareTeam_participant_effective_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    effective_Timing = models.OneToOneField("FHIR_GP_Timing", related_name='CareTeam_participant_effective_Timing', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_CareTeam_reason(models.Model):
     CareTeam = models.ForeignKey(FHIR_CareTeam, related_name='CareTeam_reason', null=False, on_delete=models.CASCADE)

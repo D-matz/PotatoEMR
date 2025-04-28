@@ -43,7 +43,7 @@ def getCodingsFromFHIRValueSet(binding_url):
     else:
         print("Could not find codes table on the page")
 
-    writeCodingFile = "potato/FHIR_Codings_and_Bindings/" + binding_url.replace("http://www.", "").replace("https://www.", "").replace("/", "_").replace("-", "_").replace(".", "_") + ".py"
+    writeCodingFile = "potato/FHIR_Codings_and_Bindings/" + binding_url.replace("http://www.", "").replace("https://www.", "").replace("https://", "").replace("http://", "").replace("/", "_").replace("-", "_").replace(".", "_") + ".py"
     print("write file: " + writeCodingFile)
     coding_file = open(writeCodingFile, 'w', encoding='utf-8')
     coding_file.write("binding = \"" + binding_url + "\"\n")
@@ -58,9 +58,10 @@ def getCodingsFromFHIRValueSet(binding_url):
     coding_file.write("]\n")
 
 
-
+##python manage.py saveCodingsToDB https://hl7.org/fhir/valueset-condition-clinical.html
 class Command(BaseCommand):
-    help = 'Save FHIR codings from potato/FHIR_Codings_and_Bindings'
+    help = f'''Save FHIR codings from potato/FHIR_Codings_and_Bindings,
+add argument such as https://hl7.org/fhir/valueset-condition-clinical.html'''
 
     def add_arguments(self, parser):
         parser.add_argument('binding_url', type=str, nargs='?', default=None)

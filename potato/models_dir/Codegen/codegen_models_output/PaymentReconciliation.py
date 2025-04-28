@@ -64,9 +64,9 @@ class FHIR_PaymentReconciliation_allocation(models.Model):
     target_ChargeItem = models.ForeignKey("FHIR_ChargeItem", related_name="PaymentReconciliation_allocation_target", null=True, blank=True, on_delete=models.SET_NULL)
     target_Encounter = models.ForeignKey("FHIR_Encounter", related_name="PaymentReconciliation_allocation_target", null=True, blank=True, on_delete=models.SET_NULL)
     target_Contract = models.ForeignKey("FHIR_Contract", related_name="PaymentReconciliation_allocation_target", null=True, blank=True, on_delete=models.SET_NULL)
-    targetItem = FHIR_primitive_StringField(null=True, blank=True, )
-    targetItem = models.OneToOneField("FHIR_GP_Identifier", related_name='PaymentReconciliation_allocation_targetItem', null=True, blank=True, on_delete=models.SET_NULL)
-    targetItem = FHIR_primitive_PositiveIntField(null=True, blank=True, )
+    targetItem_string = FHIR_primitive_StringField(null=True, blank=True, )
+    targetItem_Identifier = models.OneToOneField("FHIR_GP_Identifier", related_name='PaymentReconciliation_allocation_targetItem_Identifier', null=True, blank=True, on_delete=models.SET_NULL)
+    targetItem_positiveInt = FHIR_primitive_PositiveIntField(null=True, blank=True, )
     encounter = models.ForeignKey("FHIR_Encounter", related_name="PaymentReconciliation_allocation_encounter", null=True, blank=True, on_delete=models.SET_NULL)
     account = models.ForeignKey("FHIR_Account", related_name="PaymentReconciliation_allocation_account", null=True, blank=True, on_delete=models.SET_NULL)
     BINDING_type = "TODO"

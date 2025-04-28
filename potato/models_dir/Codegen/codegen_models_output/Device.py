@@ -81,14 +81,14 @@ class FHIR_Device_property(models.Model):
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='Device_property_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='Device_property_value', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_value = "TODO"
-    value_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value}, related_name='Device_property_value', blank=True)
-    value_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = FHIR_primitive_StringField(null=True, blank=True, )
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Range", related_name='Device_property_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Attachment", related_name='Device_property_value', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Device_property_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_value_CodeableConcept = "TODO"
+    value_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value_CodeableConcept}, related_name='Device_property_value_CodeableConcept', blank=True)
+    value_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    value_string = FHIR_primitive_StringField(null=True, blank=True, )
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    value_Range = models.OneToOneField("FHIR_GP_Range", related_name='Device_property_value_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='Device_property_value_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_Device_additive(models.Model):
     Device = models.ForeignKey(FHIR_Device, related_name='Device_additive', null=False, on_delete=models.CASCADE)

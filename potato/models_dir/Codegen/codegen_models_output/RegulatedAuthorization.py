@@ -68,5 +68,5 @@ class FHIR_RegulatedAuthorization_case(models.Model):
     BINDING_status = "TODO"
     status_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_status}, related_name='RegulatedAuthorization_case_status', blank=True)
     status_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    date = models.OneToOneField("FHIR_GP_Period", related_name='RegulatedAuthorization_case_date', null=True, blank=True, on_delete=models.SET_NULL)
-    date = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    date_Period = models.OneToOneField("FHIR_GP_Period", related_name='RegulatedAuthorization_case_date_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    date_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )

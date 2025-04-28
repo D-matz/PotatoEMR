@@ -39,10 +39,10 @@ class FHIR_MolecularDefinition_location_sequenceLocation(models.Model):
 
 class FHIR_MolecularDefinition_location_sequenceLocation_coordinateInterval(models.Model):
     MolecularDefinition_location_sequenceLocation = models.ForeignKey(FHIR_MolecularDefinition_location_sequenceLocation, related_name='MolecularDefinition_location_sequenceLocation_coordinateInterval', null=False, on_delete=models.CASCADE)
-    start = models.OneToOneField("FHIR_GP_Quantity", related_name='MolecularDefinition_location_sequenceLocation_coordinateInterval_start', null=True, blank=True, on_delete=models.SET_NULL)
-    start = models.OneToOneField("FHIR_GP_Range", related_name='MolecularDefinition_location_sequenceLocation_coordinateInterval_start', null=True, blank=True, on_delete=models.SET_NULL)
-    end = models.OneToOneField("FHIR_GP_Quantity", related_name='MolecularDefinition_location_sequenceLocation_coordinateInterval_end', null=True, blank=True, on_delete=models.SET_NULL)
-    end = models.OneToOneField("FHIR_GP_Range", related_name='MolecularDefinition_location_sequenceLocation_coordinateInterval_end', null=True, blank=True, on_delete=models.SET_NULL)
+    start_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='MolecularDefinition_location_sequenceLocation_coordinateInterval_start_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    start_Range = models.OneToOneField("FHIR_GP_Range", related_name='MolecularDefinition_location_sequenceLocation_coordinateInterval_start_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    end_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='MolecularDefinition_location_sequenceLocation_coordinateInterval_end_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    end_Range = models.OneToOneField("FHIR_GP_Range", related_name='MolecularDefinition_location_sequenceLocation_coordinateInterval_end_Range', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_MolecularDefinition_location_sequenceLocation_coordinateInterval_coordinateSystem(models.Model):
     MolecularDefinition_location_sequenceLocation_coordinateInterval = models.ForeignKey(FHIR_MolecularDefinition_location_sequenceLocation_coordinateInterval, related_name='MolecularDefinition_location_sequenceLocation_coordinateInterval_coordinateSystem', null=False, on_delete=models.CASCADE)
@@ -70,8 +70,8 @@ class FHIR_MolecularDefinition_location_cytobandLocation_genomeAssembly(models.M
     BINDING_accession = "TODO"
     accession_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_accession}, related_name='MolecularDefinition_location_cytobandLocation_genomeAssembly_accession', blank=True)
     accession_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    description = FHIR_primitive_MarkdownField(null=True, blank=True, )
-    description = FHIR_primitive_StringField(null=True, blank=True, )
+    description_markdown = FHIR_primitive_MarkdownField(null=True, blank=True, )
+    description_string = FHIR_primitive_StringField(null=True, blank=True, )
 
 class FHIR_MolecularDefinition_location_cytobandLocation_cytobandInterval(models.Model):
     MolecularDefinition_location_cytobandLocation = models.ForeignKey(FHIR_MolecularDefinition_location_cytobandLocation, related_name='MolecularDefinition_location_cytobandLocation_cytobandInterval', null=False, on_delete=models.CASCADE)
@@ -81,33 +81,33 @@ class FHIR_MolecularDefinition_location_cytobandLocation_cytobandInterval(models
 
 class FHIR_MolecularDefinition_location_cytobandLocation_cytobandInterval_startCytoband(models.Model):
     MolecularDefinition_location_cytobandLocation_cytobandInterval = models.ForeignKey(FHIR_MolecularDefinition_location_cytobandLocation_cytobandInterval, related_name='MolecularDefinition_location_cytobandLocation_cytobandInterval_startCytoband', null=False, on_delete=models.CASCADE)
-    class ArmChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
-    arm = FHIR_primitive_CodeField(choices=ArmChoices.choices, null=True, blank=True, )
-    arm = FHIR_primitive_StringField(null=True, blank=True, )
-    class RegionChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
-    region = FHIR_primitive_CodeField(choices=RegionChoices.choices, null=True, blank=True, )
-    region = FHIR_primitive_StringField(null=True, blank=True, )
-    class BandChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
-    band = FHIR_primitive_CodeField(choices=BandChoices.choices, null=True, blank=True, )
-    band = FHIR_primitive_StringField(null=True, blank=True, )
-    class SubbandChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
-    subBand = FHIR_primitive_CodeField(choices=SubbandChoices.choices, null=True, blank=True, )
-    subBand = FHIR_primitive_StringField(null=True, blank=True, )
+    class Arm_codeChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
+    arm_code = FHIR_primitive_CodeField(choices=Arm_codeChoices.choices, null=True, blank=True, )
+    arm_string = FHIR_primitive_StringField(null=True, blank=True, )
+    class Region_codeChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
+    region_code = FHIR_primitive_CodeField(choices=Region_codeChoices.choices, null=True, blank=True, )
+    region_string = FHIR_primitive_StringField(null=True, blank=True, )
+    class Band_codeChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
+    band_code = FHIR_primitive_CodeField(choices=Band_codeChoices.choices, null=True, blank=True, )
+    band_string = FHIR_primitive_StringField(null=True, blank=True, )
+    class Subband_codeChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
+    subBand_code = FHIR_primitive_CodeField(choices=Subband_codeChoices.choices, null=True, blank=True, )
+    subBand_string = FHIR_primitive_StringField(null=True, blank=True, )
 
 class FHIR_MolecularDefinition_location_cytobandLocation_cytobandInterval_endCytoband(models.Model):
     MolecularDefinition_location_cytobandLocation_cytobandInterval = models.ForeignKey(FHIR_MolecularDefinition_location_cytobandLocation_cytobandInterval, related_name='MolecularDefinition_location_cytobandLocation_cytobandInterval_endCytoband', null=False, on_delete=models.CASCADE)
-    class ArmChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
-    arm = FHIR_primitive_CodeField(choices=ArmChoices.choices, null=True, blank=True, )
-    arm = FHIR_primitive_StringField(null=True, blank=True, )
-    class RegionChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
-    region = FHIR_primitive_CodeField(choices=RegionChoices.choices, null=True, blank=True, )
-    region = FHIR_primitive_StringField(null=True, blank=True, )
-    class BandChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
-    band = FHIR_primitive_CodeField(choices=BandChoices.choices, null=True, blank=True, )
-    band = FHIR_primitive_StringField(null=True, blank=True, )
-    class SubbandChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
-    subBand = FHIR_primitive_CodeField(choices=SubbandChoices.choices, null=True, blank=True, )
-    subBand = FHIR_primitive_StringField(null=True, blank=True, )
+    class Arm_codeChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
+    arm_code = FHIR_primitive_CodeField(choices=Arm_codeChoices.choices, null=True, blank=True, )
+    arm_string = FHIR_primitive_StringField(null=True, blank=True, )
+    class Region_codeChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
+    region_code = FHIR_primitive_CodeField(choices=Region_codeChoices.choices, null=True, blank=True, )
+    region_string = FHIR_primitive_StringField(null=True, blank=True, )
+    class Band_codeChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
+    band_code = FHIR_primitive_CodeField(choices=Band_codeChoices.choices, null=True, blank=True, )
+    band_string = FHIR_primitive_StringField(null=True, blank=True, )
+    class Subband_codeChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
+    subBand_code = FHIR_primitive_CodeField(choices=Subband_codeChoices.choices, null=True, blank=True, )
+    subBand_string = FHIR_primitive_StringField(null=True, blank=True, )
 
 class FHIR_MolecularDefinition_representation(models.Model):
     MolecularDefinition = models.ForeignKey(FHIR_MolecularDefinition, related_name='MolecularDefinition_representation', null=False, on_delete=models.CASCADE)
@@ -136,10 +136,10 @@ class FHIR_MolecularDefinition_representation_extracted(models.Model):
 
 class FHIR_MolecularDefinition_representation_extracted_coordinateInterval(models.Model):
     MolecularDefinition_representation_extracted = models.ForeignKey(FHIR_MolecularDefinition_representation_extracted, related_name='MolecularDefinition_representation_extracted_coordinateInterval', null=False, on_delete=models.CASCADE)
-    start = models.OneToOneField("FHIR_GP_Quantity", related_name='MolecularDefinition_representation_extracted_coordinateInterval_start', null=True, blank=True, on_delete=models.SET_NULL)
-    start = models.OneToOneField("FHIR_GP_Range", related_name='MolecularDefinition_representation_extracted_coordinateInterval_start', null=True, blank=True, on_delete=models.SET_NULL)
-    end = models.OneToOneField("FHIR_GP_Quantity", related_name='MolecularDefinition_representation_extracted_coordinateInterval_end', null=True, blank=True, on_delete=models.SET_NULL)
-    end = models.OneToOneField("FHIR_GP_Range", related_name='MolecularDefinition_representation_extracted_coordinateInterval_end', null=True, blank=True, on_delete=models.SET_NULL)
+    start_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='MolecularDefinition_representation_extracted_coordinateInterval_start_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    start_Range = models.OneToOneField("FHIR_GP_Range", related_name='MolecularDefinition_representation_extracted_coordinateInterval_start_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    end_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='MolecularDefinition_representation_extracted_coordinateInterval_end_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    end_Range = models.OneToOneField("FHIR_GP_Range", related_name='MolecularDefinition_representation_extracted_coordinateInterval_end_Range', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_MolecularDefinition_representation_extracted_coordinateInterval_coordinateSystem(models.Model):
     MolecularDefinition_representation_extracted_coordinateInterval = models.ForeignKey(FHIR_MolecularDefinition_representation_extracted_coordinateInterval, related_name='MolecularDefinition_representation_extracted_coordinateInterval_coordinateSystem', null=False, on_delete=models.CASCADE)
@@ -175,10 +175,10 @@ class FHIR_MolecularDefinition_representation_relative_edit(models.Model):
 
 class FHIR_MolecularDefinition_representation_relative_edit_coordinateInterval(models.Model):
     MolecularDefinition_representation_relative_edit = models.ForeignKey(FHIR_MolecularDefinition_representation_relative_edit, related_name='MolecularDefinition_representation_relative_edit_coordinateInterval', null=False, on_delete=models.CASCADE)
-    start = models.OneToOneField("FHIR_GP_Quantity", related_name='MolecularDefinition_representation_relative_edit_coordinateInterval_start', null=True, blank=True, on_delete=models.SET_NULL)
-    start = models.OneToOneField("FHIR_GP_Range", related_name='MolecularDefinition_representation_relative_edit_coordinateInterval_start', null=True, blank=True, on_delete=models.SET_NULL)
-    end = models.OneToOneField("FHIR_GP_Quantity", related_name='MolecularDefinition_representation_relative_edit_coordinateInterval_end', null=True, blank=True, on_delete=models.SET_NULL)
-    end = models.OneToOneField("FHIR_GP_Range", related_name='MolecularDefinition_representation_relative_edit_coordinateInterval_end', null=True, blank=True, on_delete=models.SET_NULL)
+    start_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='MolecularDefinition_representation_relative_edit_coordinateInterval_start_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    start_Range = models.OneToOneField("FHIR_GP_Range", related_name='MolecularDefinition_representation_relative_edit_coordinateInterval_start_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    end_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='MolecularDefinition_representation_relative_edit_coordinateInterval_end_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    end_Range = models.OneToOneField("FHIR_GP_Range", related_name='MolecularDefinition_representation_relative_edit_coordinateInterval_end_Range', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_MolecularDefinition_representation_relative_edit_coordinateInterval_coordinateSystem(models.Model):
     MolecularDefinition_representation_relative_edit_coordinateInterval = models.ForeignKey(FHIR_MolecularDefinition_representation_relative_edit_coordinateInterval, related_name='MolecularDefinition_representation_relative_edit_coordinateInterval_coordinateSystem', null=False, on_delete=models.CASCADE)

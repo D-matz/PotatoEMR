@@ -6,16 +6,18 @@ from ..FHIR_DataTypes.FHIR_metadata import *
 from ..FHIR_DataTypes.FHIR_primitive import *
 
 class FHIR_Patient(models.Model):
+    def __str__(self):
+        patient_names = [name.text for name in self.Patient_name.all() if name.text]; return ', '.join(patient_names) if patient_names else 'Unnamed Patient'
     active = FHIR_primitive_BooleanField(null=True, blank=True, )
     class GenderChoices(models.TextChoices): MALE = 'male', 'Male'; FEMALE = 'female', 'Female'; OTHER = 'other', 'Other'; UNKNOWN = 'unknown', 'Unknown'; 
     gender = FHIR_primitive_CodeField(choices=GenderChoices.choices, null=True, blank=True, )
     birthDate = FHIR_primitive_DateField(null=True, blank=True, )
-    deceased = FHIR_primitive_BooleanField(null=True, blank=True, )
-    deceased = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    deceased_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    deceased_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
     BINDING_maritalStatus = "TODO"
     maritalStatus_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_maritalStatus}, related_name='Patient_maritalStatus', blank=True)
     maritalStatus_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    multipleBirth = FHIR_primitive_BooleanField(null=True, blank=True, )
+    multipleBirth_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
     generalPractitioner_Organization = models.ManyToManyField("FHIR_Organization", related_name="Patient_generalPractitioner", blank=True)
     generalPractitioner_Practitioner = models.ManyToManyField("FHIR_Practitioner", related_name="Patient_generalPractitioner", blank=True)
     generalPractitioner_PractitionerRole = models.ManyToManyField("FHIR_PractitionerRole", related_name="Patient_generalPractitioner", blank=True)

@@ -54,3 +54,5 @@ bundle from http://www.iana.org/assignments/link-relations/link-relations.xhtml#
 ^some of these codes aren't like a | b | c
 
 add __str__ to models manually idk
+
+chart review (encounters, notes, labs, imaging), grwoth, pre chart, immunizations, history/ core review, summaries, visit checklist, problem list, notes

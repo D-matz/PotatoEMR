@@ -42,17 +42,17 @@ class FHIR_Ingredient_substance(models.Model):
 
 class FHIR_Ingredient_substance_strength(models.Model):
     Ingredient_substance = models.ForeignKey(FHIR_Ingredient_substance, related_name='Ingredient_substance_strength', null=False, on_delete=models.CASCADE)
-    presentation = models.OneToOneField("FHIR_GP_Ratio", related_name='Ingredient_substance_strength_presentation', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_presentation = "TODO"
-    presentation_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_presentation}, related_name='Ingredient_substance_strength_presentation', blank=True)
-    presentation_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    presentation = models.OneToOneField("FHIR_GP_Quantity", related_name='Ingredient_substance_strength_presentation', null=True, blank=True, on_delete=models.SET_NULL)
+    presentation_Ratio = models.OneToOneField("FHIR_GP_Ratio", related_name='Ingredient_substance_strength_presentation_Ratio', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_presentation_CodeableConcept = "TODO"
+    presentation_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_presentation_CodeableConcept}, related_name='Ingredient_substance_strength_presentation_CodeableConcept', blank=True)
+    presentation_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    presentation_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Ingredient_substance_strength_presentation_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
     textPresentation = FHIR_primitive_StringField(null=True, blank=True, )
-    concentration = models.OneToOneField("FHIR_GP_Ratio", related_name='Ingredient_substance_strength_concentration', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_concentration = "TODO"
-    concentration_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_concentration}, related_name='Ingredient_substance_strength_concentration', blank=True)
-    concentration_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    concentration = models.OneToOneField("FHIR_GP_Quantity", related_name='Ingredient_substance_strength_concentration', null=True, blank=True, on_delete=models.SET_NULL)
+    concentration_Ratio = models.OneToOneField("FHIR_GP_Ratio", related_name='Ingredient_substance_strength_concentration_Ratio', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_concentration_CodeableConcept = "TODO"
+    concentration_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_concentration_CodeableConcept}, related_name='Ingredient_substance_strength_concentration_CodeableConcept', blank=True)
+    concentration_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    concentration_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Ingredient_substance_strength_concentration_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
     textConcentration = FHIR_primitive_StringField(null=True, blank=True, )
     BINDING_basis = "TODO"
     basis_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_basis}, related_name='Ingredient_substance_strength_basis', blank=True)
@@ -71,8 +71,8 @@ class FHIR_Ingredient_substance_strength_referenceStrength(models.Model):
     substance_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_substance}, related_name='Ingredient_substance_strength_referenceStrength_substance', blank=True)
     substance_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     substance_SubstanceDefinition_ref = models.ForeignKey("FHIR_SubstanceDefinition", related_name="Ingredient_substance_strength_referenceStrength_substance_SubstanceDefinition", null=True, blank=True, on_delete=models.SET_NULL)
-    strength = models.OneToOneField("FHIR_GP_Ratio", related_name='Ingredient_substance_strength_referenceStrength_strength', null=True, blank=True, on_delete=models.SET_NULL)
-    strength = models.OneToOneField("FHIR_GP_Quantity", related_name='Ingredient_substance_strength_referenceStrength_strength', null=True, blank=True, on_delete=models.SET_NULL)
+    strength_Ratio = models.OneToOneField("FHIR_GP_Ratio", related_name='Ingredient_substance_strength_referenceStrength_strength_Ratio', null=True, blank=True, on_delete=models.SET_NULL)
+    strength_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Ingredient_substance_strength_referenceStrength_strength_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
     measurementPoint = FHIR_primitive_StringField(null=True, blank=True, )
 
 class FHIR_Ingredient_substance_strength_referenceStrength_country(models.Model):

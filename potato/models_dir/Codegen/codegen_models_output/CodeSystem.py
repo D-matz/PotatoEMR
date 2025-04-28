@@ -8,8 +8,8 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 class FHIR_CodeSystem(models.Model):
     url = FHIR_primitive_URIField(null=True, blank=True, )
     version = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = models.OneToOneField("FHIR_GP_Coding", related_name='CodeSystem_versionAlgorithm', null=True, blank=True, on_delete=models.SET_NULL)
+    versionAlgorithm_string = FHIR_primitive_StringField(null=True, blank=True, )
+    versionAlgorithm_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='CodeSystem_versionAlgorithm_Coding', null=True, blank=True, on_delete=models.SET_NULL)
     name = FHIR_primitive_StringField(null=True, blank=True, )
     title = FHIR_primitive_StringField(null=True, blank=True, )
     class StatusChoices(models.TextChoices): DRAFT = 'draft', 'Draft'; ACTIVE = 'active', 'Active'; RETIRED = 'retired', 'Retired'; UNKNOWN = 'unknown', 'Unknown'; 
@@ -93,10 +93,10 @@ class FHIR_CodeSystem_concept_property(models.Model):
     CodeSystem_concept = models.ForeignKey(FHIR_CodeSystem_concept, related_name='CodeSystem_concept_property', null=False, on_delete=models.CASCADE)
     class CodeChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
     code = FHIR_primitive_CodeField(choices=CodeChoices.choices, null=True, blank=True, )
-    class ValueChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
-    value = FHIR_primitive_CodeField(choices=ValueChoices.choices, null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Coding", related_name='CodeSystem_concept_property_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = FHIR_primitive_StringField(null=True, blank=True, )
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
-    value = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    value = FHIR_primitive_DecimalField(null=True, blank=True, )
+    class Value_codeChoices(models.TextChoices): TODO = 'TODO', 'Todo'; 
+    value_code = FHIR_primitive_CodeField(choices=Value_codeChoices.choices, null=True, blank=True, )
+    value_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='CodeSystem_concept_property_value_Coding', null=True, blank=True, on_delete=models.SET_NULL)
+    value_string = FHIR_primitive_StringField(null=True, blank=True, )
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    value_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    value_decimal = FHIR_primitive_DecimalField(null=True, blank=True, )

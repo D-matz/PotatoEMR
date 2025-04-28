@@ -63,13 +63,13 @@ class FHIR_PackagedProductDefinition_packaging_property(models.Model):
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='PackagedProductDefinition_packaging_property_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_value = "TODO"
-    value_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value}, related_name='PackagedProductDefinition_packaging_property_value', blank=True)
-    value_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='PackagedProductDefinition_packaging_property_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = FHIR_primitive_DateField(null=True, blank=True, )
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Attachment", related_name='PackagedProductDefinition_packaging_property_value', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_value_CodeableConcept = "TODO"
+    value_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value_CodeableConcept}, related_name='PackagedProductDefinition_packaging_property_value_CodeableConcept', blank=True)
+    value_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='PackagedProductDefinition_packaging_property_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    value_date = FHIR_primitive_DateField(null=True, blank=True, )
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    value_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='PackagedProductDefinition_packaging_property_value_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_PackagedProductDefinition_packaging_containedItem(models.Model):
     PackagedProductDefinition_packaging = models.ForeignKey(FHIR_PackagedProductDefinition_packaging, related_name='PackagedProductDefinition_packaging_containedItem', null=False, on_delete=models.CASCADE)

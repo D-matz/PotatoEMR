@@ -1,3 +1,7 @@
+#python potato/models_dir/Codegen/codegen_models.py -overwrite
+#writes to potato/models_dir/Codegen/codegen_models_output,
+#add -overwrite to directly overwrite models in potato/models_dir/Codegen/FHIR_Resources
+
 from django.core.management.base import BaseCommand
 import requests
 import json
@@ -78,9 +82,18 @@ default_bindings = {
         "BINDING_substance": 'https://www.hl7.org/fhir/valueset-substance-code.html',
         "BINDING_exposureRoute": 'https://www.hl7.org/fhir/valueset-route-codes.html',
         "BINDING_manifestation": 'https://www.hl7.org/fhir/valueset-clinical-findings.html',
+    },
+    "Condition":{
+        "BINDING_clinicalStatus": 'https://hl7.org/fhir/valueset-condition-clinical.html',
+        "BINDING_verificationStatus": 'http://hl7.org/fhir/valueset-condition-ver-status.html',
+        "BINDING_severity": 'https://build.fhir.org/valueset-condition-severity.html',
+        "BINDING_code": 'https://build.fhir.org/valueset-condition-code.html',
     }
 }
 
+default_strs = {
+    "FHIR_Patient": "patient_names = [name.text for name in self.Patient_name.all() if name.text]; return ', '.join(patient_names) if patient_names else 'Unnamed Patient'"
+}
 
 def elementArray_to_ModelString(element_array, FHIR_Resource_name):
     #print("call with num elements", len(element_array))
@@ -271,7 +284,6 @@ class FHIR_{"_".join(id_split)}(models.Model):
     return this_model_lines + "\n" + related_model_lines
 
 
-
 overwrite = "-overwrite" in sys.argv
 base_dir = "potato/models_dir"
 output_dir = os.path.join("potato/models_dir", "FHIR_Resources" if overwrite else "Codegen/codegen_models_output")
@@ -304,6 +316,12 @@ for FHIR_Resource_name in FHIR_resource_list:
     #case where backbone element has foreign key to resource type
     #and field has same name as that resource type
 
+    strdef = "" #might need to do strs for backbone elements too idk
+    if "FHIR_" + FHIR_Resource_name in default_strs:
+        strdef = f'''
+    def __str__(self):
+        {default_strs["FHIR_" + FHIR_Resource_name]}'''
+
     #TODO maybe also print diffs vs models_dir/FHIR_Resources/FHIR_Resource_name.py
     output_file = os.path.join(output_dir, f"{FHIR_Resource_name}.py")
     print("writing", output_file)
@@ -315,4 +333,4 @@ from ..FHIR_DataTypes.FHIR_specialpurpose import *
 from ..FHIR_DataTypes.FHIR_metadata import *
 from ..FHIR_DataTypes.FHIR_primitive import *
 
-class FHIR_{FHIR_Resource_name}(models.Model):{all_model_lines}''')
+class FHIR_{FHIR_Resource_name}(models.Model):{strdef}{all_model_lines}''')

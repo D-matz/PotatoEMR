@@ -9,8 +9,8 @@ class FHIR_CoverageEligibilityResponse(models.Model):
     class StatusChoices(models.TextChoices): ACTIVE = 'active', 'Active'; CANCELLED = 'cancelled', 'Cancelled'; DRAFT = 'draft', 'Draft'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; 
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
     patient = models.ForeignKey("FHIR_Patient", related_name="CoverageEligibilityResponse_patient", null=True, blank=True, on_delete=models.SET_NULL)
-    serviced = FHIR_primitive_DateField(null=True, blank=True, )
-    serviced = models.OneToOneField("FHIR_GP_Period", related_name='CoverageEligibilityResponse_serviced', null=True, blank=True, on_delete=models.SET_NULL)
+    serviced_date = FHIR_primitive_DateField(null=True, blank=True, )
+    serviced_Period = models.OneToOneField("FHIR_GP_Period", related_name='CoverageEligibilityResponse_serviced_Period', null=True, blank=True, on_delete=models.SET_NULL)
     created = FHIR_primitive_DateTimeField(null=True, blank=True, )
     requestor_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="CoverageEligibilityResponse_requestor", null=True, blank=True, on_delete=models.SET_NULL)
     requestor_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="CoverageEligibilityResponse_requestor", null=True, blank=True, on_delete=models.SET_NULL)
@@ -39,8 +39,8 @@ class FHIR_CoverageEligibilityResponse_event(models.Model):
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='CoverageEligibilityResponse_event_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    when = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    when = models.OneToOneField("FHIR_GP_Period", related_name='CoverageEligibilityResponse_event_when', null=True, blank=True, on_delete=models.SET_NULL)
+    when_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    when_Period = models.OneToOneField("FHIR_GP_Period", related_name='CoverageEligibilityResponse_event_when_Period', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_CoverageEligibilityResponse_insurance(models.Model):
     CoverageEligibilityResponse = models.ForeignKey(FHIR_CoverageEligibilityResponse, related_name='CoverageEligibilityResponse_insurance', null=False, on_delete=models.CASCADE)
@@ -84,12 +84,12 @@ class FHIR_CoverageEligibilityResponse_insurance_item_benefit(models.Model):
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='CoverageEligibilityResponse_insurance_item_benefit_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    allowed = FHIR_primitive_UnsignedIntField(null=True, blank=True, )
-    allowed = FHIR_primitive_StringField(null=True, blank=True, )
-    allowed = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='CoverageEligibilityResponse_insurance_item_benefit_allowed', null=True, blank=True, on_delete=models.SET_NULL)
-    used = FHIR_primitive_UnsignedIntField(null=True, blank=True, )
-    used = FHIR_primitive_StringField(null=True, blank=True, )
-    used = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='CoverageEligibilityResponse_insurance_item_benefit_used', null=True, blank=True, on_delete=models.SET_NULL)
+    allowed_unsignedInt = FHIR_primitive_UnsignedIntField(null=True, blank=True, )
+    allowed_string = FHIR_primitive_StringField(null=True, blank=True, )
+    allowed_Money = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='CoverageEligibilityResponse_insurance_item_benefit_allowed_Money', null=True, blank=True, on_delete=models.SET_NULL)
+    used_unsignedInt = FHIR_primitive_UnsignedIntField(null=True, blank=True, )
+    used_string = FHIR_primitive_StringField(null=True, blank=True, )
+    used_Money = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='CoverageEligibilityResponse_insurance_item_benefit_used_Money', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_CoverageEligibilityResponse_insurance_item_authorizationSupporting(models.Model):
     CoverageEligibilityResponse_insurance_item = models.ForeignKey(FHIR_CoverageEligibilityResponse_insurance_item, related_name='CoverageEligibilityResponse_insurance_item_authorizationSupporting', null=False, on_delete=models.CASCADE)

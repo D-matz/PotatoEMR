@@ -51,10 +51,10 @@ class FHIR_MedicationKnowledge_cost(models.Model):
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='MedicationKnowledge_cost_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     source = FHIR_primitive_StringField(null=True, blank=True, )
-    cost = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='MedicationKnowledge_cost_cost', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_cost = "TODO"
-    cost_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_cost}, related_name='MedicationKnowledge_cost_cost', blank=True)
-    cost_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    cost_Money = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='MedicationKnowledge_cost_cost_Money', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_cost_CodeableConcept = "TODO"
+    cost_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_cost_CodeableConcept}, related_name='MedicationKnowledge_cost_cost_CodeableConcept', blank=True)
+    cost_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
 class FHIR_MedicationKnowledge_cost_effectiveDate(FHIR_GP_Period):
     MedicationKnowledge_cost = models.ForeignKey(FHIR_MedicationKnowledge_cost, related_name='MedicationKnowledge_cost_effectiveDate', null=False, on_delete=models.CASCADE)
@@ -99,19 +99,19 @@ class FHIR_MedicationKnowledge_indicationGuideline_dosingGuideline_patientCharac
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='MedicationKnowledge_indicationGuideline_dosingGuideline_patientCharacteristic_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_value = "TODO"
-    value_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value}, related_name='MedicationKnowledge_indicationGuideline_dosingGuideline_patientCharacteristic_value', blank=True)
-    value_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='MedicationKnowledge_indicationGuideline_dosingGuideline_patientCharacteristic_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Range", related_name='MedicationKnowledge_indicationGuideline_dosingGuideline_patientCharacteristic_value', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_value_CodeableConcept = "TODO"
+    value_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value_CodeableConcept}, related_name='MedicationKnowledge_indicationGuideline_dosingGuideline_patientCharacteristic_value_CodeableConcept', blank=True)
+    value_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='MedicationKnowledge_indicationGuideline_dosingGuideline_patientCharacteristic_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Range = models.OneToOneField("FHIR_GP_Range", related_name='MedicationKnowledge_indicationGuideline_dosingGuideline_patientCharacteristic_value_Range', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_MedicationKnowledge_medicineClassification(models.Model):
     MedicationKnowledge = models.ForeignKey(FHIR_MedicationKnowledge, related_name='MedicationKnowledge_medicineClassification', null=False, on_delete=models.CASCADE)
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='MedicationKnowledge_medicineClassification_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    source = FHIR_primitive_StringField(null=True, blank=True, )
-    source = FHIR_primitive_URIField(null=True, blank=True, )
+    source_string = FHIR_primitive_StringField(null=True, blank=True, )
+    source_uri = FHIR_primitive_URIField(null=True, blank=True, )
 
 class FHIR_MedicationKnowledge_medicineClassification_classification(models.Model):
     MedicationKnowledge_medicineClassification = models.ForeignKey(FHIR_MedicationKnowledge_medicineClassification, related_name='MedicationKnowledge_medicineClassification_classification', null=False, on_delete=models.CASCADE)
@@ -136,11 +136,11 @@ class FHIR_MedicationKnowledge_storageGuideline_environmentalSetting(models.Mode
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='MedicationKnowledge_storageGuideline_environmentalSetting_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='MedicationKnowledge_storageGuideline_environmentalSetting_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = models.OneToOneField("FHIR_GP_Range", related_name='MedicationKnowledge_storageGuideline_environmentalSetting_value', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_value = "TODO"
-    value_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value}, related_name='MedicationKnowledge_storageGuideline_environmentalSetting_value', blank=True)
-    value_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='MedicationKnowledge_storageGuideline_environmentalSetting_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    value_Range = models.OneToOneField("FHIR_GP_Range", related_name='MedicationKnowledge_storageGuideline_environmentalSetting_value_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_value_CodeableConcept = "TODO"
+    value_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value_CodeableConcept}, related_name='MedicationKnowledge_storageGuideline_environmentalSetting_value_CodeableConcept', blank=True)
+    value_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
 class FHIR_MedicationKnowledge_regulatory(models.Model):
     MedicationKnowledge = models.ForeignKey(FHIR_MedicationKnowledge, related_name='MedicationKnowledge_regulatory', null=False, on_delete=models.CASCADE)
@@ -186,21 +186,21 @@ class FHIR_MedicationKnowledge_definitional_ingredient(models.Model):
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='MedicationKnowledge_definitional_ingredient_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    strength = models.OneToOneField("FHIR_GP_Ratio", related_name='MedicationKnowledge_definitional_ingredient_strength', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_strength = "TODO"
-    strength_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_strength}, related_name='MedicationKnowledge_definitional_ingredient_strength', blank=True)
-    strength_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    strength = models.OneToOneField("FHIR_GP_Quantity", related_name='MedicationKnowledge_definitional_ingredient_strength', null=True, blank=True, on_delete=models.SET_NULL)
+    strength_Ratio = models.OneToOneField("FHIR_GP_Ratio", related_name='MedicationKnowledge_definitional_ingredient_strength_Ratio', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_strength_CodeableConcept = "TODO"
+    strength_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_strength_CodeableConcept}, related_name='MedicationKnowledge_definitional_ingredient_strength_CodeableConcept', blank=True)
+    strength_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    strength_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='MedicationKnowledge_definitional_ingredient_strength_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_MedicationKnowledge_definitional_drugCharacteristic(models.Model):
     MedicationKnowledge_definitional = models.ForeignKey(FHIR_MedicationKnowledge_definitional, related_name='MedicationKnowledge_definitional_drugCharacteristic', null=False, on_delete=models.CASCADE)
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='MedicationKnowledge_definitional_drugCharacteristic_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_value = "TODO"
-    value_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value}, related_name='MedicationKnowledge_definitional_drugCharacteristic_value', blank=True)
-    value_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = FHIR_primitive_StringField(null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='MedicationKnowledge_definitional_drugCharacteristic_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = FHIR_primitive_Base64BinaryField(null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Attachment", related_name='MedicationKnowledge_definitional_drugCharacteristic_value', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_value_CodeableConcept = "TODO"
+    value_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value_CodeableConcept}, related_name='MedicationKnowledge_definitional_drugCharacteristic_value_CodeableConcept', blank=True)
+    value_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    value_string = FHIR_primitive_StringField(null=True, blank=True, )
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='MedicationKnowledge_definitional_drugCharacteristic_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    value_base64Binary = FHIR_primitive_Base64BinaryField(null=True, blank=True, )
+    value_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='MedicationKnowledge_definitional_drugCharacteristic_value_Attachment', null=True, blank=True, on_delete=models.SET_NULL)

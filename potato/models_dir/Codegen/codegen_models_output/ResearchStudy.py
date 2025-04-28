@@ -50,10 +50,10 @@ class FHIR_ResearchStudy_relatesTo(models.Model):
     ResearchStudy = models.ForeignKey(FHIR_ResearchStudy, related_name='ResearchStudy_relatesTo', null=False, on_delete=models.CASCADE)
     class TypeChoices(models.TextChoices): DOCUMENTATION = 'documentation', 'Documentation'; JUSTIFICATION = 'justification', 'Justification'; PREDECESSOR = 'predecessor', 'Predecessor'; SUCCESSOR = 'successor', 'Successor'; DERIVED_FROM = 'derived-from', 'Derived-from'; DEPENDS_ON = 'depends-on', 'Depends-on'; COMPOSED_OF = 'composed-of', 'Composed-of'; PART_OF = 'part-of', 'Part-of'; AMENDS = 'amends', 'Amends'; AMENDED_WITH = 'amended-with', 'Amended-with'; APPENDS = 'appends', 'Appends'; APPENDED_WITH = 'appended-with', 'Appended-with'; CITES = 'cites', 'Cites'; CITED_BY = 'cited-by', 'Cited-by'; COMMENTS_ON = 'comments-on', 'Comments-on'; COMMENT_IN = 'comment-in', 'Comment-in'; CONTAINS = 'contains', 'Contains'; CONTAINED_IN = 'contained-in', 'Contained-in'; CORRECTS = 'corrects', 'Corrects'; CORRECTION_IN = 'correction-in', 'Correction-in'; REPLACES = 'replaces', 'Replaces'; REPLACED_WITH = 'replaced-with', 'Replaced-with'; RETRACTS = 'retracts', 'Retracts'; RETRACTED_BY = 'retracted-by', 'Retracted-by'; SIGNS = 'signs', 'Signs'; SIMILAR_TO = 'similar-to', 'Similar-to'; SUPPORTS = 'supports', 'Supports'; SUPPORTED_WITH = 'supported-with', 'Supported-with'; TRANSFORMS = 'transforms', 'Transforms'; TRANSFORMED_INTO = 'transformed-into', 'Transformed-into'; TRANSFORMED_WITH = 'transformed-with', 'Transformed-with'; SPECIFICATION_OF = 'specification-of', 'Specification-of'; CREATED_WITH = 'created-with', 'Created-with'; CITE_AS = 'cite-as', 'Cite-as'; SUMMARIZES = 'summarizes', 'Summarizes'; 
     type = FHIR_primitive_CodeField(choices=TypeChoices.choices, null=True, blank=True, )
-    target = FHIR_primitive_URIField(null=True, blank=True, )
-    target = models.OneToOneField("FHIR_GP_Attachment", related_name='ResearchStudy_relatesTo_target', null=True, blank=True, on_delete=models.SET_NULL)
-    target = FHIR_primitive_CanonicalField(null=True, blank=True, )
-    target = FHIR_primitive_MarkdownField(null=True, blank=True, )
+    target_uri = FHIR_primitive_URIField(null=True, blank=True, )
+    target_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='ResearchStudy_relatesTo_target_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
+    target_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
+    target_markdown = FHIR_primitive_MarkdownField(null=True, blank=True, )
 
 class FHIR_ResearchStudy_studyDesign(models.Model):
     ResearchStudy = models.ForeignKey(FHIR_ResearchStudy, related_name='ResearchStudy_studyDesign', null=False, on_delete=models.CASCADE)

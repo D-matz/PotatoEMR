@@ -144,8 +144,8 @@ class FHIR_NutritionOrder_enteralFormula_routeOfAdministration(models.Model):
 class FHIR_NutritionOrder_enteralFormula_administration(models.Model):
     NutritionOrder_enteralFormula = models.ForeignKey(FHIR_NutritionOrder_enteralFormula, related_name='NutritionOrder_enteralFormula_administration', null=False, on_delete=models.CASCADE)
     quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='NutritionOrder_enteralFormula_administration_quantity', null=True, blank=True, on_delete=models.SET_NULL)
-    rate = models.OneToOneField("FHIR_GP_Quantity", related_name='NutritionOrder_enteralFormula_administration_rate', null=True, blank=True, on_delete=models.SET_NULL)
-    rate = models.OneToOneField("FHIR_GP_Ratio", related_name='NutritionOrder_enteralFormula_administration_rate', null=True, blank=True, on_delete=models.SET_NULL)
+    rate_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='NutritionOrder_enteralFormula_administration_rate_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    rate_Ratio = models.OneToOneField("FHIR_GP_Ratio", related_name='NutritionOrder_enteralFormula_administration_rate_Ratio', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_NutritionOrder_enteralFormula_administration_schedule(models.Model):
     NutritionOrder_enteralFormula_administration = models.ForeignKey(FHIR_NutritionOrder_enteralFormula_administration, related_name='NutritionOrder_enteralFormula_administration_schedule', null=False, on_delete=models.CASCADE)

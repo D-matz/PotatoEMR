@@ -8,8 +8,8 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 class FHIR_Library(models.Model):
     url = FHIR_primitive_URIField(null=True, blank=True, )
     version = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = models.OneToOneField("FHIR_GP_Coding", related_name='Library_versionAlgorithm', null=True, blank=True, on_delete=models.SET_NULL)
+    versionAlgorithm_string = FHIR_primitive_StringField(null=True, blank=True, )
+    versionAlgorithm_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='Library_versionAlgorithm_Coding', null=True, blank=True, on_delete=models.SET_NULL)
     name = FHIR_primitive_StringField(null=True, blank=True, )
     title = FHIR_primitive_StringField(null=True, blank=True, )
     subtitle = FHIR_primitive_StringField(null=True, blank=True, )
@@ -19,10 +19,10 @@ class FHIR_Library(models.Model):
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='Library_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_subject = "TODO"
-    subject_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_subject}, related_name='Library_subject', blank=True)
-    subject_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    subject = models.ForeignKey("FHIR_Group", related_name="Library_subject", null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_subject_CodeableConcept = "TODO"
+    subject_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_subject_CodeableConcept}, related_name='Library_subject_CodeableConcept', blank=True)
+    subject_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    subject_Reference = models.ForeignKey("FHIR_Group", related_name="Library_subject_Reference", null=True, blank=True, on_delete=models.SET_NULL)
     date = FHIR_primitive_DateTimeField(null=True, blank=True, )
     publisher = FHIR_primitive_StringField(null=True, blank=True, )
     description = FHIR_primitive_MarkdownField(null=True, blank=True, )

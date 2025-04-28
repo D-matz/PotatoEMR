@@ -6,32 +6,32 @@ from ..FHIR_DataTypes.FHIR_metadata import *
 from ..FHIR_DataTypes.FHIR_primitive import *
 
 class FHIR_Condition(models.Model):
-    BINDING_clinicalStatus = "TODO"
+    BINDING_clinicalStatus = "https://build.fhir.org/valueset-condition-clinical.html"
     clinicalStatus_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_clinicalStatus}, related_name='Condition_clinicalStatus', blank=True)
     clinicalStatus_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_verificationStatus = "TODO"
+    BINDING_verificationStatus = "http://hl7.org/fhir/ValueSet/condition-ver-status.html"
     verificationStatus_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_verificationStatus}, related_name='Condition_verificationStatus', blank=True)
     verificationStatus_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_severity = "TODO"
+    BINDING_severity = "https://build.fhir.org/valueset-condition-severity.html"
     severity_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_severity}, related_name='Condition_severity', blank=True)
     severity_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_code = "TODO"
+    BINDING_code = "https://build.fhir.org/valueset-condition-code.html"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='Condition_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     bodyStructure = models.ForeignKey("FHIR_BodyStructure", related_name="Condition_bodyStructure", null=True, blank=True, on_delete=models.SET_NULL)
     subject_Patient = models.ForeignKey("FHIR_Patient", related_name="Condition_subject", null=True, blank=True, on_delete=models.SET_NULL)
     subject_Group = models.ForeignKey("FHIR_Group", related_name="Condition_subject", null=True, blank=True, on_delete=models.SET_NULL)
     encounter = models.ForeignKey("FHIR_Encounter", related_name="Condition_encounter", null=True, blank=True, on_delete=models.SET_NULL)
-    onset = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    onset = models.OneToOneField("FHIR_GP_Quantity_Age", related_name='Condition_onset', null=True, blank=True, on_delete=models.SET_NULL)
-    onset = models.OneToOneField("FHIR_GP_Period", related_name='Condition_onset', null=True, blank=True, on_delete=models.SET_NULL)
-    onset = models.OneToOneField("FHIR_GP_Range", related_name='Condition_onset', null=True, blank=True, on_delete=models.SET_NULL)
-    onset = FHIR_primitive_StringField(null=True, blank=True, )
-    abatement = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    abatement = models.OneToOneField("FHIR_GP_Quantity_Age", related_name='Condition_abatement', null=True, blank=True, on_delete=models.SET_NULL)
-    abatement = models.OneToOneField("FHIR_GP_Period", related_name='Condition_abatement', null=True, blank=True, on_delete=models.SET_NULL)
-    abatement = models.OneToOneField("FHIR_GP_Range", related_name='Condition_abatement', null=True, blank=True, on_delete=models.SET_NULL)
-    abatement = FHIR_primitive_StringField(null=True, blank=True, )
+    onset_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    onset_Age = models.OneToOneField("FHIR_GP_Quantity_Age", related_name='Condition_onset_Age', null=True, blank=True, on_delete=models.SET_NULL)
+    onset_Period = models.OneToOneField("FHIR_GP_Period", related_name='Condition_onset_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    onset_Range = models.OneToOneField("FHIR_GP_Range", related_name='Condition_onset_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    onset_string = FHIR_primitive_StringField(null=True, blank=True, )
+    abatement_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    abatement_Age = models.OneToOneField("FHIR_GP_Quantity_Age", related_name='Condition_abatement_Age', null=True, blank=True, on_delete=models.SET_NULL)
+    abatement_Period = models.OneToOneField("FHIR_GP_Period", related_name='Condition_abatement_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    abatement_Range = models.OneToOneField("FHIR_GP_Range", related_name='Condition_abatement_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    abatement_string = FHIR_primitive_StringField(null=True, blank=True, )
     recordedDate = FHIR_primitive_DateTimeField(null=True, blank=True, )
     recorder_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="Condition_recorder", null=True, blank=True, on_delete=models.SET_NULL)
     recorder_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="Condition_recorder", null=True, blank=True, on_delete=models.SET_NULL)

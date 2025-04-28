@@ -29,11 +29,11 @@ class FHIR_Medication_ingredient(models.Model):
     item_Substance_ref = models.ForeignKey("FHIR_Substance", related_name="Medication_ingredient_item_Substance", null=True, blank=True, on_delete=models.SET_NULL)
     item_Medication_ref = models.ForeignKey("FHIR_Medication", related_name="Medication_ingredient_item_Medication", null=True, blank=True, on_delete=models.SET_NULL)
     isActive = FHIR_primitive_BooleanField(null=True, blank=True, )
-    strength = models.OneToOneField("FHIR_GP_Ratio", related_name='Medication_ingredient_strength', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_strength = "TODO"
-    strength_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_strength}, related_name='Medication_ingredient_strength', blank=True)
-    strength_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    strength = models.OneToOneField("FHIR_GP_Quantity", related_name='Medication_ingredient_strength', null=True, blank=True, on_delete=models.SET_NULL)
+    strength_Ratio = models.OneToOneField("FHIR_GP_Ratio", related_name='Medication_ingredient_strength_Ratio', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_strength_CodeableConcept = "TODO"
+    strength_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_strength_CodeableConcept}, related_name='Medication_ingredient_strength_CodeableConcept', blank=True)
+    strength_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    strength_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Medication_ingredient_strength_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_Medication_batch(models.Model):
     Medication = models.ForeignKey(FHIR_Medication, related_name='Medication_batch', null=False, on_delete=models.CASCADE)

@@ -26,6 +26,7 @@ from potato.ModuleAllergyIntoleranceBootstrap import AllergyIntoleranceBootstrap
 from potato.ModuleAppointmentCalendar import AppointmentCalendar_view
 from potato.ModulePatientLists import PatientLists_view
 from potato.ModuleAppointmentEncounter import AppointmentEncounter_view
+from potato.ModuleProblemList import ProblemList_view
 
 
 urlpatterns = [
@@ -58,4 +59,6 @@ urlpatterns = [
     path("patient-lists", PatientLists_view.lists, name="home_patient_lists"),
 
     path("patient/<int:patient_id>/encounter/<int:encounter_id>", AppointmentEncounter_view.overview, name="AppointmentEncounter_overview"),
+    path("patient/<int:patient_id>/problem-list", ProblemList_view.problem_list, name="ProblemList"),
+
 ]

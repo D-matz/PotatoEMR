@@ -8,8 +8,8 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 class FHIR_PlanDefinition(models.Model):
     url = FHIR_primitive_URIField(null=True, blank=True, )
     version = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = models.OneToOneField("FHIR_GP_Coding", related_name='PlanDefinition_versionAlgorithm', null=True, blank=True, on_delete=models.SET_NULL)
+    versionAlgorithm_string = FHIR_primitive_StringField(null=True, blank=True, )
+    versionAlgorithm_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='PlanDefinition_versionAlgorithm_Coding', null=True, blank=True, on_delete=models.SET_NULL)
     name = FHIR_primitive_StringField(null=True, blank=True, )
     title = FHIR_primitive_StringField(null=True, blank=True, )
     subtitle = FHIR_primitive_StringField(null=True, blank=True, )
@@ -19,16 +19,16 @@ class FHIR_PlanDefinition(models.Model):
     class StatusChoices(models.TextChoices): DRAFT = 'draft', 'Draft'; ACTIVE = 'active', 'Active'; RETIRED = 'retired', 'Retired'; UNKNOWN = 'unknown', 'Unknown'; 
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
     experimental = FHIR_primitive_BooleanField(null=True, blank=True, )
-    BINDING_subject = "TODO"
-    subject_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_subject}, related_name='PlanDefinition_subject', blank=True)
-    subject_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    subject_Group = models.ForeignKey("FHIR_Group", related_name="PlanDefinition_subject", null=True, blank=True, on_delete=models.SET_NULL)
-    subject_MedicinalProductDefinition = models.ForeignKey("FHIR_MedicinalProductDefinition", related_name="PlanDefinition_subject", null=True, blank=True, on_delete=models.SET_NULL)
-    subject_SubstanceDefinition = models.ForeignKey("FHIR_SubstanceDefinition", related_name="PlanDefinition_subject", null=True, blank=True, on_delete=models.SET_NULL)
-    subject_AdministrableProductDefinition = models.ForeignKey("FHIR_AdministrableProductDefinition", related_name="PlanDefinition_subject", null=True, blank=True, on_delete=models.SET_NULL)
-    subject_ManufacturedItemDefinition = models.ForeignKey("FHIR_ManufacturedItemDefinition", related_name="PlanDefinition_subject", null=True, blank=True, on_delete=models.SET_NULL)
-    subject_PackagedProductDefinition = models.ForeignKey("FHIR_PackagedProductDefinition", related_name="PlanDefinition_subject", null=True, blank=True, on_delete=models.SET_NULL)
-    subject = FHIR_primitive_CanonicalField(null=True, blank=True, )
+    BINDING_subject_CodeableConcept = "TODO"
+    subject_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_subject_CodeableConcept}, related_name='PlanDefinition_subject_CodeableConcept', blank=True)
+    subject_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    subject_Reference_Group = models.ForeignKey("FHIR_Group", related_name="PlanDefinition_subject_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    subject_Reference_MedicinalProductDefinition = models.ForeignKey("FHIR_MedicinalProductDefinition", related_name="PlanDefinition_subject_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    subject_Reference_SubstanceDefinition = models.ForeignKey("FHIR_SubstanceDefinition", related_name="PlanDefinition_subject_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    subject_Reference_AdministrableProductDefinition = models.ForeignKey("FHIR_AdministrableProductDefinition", related_name="PlanDefinition_subject_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    subject_Reference_ManufacturedItemDefinition = models.ForeignKey("FHIR_ManufacturedItemDefinition", related_name="PlanDefinition_subject_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    subject_Reference_PackagedProductDefinition = models.ForeignKey("FHIR_PackagedProductDefinition", related_name="PlanDefinition_subject_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    subject_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
     date = FHIR_primitive_DateTimeField(null=True, blank=True, )
     publisher = FHIR_primitive_StringField(null=True, blank=True, )
     description = FHIR_primitive_MarkdownField(null=True, blank=True, )
@@ -39,10 +39,10 @@ class FHIR_PlanDefinition(models.Model):
     approvalDate = FHIR_primitive_DateField(null=True, blank=True, )
     lastReviewDate = FHIR_primitive_DateField(null=True, blank=True, )
     effectivePeriod = models.OneToOneField("FHIR_GP_Period", related_name='PlanDefinition_effectivePeriod', null=True, blank=True, on_delete=models.SET_NULL)
-    asNeeded = FHIR_primitive_BooleanField(null=True, blank=True, )
-    BINDING_asNeeded = "TODO"
-    asNeeded_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_asNeeded}, related_name='PlanDefinition_asNeeded', blank=True)
-    asNeeded_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    asNeeded_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    BINDING_asNeeded_CodeableConcept = "TODO"
+    asNeeded_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_asNeeded_CodeableConcept}, related_name='PlanDefinition_asNeeded_CodeableConcept', blank=True)
+    asNeeded_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
 class FHIR_PlanDefinition_identifier(FHIR_GP_Identifier):
     PlanDefinition = models.ForeignKey(FHIR_PlanDefinition, related_name='PlanDefinition_identifier', null=False, on_delete=models.CASCADE)
@@ -90,14 +90,14 @@ class FHIR_PlanDefinition_goal_target(models.Model):
     BINDING_measure = "TODO"
     measure_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_measure}, related_name='PlanDefinition_goal_target_measure', blank=True)
     measure_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    detail = models.OneToOneField("FHIR_GP_Quantity", related_name='PlanDefinition_goal_target_detail', null=True, blank=True, on_delete=models.SET_NULL)
-    detail = models.OneToOneField("FHIR_GP_Range", related_name='PlanDefinition_goal_target_detail', null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_detail = "TODO"
-    detail_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_detail}, related_name='PlanDefinition_goal_target_detail', blank=True)
-    detail_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    detail = FHIR_primitive_StringField(null=True, blank=True, )
-    detail = FHIR_primitive_BooleanField(null=True, blank=True, )
-    detail = models.OneToOneField("FHIR_GP_Ratio", related_name='PlanDefinition_goal_target_detail', null=True, blank=True, on_delete=models.SET_NULL)
+    detail_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='PlanDefinition_goal_target_detail_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    detail_Range = models.OneToOneField("FHIR_GP_Range", related_name='PlanDefinition_goal_target_detail_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_detail_CodeableConcept = "TODO"
+    detail_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_detail_CodeableConcept}, related_name='PlanDefinition_goal_target_detail_CodeableConcept', blank=True)
+    detail_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    detail_string = FHIR_primitive_StringField(null=True, blank=True, )
+    detail_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    detail_Ratio = models.OneToOneField("FHIR_GP_Ratio", related_name='PlanDefinition_goal_target_detail_Ratio', null=True, blank=True, on_delete=models.SET_NULL)
     due = models.OneToOneField("FHIR_GP_Quantity_Duration", related_name='PlanDefinition_goal_target_due', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_PlanDefinition_actor(models.Model):
@@ -142,15 +142,15 @@ class FHIR_PlanDefinition_action(models.Model):
     BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='PlanDefinition_action_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_subject = "TODO"
-    subject_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_subject}, related_name='PlanDefinition_action_subject', blank=True)
-    subject_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    subject = models.ForeignKey("FHIR_Group", related_name="PlanDefinition_action_subject", null=True, blank=True, on_delete=models.SET_NULL)
-    subject = FHIR_primitive_CanonicalField(null=True, blank=True, )
-    timing = models.OneToOneField("FHIR_GP_Quantity_Age", related_name='PlanDefinition_action_timing', null=True, blank=True, on_delete=models.SET_NULL)
-    timing = models.OneToOneField("FHIR_GP_Quantity_Duration", related_name='PlanDefinition_action_timing', null=True, blank=True, on_delete=models.SET_NULL)
-    timing = models.OneToOneField("FHIR_GP_Range", related_name='PlanDefinition_action_timing', null=True, blank=True, on_delete=models.SET_NULL)
-    timing = models.OneToOneField("FHIR_GP_Timing", related_name='PlanDefinition_action_timing', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_subject_CodeableConcept = "TODO"
+    subject_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_subject_CodeableConcept}, related_name='PlanDefinition_action_subject_CodeableConcept', blank=True)
+    subject_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    subject_Reference = models.ForeignKey("FHIR_Group", related_name="PlanDefinition_action_subject_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    subject_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
+    timing_Age = models.OneToOneField("FHIR_GP_Quantity_Age", related_name='PlanDefinition_action_timing_Age', null=True, blank=True, on_delete=models.SET_NULL)
+    timing_Duration = models.OneToOneField("FHIR_GP_Quantity_Duration", related_name='PlanDefinition_action_timing_Duration', null=True, blank=True, on_delete=models.SET_NULL)
+    timing_Range = models.OneToOneField("FHIR_GP_Range", related_name='PlanDefinition_action_timing_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    timing_Timing = models.OneToOneField("FHIR_GP_Timing", related_name='PlanDefinition_action_timing_Timing', null=True, blank=True, on_delete=models.SET_NULL)
     BINDING_location = "TODO"
     location_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_location}, related_name='PlanDefinition_action_location', blank=True)
     location_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
@@ -168,8 +168,8 @@ class FHIR_PlanDefinition_action(models.Model):
     precheckBehavior = FHIR_primitive_CodeField(choices=PrecheckbehaviorChoices.choices, null=True, blank=True, )
     class CardinalitybehaviorChoices(models.TextChoices): SINGLE = 'single', 'Single'; MULTIPLE = 'multiple', 'Multiple'; 
     cardinalityBehavior = FHIR_primitive_CodeField(choices=CardinalitybehaviorChoices.choices, null=True, blank=True, )
-    definition = FHIR_primitive_CanonicalField(null=True, blank=True, )
-    definition = FHIR_primitive_URIField(null=True, blank=True, )
+    definition_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
+    definition_uri = FHIR_primitive_URIField(null=True, blank=True, )
     transform = FHIR_primitive_CanonicalField(null=True, blank=True, )
 
 class FHIR_PlanDefinition_action_reason(models.Model):
@@ -205,8 +205,8 @@ class FHIR_PlanDefinition_action_relatedAction(models.Model):
     relationship = FHIR_primitive_CodeField(choices=RelationshipChoices.choices, null=True, blank=True, )
     class EndrelationshipChoices(models.TextChoices): BEFORE = 'before', 'Before'; BEFORE_START = 'before-start', 'Before-start'; BEFORE_END = 'before-end', 'Before-end'; CONCURRENT = 'concurrent', 'Concurrent'; CONCURRENT_WITH_START = 'concurrent-with-start', 'Concurrent-with-start'; CONCURRENT_WITH_END = 'concurrent-with-end', 'Concurrent-with-end'; AFTER = 'after', 'After'; AFTER_START = 'after-start', 'After-start'; AFTER_END = 'after-end', 'After-end'; 
     endRelationship = FHIR_primitive_CodeField(choices=EndrelationshipChoices.choices, null=True, blank=True, )
-    offset = models.OneToOneField("FHIR_GP_Quantity_Duration", related_name='PlanDefinition_action_relatedAction_offset', null=True, blank=True, on_delete=models.SET_NULL)
-    offset = models.OneToOneField("FHIR_GP_Range", related_name='PlanDefinition_action_relatedAction_offset', null=True, blank=True, on_delete=models.SET_NULL)
+    offset_Duration = models.OneToOneField("FHIR_GP_Quantity_Duration", related_name='PlanDefinition_action_relatedAction_offset_Duration', null=True, blank=True, on_delete=models.SET_NULL)
+    offset_Range = models.OneToOneField("FHIR_GP_Range", related_name='PlanDefinition_action_relatedAction_offset_Range', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_PlanDefinition_action_participant(models.Model):
     PlanDefinition_action = models.ForeignKey(FHIR_PlanDefinition_action, related_name='PlanDefinition_action_participant', null=False, on_delete=models.CASCADE)

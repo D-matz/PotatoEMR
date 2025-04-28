@@ -41,9 +41,9 @@ class FHIR_SubstanceReferenceInformation_target(models.Model):
     BINDING_organismType = "TODO"
     organismType_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_organismType}, related_name='SubstanceReferenceInformation_target_organismType', blank=True)
     organismType_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    amount = models.OneToOneField("FHIR_GP_Quantity", related_name='SubstanceReferenceInformation_target_amount', null=True, blank=True, on_delete=models.SET_NULL)
-    amount = models.OneToOneField("FHIR_GP_Range", related_name='SubstanceReferenceInformation_target_amount', null=True, blank=True, on_delete=models.SET_NULL)
-    amount = FHIR_primitive_StringField(null=True, blank=True, )
+    amount_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='SubstanceReferenceInformation_target_amount_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    amount_Range = models.OneToOneField("FHIR_GP_Range", related_name='SubstanceReferenceInformation_target_amount_Range', null=True, blank=True, on_delete=models.SET_NULL)
+    amount_string = FHIR_primitive_StringField(null=True, blank=True, )
     BINDING_amountType = "TODO"
     amountType_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_amountType}, related_name='SubstanceReferenceInformation_target_amountType', blank=True)
     amountType_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)

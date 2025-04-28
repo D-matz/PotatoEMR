@@ -17,8 +17,8 @@ class FHIR_RiskAssessment(models.Model):
     subject_Patient = models.ForeignKey("FHIR_Patient", related_name="RiskAssessment_subject", null=True, blank=True, on_delete=models.SET_NULL)
     subject_Group = models.ForeignKey("FHIR_Group", related_name="RiskAssessment_subject", null=True, blank=True, on_delete=models.SET_NULL)
     encounter = models.ForeignKey("FHIR_Encounter", related_name="RiskAssessment_encounter", null=True, blank=True, on_delete=models.SET_NULL)
-    occurrence = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    occurrence = models.OneToOneField("FHIR_GP_Period", related_name='RiskAssessment_occurrence', null=True, blank=True, on_delete=models.SET_NULL)
+    occurrence_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    occurrence_Period = models.OneToOneField("FHIR_GP_Period", related_name='RiskAssessment_occurrence_Period', null=True, blank=True, on_delete=models.SET_NULL)
     condition = models.ForeignKey("FHIR_Condition", related_name="RiskAssessment_condition", null=True, blank=True, on_delete=models.SET_NULL)
     performer_Patient = models.ForeignKey("FHIR_Patient", related_name="RiskAssessment_performer", null=True, blank=True, on_delete=models.SET_NULL)
     performer_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="RiskAssessment_performer", null=True, blank=True, on_delete=models.SET_NULL)
@@ -45,14 +45,14 @@ class FHIR_RiskAssessment_prediction(models.Model):
     BINDING_outcome = "TODO"
     outcome_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_outcome}, related_name='RiskAssessment_prediction_outcome', blank=True)
     outcome_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    probability = FHIR_primitive_DecimalField(null=True, blank=True, )
-    probability = models.OneToOneField("FHIR_GP_Range", related_name='RiskAssessment_prediction_probability', null=True, blank=True, on_delete=models.SET_NULL)
+    probability_decimal = FHIR_primitive_DecimalField(null=True, blank=True, )
+    probability_Range = models.OneToOneField("FHIR_GP_Range", related_name='RiskAssessment_prediction_probability_Range', null=True, blank=True, on_delete=models.SET_NULL)
     BINDING_qualitativeRisk = "TODO"
     qualitativeRisk_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_qualitativeRisk}, related_name='RiskAssessment_prediction_qualitativeRisk', blank=True)
     qualitativeRisk_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     relativeRisk = FHIR_primitive_DecimalField(null=True, blank=True, )
-    when = models.OneToOneField("FHIR_GP_Period", related_name='RiskAssessment_prediction_when', null=True, blank=True, on_delete=models.SET_NULL)
-    when = models.OneToOneField("FHIR_GP_Range", related_name='RiskAssessment_prediction_when', null=True, blank=True, on_delete=models.SET_NULL)
+    when_Period = models.OneToOneField("FHIR_GP_Period", related_name='RiskAssessment_prediction_when_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    when_Range = models.OneToOneField("FHIR_GP_Range", related_name='RiskAssessment_prediction_when_Range', null=True, blank=True, on_delete=models.SET_NULL)
     rationale = FHIR_primitive_StringField(null=True, blank=True, )
 
 class FHIR_RiskAssessment_note(FHIR_GP_Annotation):

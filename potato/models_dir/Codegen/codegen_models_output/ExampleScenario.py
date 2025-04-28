@@ -8,8 +8,8 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 class FHIR_ExampleScenario(models.Model):
     url = FHIR_primitive_URIField(null=True, blank=True, )
     version = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = FHIR_primitive_StringField(null=True, blank=True, )
-    versionAlgorithm = models.OneToOneField("FHIR_GP_Coding", related_name='ExampleScenario_versionAlgorithm', null=True, blank=True, on_delete=models.SET_NULL)
+    versionAlgorithm_string = FHIR_primitive_StringField(null=True, blank=True, )
+    versionAlgorithm_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='ExampleScenario_versionAlgorithm_Coding', null=True, blank=True, on_delete=models.SET_NULL)
     name = FHIR_primitive_StringField(null=True, blank=True, )
     title = FHIR_primitive_StringField(null=True, blank=True, )
     class StatusChoices(models.TextChoices): DRAFT = 'draft', 'Draft'; ACTIVE = 'active', 'Active'; RETIRED = 'retired', 'Retired'; UNKNOWN = 'unknown', 'Unknown'; 
@@ -45,8 +45,8 @@ class FHIR_ExampleScenario_instance(models.Model):
     key = FHIR_primitive_StringField(null=True, blank=True, )
     structureType = models.OneToOneField("FHIR_GP_Coding", related_name='ExampleScenario_instance_structureType', null=True, blank=True, on_delete=models.SET_NULL)
     structureVersion = FHIR_primitive_StringField(null=True, blank=True, )
-    structureProfile = FHIR_primitive_CanonicalField(null=True, blank=True, )
-    structureProfile = FHIR_primitive_URIField(null=True, blank=True, )
+    structureProfile_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
+    structureProfile_uri = FHIR_primitive_URIField(null=True, blank=True, )
     title = FHIR_primitive_StringField(null=True, blank=True, )
     description = FHIR_primitive_MarkdownField(null=True, blank=True, )
 

@@ -19,8 +19,8 @@ class FHIR_Invoice(models.Model):
     recipient_RelatedPerson = models.ForeignKey("FHIR_RelatedPerson", related_name="Invoice_recipient", null=True, blank=True, on_delete=models.SET_NULL)
     date = FHIR_primitive_DateTimeField(null=True, blank=True, )
     creation = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    period = FHIR_primitive_DateField(null=True, blank=True, )
-    period = models.OneToOneField("FHIR_GP_Period", related_name='Invoice_period', null=True, blank=True, on_delete=models.SET_NULL)
+    period_date = FHIR_primitive_DateField(null=True, blank=True, )
+    period_Period = models.OneToOneField("FHIR_GP_Period", related_name='Invoice_period_Period', null=True, blank=True, on_delete=models.SET_NULL)
     issuer = models.ForeignKey("FHIR_Organization", related_name="Invoice_issuer", null=True, blank=True, on_delete=models.SET_NULL)
     account = models.ForeignKey("FHIR_Account", related_name="Invoice_account", null=True, blank=True, on_delete=models.SET_NULL)
     totalNet = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='Invoice_totalNet', null=True, blank=True, on_delete=models.SET_NULL)
@@ -45,12 +45,12 @@ class FHIR_Invoice_participant(models.Model):
 class FHIR_Invoice_lineItem(models.Model):
     Invoice = models.ForeignKey(FHIR_Invoice, related_name='Invoice_lineItem', null=False, on_delete=models.CASCADE)
     sequence = FHIR_primitive_PositiveIntField(null=True, blank=True, )
-    serviced = FHIR_primitive_DateField(null=True, blank=True, )
-    serviced = models.OneToOneField("FHIR_GP_Period", related_name='Invoice_lineItem_serviced', null=True, blank=True, on_delete=models.SET_NULL)
-    chargeItem = models.ForeignKey("FHIR_ChargeItem", related_name="Invoice_lineItem_chargeItem", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_chargeItem = "TODO"
-    chargeItem_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_chargeItem}, related_name='Invoice_lineItem_chargeItem', blank=True)
-    chargeItem_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    serviced_date = FHIR_primitive_DateField(null=True, blank=True, )
+    serviced_Period = models.OneToOneField("FHIR_GP_Period", related_name='Invoice_lineItem_serviced_Period', null=True, blank=True, on_delete=models.SET_NULL)
+    chargeItem_Reference = models.ForeignKey("FHIR_ChargeItem", related_name="Invoice_lineItem_chargeItem_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_chargeItem_CodeableConcept = "TODO"
+    chargeItem_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_chargeItem_CodeableConcept}, related_name='Invoice_lineItem_chargeItem_CodeableConcept', blank=True)
+    chargeItem_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
 
 class FHIR_Invoice_note(FHIR_GP_Annotation):
     Invoice = models.ForeignKey(FHIR_Invoice, related_name='Invoice_note', null=False, on_delete=models.CASCADE)

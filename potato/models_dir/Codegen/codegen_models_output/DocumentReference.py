@@ -112,6 +112,6 @@ class FHIR_DocumentReference_content(models.Model):
 
 class FHIR_DocumentReference_content_profile(models.Model):
     DocumentReference_content = models.ForeignKey(FHIR_DocumentReference_content, related_name='DocumentReference_content_profile', null=False, on_delete=models.CASCADE)
-    value = models.OneToOneField("FHIR_GP_Coding", related_name='DocumentReference_content_profile_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = FHIR_primitive_URIField(null=True, blank=True, )
-    value = FHIR_primitive_CanonicalField(null=True, blank=True, )
+    value_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='DocumentReference_content_profile_value_Coding', null=True, blank=True, on_delete=models.SET_NULL)
+    value_uri = FHIR_primitive_URIField(null=True, blank=True, )
+    value_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )

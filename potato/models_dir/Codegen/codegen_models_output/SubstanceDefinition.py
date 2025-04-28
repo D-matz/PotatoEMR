@@ -54,8 +54,8 @@ class FHIR_SubstanceDefinition_moiety(models.Model):
     opticalActivity_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_opticalActivity}, related_name='SubstanceDefinition_moiety_opticalActivity', blank=True)
     opticalActivity_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     molecularFormula = FHIR_primitive_StringField(null=True, blank=True, )
-    amount = models.OneToOneField("FHIR_GP_Quantity", related_name='SubstanceDefinition_moiety_amount', null=True, blank=True, on_delete=models.SET_NULL)
-    amount = FHIR_primitive_StringField(null=True, blank=True, )
+    amount_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='SubstanceDefinition_moiety_amount_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    amount_string = FHIR_primitive_StringField(null=True, blank=True, )
     BINDING_measurementType = "TODO"
     measurementType_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_measurementType}, related_name='SubstanceDefinition_moiety_measurementType', blank=True)
     measurementType_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
@@ -78,13 +78,13 @@ class FHIR_SubstanceDefinition_property(models.Model):
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='SubstanceDefinition_property_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_value = "TODO"
-    value_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value}, related_name='SubstanceDefinition_property_value', blank=True)
-    value_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    value = models.OneToOneField("FHIR_GP_Quantity", related_name='SubstanceDefinition_property_value', null=True, blank=True, on_delete=models.SET_NULL)
-    value = FHIR_primitive_DateField(null=True, blank=True, )
-    value = FHIR_primitive_BooleanField(null=True, blank=True, )
-    value = models.OneToOneField("FHIR_GP_Attachment", related_name='SubstanceDefinition_property_value', null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_value_CodeableConcept = "TODO"
+    value_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_value_CodeableConcept}, related_name='SubstanceDefinition_property_value_CodeableConcept', blank=True)
+    value_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='SubstanceDefinition_property_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    value_date = FHIR_primitive_DateField(null=True, blank=True, )
+    value_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    value_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='SubstanceDefinition_property_value_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_SubstanceDefinition_molecularWeight(models.Model):
     SubstanceDefinition = models.ForeignKey(FHIR_SubstanceDefinition, related_name='SubstanceDefinition_molecularWeight', null=False, on_delete=models.CASCADE)
@@ -181,17 +181,17 @@ class FHIR_SubstanceDefinition_name_official(models.Model):
 
 class FHIR_SubstanceDefinition_relationship(models.Model):
     SubstanceDefinition = models.ForeignKey(FHIR_SubstanceDefinition, related_name='SubstanceDefinition_relationship', null=False, on_delete=models.CASCADE)
-    substanceDefinition = models.ForeignKey("FHIR_SubstanceDefinition", related_name="SubstanceDefinition_relationship_substanceDefinition", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_substanceDefinition = "TODO"
-    substanceDefinition_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_substanceDefinition}, related_name='SubstanceDefinition_relationship_substanceDefinition', blank=True)
-    substanceDefinition_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    substanceDefinition_Reference = models.ForeignKey("FHIR_SubstanceDefinition", related_name="SubstanceDefinition_relationship_substanceDefinition_Reference", null=True, blank=True, on_delete=models.SET_NULL)
+    BINDING_substanceDefinition_CodeableConcept = "TODO"
+    substanceDefinition_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_substanceDefinition_CodeableConcept}, related_name='SubstanceDefinition_relationship_substanceDefinition_CodeableConcept', blank=True)
+    substanceDefinition_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='SubstanceDefinition_relationship_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     isDefining = FHIR_primitive_BooleanField(null=True, blank=True, )
-    amount = models.OneToOneField("FHIR_GP_Quantity", related_name='SubstanceDefinition_relationship_amount', null=True, blank=True, on_delete=models.SET_NULL)
-    amount = models.OneToOneField("FHIR_GP_Ratio", related_name='SubstanceDefinition_relationship_amount', null=True, blank=True, on_delete=models.SET_NULL)
-    amount = FHIR_primitive_StringField(null=True, blank=True, )
+    amount_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='SubstanceDefinition_relationship_amount_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+    amount_Ratio = models.OneToOneField("FHIR_GP_Ratio", related_name='SubstanceDefinition_relationship_amount_Ratio', null=True, blank=True, on_delete=models.SET_NULL)
+    amount_string = FHIR_primitive_StringField(null=True, blank=True, )
     ratioHighLimitAmount = models.OneToOneField("FHIR_GP_Ratio", related_name='SubstanceDefinition_relationship_ratioHighLimitAmount', null=True, blank=True, on_delete=models.SET_NULL)
     BINDING_comparator = "TODO"
     comparator_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_comparator}, related_name='SubstanceDefinition_relationship_comparator', blank=True)

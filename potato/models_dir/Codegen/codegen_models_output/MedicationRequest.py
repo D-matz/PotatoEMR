@@ -122,10 +122,10 @@ class FHIR_MedicationRequest_dispenseRequest_dispenserInstruction(FHIR_GP_Annota
 
 class FHIR_MedicationRequest_substitution(models.Model):
     MedicationRequest = models.ForeignKey(FHIR_MedicationRequest, related_name='MedicationRequest_substitution', null=False, on_delete=models.CASCADE)
-    allowed = FHIR_primitive_BooleanField(null=True, blank=True, )
-    BINDING_allowed = "TODO"
-    allowed_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_allowed}, related_name='MedicationRequest_substitution_allowed', blank=True)
-    allowed_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    allowed_boolean = FHIR_primitive_BooleanField(null=True, blank=True, )
+    BINDING_allowed_CodeableConcept = "TODO"
+    allowed_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_allowed_CodeableConcept}, related_name='MedicationRequest_substitution_allowed_CodeableConcept', blank=True)
+    allowed_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     BINDING_reason = "TODO"
     reason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_reason}, related_name='MedicationRequest_substitution_reason', blank=True)
     reason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)

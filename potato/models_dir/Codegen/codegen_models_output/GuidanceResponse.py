@@ -7,11 +7,11 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 
 class FHIR_GuidanceResponse(models.Model):
     requestIdentifier = models.OneToOneField("FHIR_GP_Identifier", related_name='GuidanceResponse_requestIdentifier', null=True, blank=True, on_delete=models.SET_NULL)
-    module = FHIR_primitive_URIField(null=True, blank=True, )
-    module = FHIR_primitive_CanonicalField(null=True, blank=True, )
-    BINDING_module = "TODO"
-    module_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_module}, related_name='GuidanceResponse_module', blank=True)
-    module_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    module_uri = FHIR_primitive_URIField(null=True, blank=True, )
+    module_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
+    BINDING_module_CodeableConcept = "TODO"
+    module_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_module_CodeableConcept}, related_name='GuidanceResponse_module_CodeableConcept', blank=True)
+    module_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     class StatusChoices(models.TextChoices): SUCCESS = 'success', 'Success'; DATA_REQUESTED = 'data-requested', 'Data-requested'; DATA_REQUIRED = 'data-required', 'Data-required'; IN_PROGRESS = 'in-progress', 'In-progress'; FAILURE = 'failure', 'Failure'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; 
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
     subject_Patient = models.ForeignKey("FHIR_Patient", related_name="GuidanceResponse_subject", null=True, blank=True, on_delete=models.SET_NULL)
