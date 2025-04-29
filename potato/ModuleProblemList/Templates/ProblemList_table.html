@@ -1,0 +1,76 @@
+<div id="problems" class="m-4">
+  <button style="cursor: pointer;"
+      hx-get="{% url 'ProblemList_new' patient.id %}"
+      hx-target="#modals-here"
+      hx-trigger="click"
+      hx-push-url="false"
+      data-bs-toggle="modal"
+      data-bs-target="#modals-here">
+    + Add New Problem
+  </button>
+  <div id="ProblemList_table" class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th style="width: 25%">Problem</th>
+          <th style="width: 20%">Clinical Status</th>
+          <th style="width: 20%">Verification Status</th>
+          <th style="width: 20%">Severity</th>
+          <th style="width: 15%">Onset Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for condition in conditions %}
+          <tr style="cursor: pointer;"
+              hx-get="{% url 'ProblemList_existing' patient.id condition.id %}"
+              hx-target="#modals-here"
+              hx-trigger="click"
+              hx-push-url="false"
+              data-bs-toggle="modal"
+              data-bs-target="#modals-here">
+            <td class="text-wrap small">
+              {% if condition.code_cc.all %}
+                {{ condition.code_cc.first.display }}
+              {% endif %}
+            </td>
+            <td class="text-wrap small">
+              {% if condition.clinicalStatus_cc.all %}
+                {{ condition.clinicalStatus_cc.first.display }}
+              {% endif %}
+            </td>
+            <td class="text-wrap small">
+              {% if condition.verificationStatus_cc.all %}
+                {{ condition.verificationStatus_cc.first.display }}
+              {% endif %}
+            </td>
+            <td class="text-wrap small">
+              {% if condition.severity_cc.all %}
+                {{ condition.severity_cc.first.display }}
+              {% endif %}
+            </td>
+            <td class="text-wrap small">
+              {% if condition.onset_dateTime %}
+                {{ condition.onset_dateTime|date:"Y-m-d" }}
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div id="modals-here"
+      class="modal modal-blur fade"
+      style="display: none"
+      aria-hidden="false"
+      tabindex="-1"
+      hx-trigger="hidden.bs.modal"
+      hx-get="{% url 'ProblemList_overview' patient_id=patient.id %}"
+      hx-target="body"
+      hx-swap="morph"
+      hx-push-url="false">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+          <div class="modal-content"></div>
+      </div>
+  </div>
+</div>

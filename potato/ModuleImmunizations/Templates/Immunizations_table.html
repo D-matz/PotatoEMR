@@ -1,0 +1,74 @@
+<div id="immunizations" class="m-4">
+  <button style="cursor: pointer;"
+      hx-get="{% url 'Immunizations_new' patient.id %}"
+      hx-target="#modals-here"
+      hx-trigger="click"
+      hx-push-url="false"
+      data-bs-toggle="modal"
+      data-bs-target="#modals-here">
+    + Add New Immunization
+  </button>
+  <div id="ImmunizationList_table" class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th style="width: 25%">Vaccine</th>
+          <th style="width: 20%">Status</th>
+          <th style="width: 20%">Route</th>
+          <th style="width: 20%">Site</th>
+          <th style="width: 15%">Date Given</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for immunization in immunizations %}
+          <tr style="cursor: pointer;"
+              hx-get="{% url 'Immunizations_existing' patient.id immunization.id %}"
+              hx-target="#modals-here"
+              hx-trigger="click"
+              hx-push-url="false"
+              data-bs-toggle="modal"
+              data-bs-target="#modals-here">
+            <td class="text-wrap small">
+              {% if immunization.vaccineCode_cc.all %}
+                {{ immunization.vaccineCode_cc.first.display }}
+              {% endif %}
+            </td>
+            <td class="text-wrap small">
+              {{ immunization.status }}
+            </td>
+            <td class="text-wrap small">
+              {% if immunization.route_cc.all %}
+                {{ immunization.route_cc.first.display }}
+              {% endif %}
+            </td>
+            <td class="text-wrap small">
+              {% if immunization.site_cc.all %}
+                {{ immunization.site_cc.first.display }}
+              {% endif %}
+            </td>
+            <td class="text-wrap small">
+              {% if immunization.occurrence_dateTime %}
+                {{ immunization.occurrence_dateTime|date:"Y-m-d" }}
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div id="modals-here"
+      class="modal modal-blur fade"
+      style="display: none"
+      aria-hidden="false"
+      tabindex="-1"
+      hx-trigger="hidden.bs.modal"
+      hx-get="{% url 'Immunizations_overview' patient_id=patient.id %}"
+      hx-target="body"
+      hx-swap="morph"
+      hx-push-url="false">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+          <div class="modal-content"></div>
+      </div>
+  </div>
+</div>

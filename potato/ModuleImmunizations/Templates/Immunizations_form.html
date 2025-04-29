@@ -1,0 +1,139 @@
+<style>
+  .fade-me-out.htmx-swapping {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+  }
+</style>
+<form
+    id="Immunization_form"
+    class="container mt-4 p-4 rounded-3 bg-body"
+    style="height: 85vh; overflow-y: auto"
+    {% if immunization_id %}
+    hx-post="{% url 'Immunizations_existing' patient_id=patient_id immunization_id=immunization_id %}"
+    {% else %}
+    hx-post="{% url 'Immunizations_new' patient_id=patient_id %}"
+    {% endif %}
+    hx-swap="outerHTML"
+    hx-target="#Immunization_form"
+    >
+    {% csrf_token %}
+
+    <div class="row">
+        <div class="col-6">
+            <div class="row mb-2">
+                <label for="{{ immunization_form.vaccineCode_cc.id_for_label }}" class="col-2 col-form-label-sm p-0">Vaccine:</label>
+                <div class="col-10">
+                    {{ immunization_form.vaccineCode_cc }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="row mb-2">
+                        <label for="{{ immunization_form.status.id_for_label }}" class="col-4 col-form-label-sm p-0">Status:</label>
+                        <div class="col-8">
+                            {{ immunization_form.status }}
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="{{ immunization_form.occurrence_dateTime.id_for_label }}" class="col-4 col-form-label-sm p-0">Date:</label>
+                        <div class="col-8">
+                            {{ immunization_form.occurrence_dateTime }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="row mb-2">
+                        <label for="{{ immunization_form.route_cc.id_for_label }}" class="col-4 col-form-label-sm p-0">Route:</label>
+                        <div class="col-8">
+                            {{ immunization_form.route_cc }}
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="{{ immunization_form.site_cc.id_for_label }}" class="col-4 col-form-label-sm p-0">Site:</label>
+                        <div class="col-8">
+                            {{ immunization_form.site_cc }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div>
+                <label for="{{ immunization_form.text.id_for_label }}" class="form-label small p-0">Notes:</label>
+            </div>
+            <div>
+                {{ immunization_form.text }}
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Save</button>
+    <button type="button" class="btn btn-danger mt-3" data-bs-dismiss="modal">Cancel</button>
+    <div id="response" class="fade-me-out position-absolute top-0 start-50 translate-middle-x mt-3" style="width: 80%;">
+        {% if save_result == "Save_Success" %}
+            <div
+                hx-get="/empty"
+                hx-trigger="load delay:2s"
+                hx-swap="outerHTML swap:3s"
+                hx-target="#response"
+                class="fade-me-out alert alert-success py-2 px-3 mb-0 text-center">
+                Saved Successfully
+            </div>
+        {% elif save_result == "Save_Failed" %}
+            <div
+                hx-get="/empty"
+                hx-trigger="load delay:2s"
+                hx-swap="outerHTML swap:3s"
+                hx-target="#response"
+                class="alert alert-danger py-2 px-3 mb-0 text-center">
+                Failed to save
+            </div>
+        {% endif %}
+    </div>
+</form>
+
+<script>
+    document.querySelectorAll('.tomselect').forEach(function(el){
+    //  new TomSelect(el, {});
+    });
+</script>
+
+
+
+<style>
+    .fade-me-out.htmx-swapping {
+    opacity: 0;
+    transition: opacity 2s ease-out;
+    }
+
+
+    .ts-dropdown {
+      color: var(--bs-body-color);
+      background-color: var(--bs-body-bg);
+      border-color: var(--bs-border-color);
+    }
+
+
+    .ts-dropdown .option.active {
+      background-color: var(--bs-secondary);
+      color: var(--bs-body-color);
+    }
+
+    .ts-control, .ts-wrapper.single.input-active .ts-control, .ts-wrapper{
+      background-color: var(--bs-body-tertiary);
+      color: var(--bs-body-color);
+    }
+
+    .ts-control > input{
+      color: var(--bs-body-color);
+    }
+
+    .ts-control {
+      border-color: var(--bs-border-color);
+    }
+
+
+    .full .ts-control{
+      background-color: var(--bs-body-tertiary);
+      color: var(--bs-body-color);
+    }
+</style>

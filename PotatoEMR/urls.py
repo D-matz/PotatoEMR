@@ -27,7 +27,7 @@ from potato.ModuleAppointmentCalendar import AppointmentCalendar_view
 from potato.ModulePatientLists import PatientLists_view
 from potato.ModuleAppointmentEncounter import AppointmentEncounter_view
 from potato.ModuleProblemList import ProblemList_view
-
+from potato.ModuleImmunizations import Immunizations_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -52,13 +52,20 @@ urlpatterns = [
     path("patient/<int:id>/", view_patientOverview.patient_overview, name="PatientOverview"),
     path("patient-partial/<int:id>/", view_patientOverview.patient_overview_partial, name="PatientOverview_partial"),
 
+    path("patient-lists", PatientLists_view.lists, name="home_patient_lists"),
+
+    path("patient/<int:patient_id>/encounter/<int:encounter_id>", AppointmentEncounter_view.overview, name="AppointmentEncounter_overview"),
+
     path("patient/<int:patient_id>/allergy-intolerance", AllergyIntoleranceBootstrap_view.allergy_intolerance_overview, name="AllergyIntoleranceBootstrap_overview"),
     path("patient/<int:patient_id>/allergy-intolerance-existing/<int:allergy_id>", AllergyIntoleranceBootstrap_view.allergy_intolerance_existing, name="AllergyIntoleranceBootstrap_existing"),
     path("patient/<int:patient_id>/allergy-intolerance-new", AllergyIntoleranceBootstrap_view.allergy_intolerance_new, name="AllergyIntoleranceBootstrap_new"),
 
-    path("patient-lists", PatientLists_view.lists, name="home_patient_lists"),
+    path("patient/<int:patient_id>/immunizations", Immunizations_view.immunization_overview, name="Immunizations_overview"),
+    path("patient/<int:patient_id>/immunizations-existing/<int:immunization_id>", Immunizations_view.immunization_existing, name="Immunizations_existing"),
+    path("patient/<int:patient_id>/immunizations-new", Immunizations_view.immunization_new, name="Immunizations_new"),
 
-    path("patient/<int:patient_id>/encounter/<int:encounter_id>", AppointmentEncounter_view.overview, name="AppointmentEncounter_overview"),
-    path("patient/<int:patient_id>/problem-list", ProblemList_view.problem_list, name="ProblemList"),
+    path("patient/<int:patient_id>/problem-list", ProblemList_view.problem_list_overview, name="ProblemList_overview"),
+    path("patient/<int:patient_id>/problem-list-existing/<int:condition_id>", ProblemList_view.problem_list_existing, name="ProblemList_existing"),
+    path("patient/<int:patient_id>/problem-list-new", ProblemList_view.problem_list_new, name="ProblemList_new"),
 
 ]

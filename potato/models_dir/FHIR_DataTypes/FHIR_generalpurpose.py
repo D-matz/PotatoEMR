@@ -50,7 +50,7 @@ class FHIR_GP_Coding(models.Model):
     version = FHIR_primitive_StringField(max_length=256, null=True, blank=True)  # Version of the system (optional)
     code = FHIR_primitive_CodeField(max_length=1024, null=True, blank=True)  # Symbol in syntax defined by the system
     display = FHIR_primitive_StringField(max_length=256, null=True, blank=True)  # Representation defined by the system (optional)
-    userSelected = FHIR_primitive_BooleanField()  # If this coding was chosen directly by the user
+    userSelected = FHIR_primitive_BooleanField(default=False)  # If this coding was chosen directly by the user
     def __str__(self):
         if self.display:
             return self.display

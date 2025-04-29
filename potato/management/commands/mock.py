@@ -14,6 +14,9 @@ class Command(BaseCommand):
         patient_model_list = FHIR_Patient.objects.all()
         print("patients", patient_model_list)
 
+        FHIR_Observation.objects.all().delete()
+        
+
         FHIR_Condition.objects.all().delete()
         choices_clinicalStatus = FHIR_GP_Coding.objects.filter(codings__binding_rule=FHIR_Condition.BINDING_clinicalStatus)
         choices_verificationStatus = FHIR_GP_Coding.objects.filter(codings__binding_rule=FHIR_Condition.BINDING_verificationStatus)
@@ -22,7 +25,8 @@ class Command(BaseCommand):
         print("choices_clinicalStatus", FHIR_Condition.BINDING_clinicalStatus, choices_clinicalStatus)
         for patient_model in patient_model_list:
             for i in range(0, random.randint(3, 7)):
-                condition_model = FHIR_Condition.objects.create(subject_Patient=patient_model)
+                condition_model = FHIR_Condition.objects.create(subject_Patient=patient_model,
+                                                                onset_dateTime=datetime.now(timezone.utc) - timedelta(days=random.randint(0, 365 * 10)))
                 condition_model.clinicalStatus_cc.set([random.choice(choices_clinicalStatus)])
                 condition_model.verificationStatus_cc.set([random.choice(choices_verificationStatus)])
                 condition_model.severity_cc.set([random.choice(choices_severity)])
