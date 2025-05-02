@@ -4,6 +4,7 @@ from ..FHIR_DataTypes.FHIR_generalpurpose import *
 from ..FHIR_DataTypes.FHIR_specialpurpose import *
 from ..FHIR_DataTypes.FHIR_metadata import *
 from ..FHIR_DataTypes.FHIR_primitive import *
+from datetime import datetime
 
 class FHIR_Observation(models.Model):
     instantiates_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
@@ -23,7 +24,7 @@ class FHIR_Observation(models.Model):
     partOf_GenomicStudy = models.ManyToManyField("FHIR_GenomicStudy", related_name="Observation_partOf", blank=True)
     class StatusChoices(models.TextChoices): REGISTERED = 'registered', 'Registered'; SPECIMEN_IN_PROCESS = 'specimen-in-process', 'Specimen-in-process'; PRELIMINARY = 'preliminary', 'Preliminary'; FINAL = 'final', 'Final'; AMENDED = 'amended', 'Amended'; CORRECTED = 'corrected', 'Corrected'; APPENDED = 'appended', 'Appended'; CANCELLED = 'cancelled', 'Cancelled'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; UNKNOWN = 'unknown', 'Unknown'; CANNOT_BE_OBTAINED = 'cannot-be-obtained', 'Cannot-be-obtained'; 
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
-    BINDING_code = "TODO"
+    BINDING_code = "http://loinc.org"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='Observation_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     subject_Patient = models.ForeignKey("FHIR_Patient", related_name="Observation_subject", null=True, blank=True, on_delete=models.SET_NULL)
@@ -90,6 +91,45 @@ class FHIR_Observation(models.Model):
     derivedFrom_MolecularSequence = models.ManyToManyField("FHIR_MolecularSequence", related_name="Observation_derivedFrom", blank=True)
     derivedFrom_GenomicStudy = models.ManyToManyField("FHIR_GenomicStudy", related_name="Observation_derivedFrom", blank=True)
 
+    def get_effective_datetime(self) -> datetime:
+        """
+        effective[x] is when the observation was true
+        effective[x] can be a datetime, an instant, a period, or a timing
+        this function returns effective time as a datetime object no matter which one is populated
+        """
+        if self.effective_dateTime:
+            return self.effective_dateTime
+        elif self.effective_instant:
+            return self.effective_instant
+        elif self.effective_Period and self.effective_Period.start_datetime:
+            return self.effective_Period.start_datetime
+        elif self.effective_Timing and self.effective_Timing.events.exists():
+            first_event = self.effective_Timing.events.first()
+            if first_event and first_event.event:
+                return first_event.event
+        return None
+    
+    def get_value_float(self) -> float:
+        """
+        value[x] is the observation value, which can be a codeableconcept, a string, a boolean, a range, a ratio, a sampleddata, a time, a datetime, a period, an attachment, or a reference
+        this function returns value as a float any of these is populated:
+          string, quantity, range, ratio, sampleddata
+        """
+        if self.value_string:
+            try:
+                return float(self.value_string.strip())
+            except:
+                return None
+        elif self.value_Quantity:
+            return float(self.value_Quantity.value)
+        elif self.value_Range:
+            return float(self.value_Range.low.value)
+        elif self.value_Ratio:
+            return float(self.value_Ratio.numerator.value) / float(self.value_Ratio.denominator.value)
+        elif self.value_SampledData:
+            return float(self.value_SampledData.origin)
+        return None
+
 class FHIR_Observation_identifier(FHIR_GP_Identifier):
     Observation = models.ForeignKey(FHIR_Observation, related_name='Observation_identifier', null=False, on_delete=models.CASCADE)
 
@@ -136,7 +176,7 @@ class FHIR_Observation_referenceRange_appliesTo(models.Model):
     
 class FHIR_Observation_component(models.Model):
     Observation = models.ForeignKey(FHIR_Observation, related_name='Observation_component', null=False, on_delete=models.CASCADE)
-    BINDING_code = "TODO"
+    BINDING_code = "http://loinc.org"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='Observation_component_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Observation_component_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)

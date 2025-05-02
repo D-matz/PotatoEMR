@@ -68,6 +68,46 @@ class Command(BaseCommand):
                 'system': 'http://loinc.org',
                 'code': '8462-4',
                 'display': 'Diastolic blood pressure'
+            },
+            {
+                'system': 'http://loinc.org',
+                'code': '3137-7',
+                'display': 'Body height Measured'
+            },
+            {
+                'system': 'http://loinc.org',
+                'code': '3138-5',
+                'display': 'Body height Stated'
+            },
+            {
+                'system': 'http://loinc.org',
+                'code': '8301-4',
+                'display': 'Body height Estimated'
+            },
+            {
+                'system': 'http://loinc.org',
+                'code': '8305-5',
+                'display': 'Body height --post partum'
+            },
+            {
+                'system': 'http://loinc.org',
+                'code': '8306-3',
+                'display': 'Body height --lying'
+            },
+            {
+                'system': 'http://loinc.org',
+                'code': '8307-1',
+                'display': 'Body height --preoperative'
+            },
+            {
+                'system': 'http://loinc.org',
+                'code': '8308-9',
+                'display': 'Body height --standing'
+            },
+            {
+                'system': 'http://loinc.org',
+                'code': '92999-2',
+                'display': 'Body height --sitting'
             }
         ]
 

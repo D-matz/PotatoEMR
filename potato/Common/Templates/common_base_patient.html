@@ -2,7 +2,7 @@
 
 {% block content %}
 <div id="page-with-patient" class="d-flex h-100 w-100">
-  <div id="patient-sidebar-here" class="bg-body-secondary" style="width: 200px;">
+  <div id="patient-sidebar-here" style="width: 200px; flex-shrink: 0;" class="bg-body-secondary overflow-auto">
     <ul class="nav flex-column"
     hx-swap="morph"
     hx-target="body">
@@ -20,7 +20,7 @@
       <li id="p_results" class="nav-item"><a class="nav-link" href="#">Chart review todo</a></li>
       <li id="p_results1" class="nav-item"><a class="nav-link" href="#">Encounter</a></li>
       <li id="p_results1" class="nav-item"><a class="nav-link" href="#">Family history todo</a></li>
-      <li id="p_results2" class="nav-item"><a class="nav-link" href="#">Growth chart todo</a></li>
+      <li id="p_growth" class="nav-item"><a href="{% url 'GrowthChart_overview' patient.id %}" class="nav-link" hx-get="{% url 'GrowthChart_overview' patient.id %}">Growth chart</a></li>
       <li id="p_immunization" class="nav-item"><a href="{% url 'Immunizations_overview' patient.id %}" class="nav-link" hx-get="{% url 'Immunizations_overview' patient.id %}">Immunizations</a></li>
       <li id="p_MAR" class="nav-item"><a class="nav-link" href="#">Medications todo</a></li>
       <li id="p_results3" class="nav-item"><a href="{% url 'ProblemList_overview' patient.id %}" class="nav-link" hx-get="{% url 'ProblemList_overview' patient.id %}">Problem list</a></li>
@@ -29,10 +29,12 @@
   </div>
 
   <div id="patient-page-here" class="d-flex flex-column flex-grow-1 h-100">
-    {% block patientPage %}
-    {% endblock %}
+    <div class="flex-grow-1 overflow-auto">
+      {% block patientPage %}
+      {% endblock %}
+    </div>
 
-    <div class="mt-auto" id="patient-footer-here" class="container">
+    <div id="patient-footer-here" class="container-fluid m-0 p-0 w-100">
       <ul class="nav flex-row bg-body">
         <li id="p_orders5" class="nav-item"><a class="nav-link" href="#">Orders todo</a></li>
         <li id="p_orders6" class="nav-item"><a class="nav-link" href="#">Diagnoses todo</a></li>

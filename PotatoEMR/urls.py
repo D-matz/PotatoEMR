@@ -28,6 +28,7 @@ from potato.ModulePatientLists import PatientLists_view
 from potato.ModuleAppointmentEncounter import AppointmentEncounter_view
 from potato.ModuleProblemList import ProblemList_view
 from potato.ModuleImmunizations import Immunizations_view
+from potato.ModuleGrowthChart import GrowthChart_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -55,6 +56,8 @@ urlpatterns = [
     path("patient-lists", PatientLists_view.lists, name="home_patient_lists"),
 
     path("patient/<int:patient_id>/encounter/<int:encounter_id>", AppointmentEncounter_view.overview, name="AppointmentEncounter_overview"),
+
+    path("patient/<int:patient_id>/growth-chart", GrowthChart_view.growth_chart_overview, name="GrowthChart_overview"),
 
     path("patient/<int:patient_id>/allergy-intolerance", AllergyIntoleranceBootstrap_view.allergy_intolerance_overview, name="AllergyIntoleranceBootstrap_overview"),
     path("patient/<int:patient_id>/allergy-intolerance-existing/<int:allergy_id>", AllergyIntoleranceBootstrap_view.allergy_intolerance_existing, name="AllergyIntoleranceBootstrap_existing"),

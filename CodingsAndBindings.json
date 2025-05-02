@@ -37587,6 +37587,94 @@
     }
   },
   {
+    "model": "potato.fhir_gp_coding",
+    "pk": 3418,
+    "fields": {
+      "system": "http://loinc.org",
+      "version": null,
+      "code": "3137-7",
+      "display": "Body height Measured",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 3419,
+    "fields": {
+      "system": "http://loinc.org",
+      "version": null,
+      "code": "3138-5",
+      "display": "Body height Stated",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 3420,
+    "fields": {
+      "system": "http://loinc.org",
+      "version": null,
+      "code": "8301-4",
+      "display": "Body height Estimated",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 3421,
+    "fields": {
+      "system": "http://loinc.org",
+      "version": null,
+      "code": "8305-5",
+      "display": "Body height --post partum",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 3422,
+    "fields": {
+      "system": "http://loinc.org",
+      "version": null,
+      "code": "8306-3",
+      "display": "Body height --lying",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 3423,
+    "fields": {
+      "system": "http://loinc.org",
+      "version": null,
+      "code": "8307-1",
+      "display": "Body height --preoperative",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 3424,
+    "fields": {
+      "system": "http://loinc.org",
+      "version": null,
+      "code": "8308-9",
+      "display": "Body height --standing",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 3425,
+    "fields": {
+      "system": "http://loinc.org",
+      "version": null,
+      "code": "92999-2",
+      "display": "Body height --sitting",
+      "userSelected": false
+    }
+  },
+  {
     "model": "potato.fhir_gp_binding",
     "pk": 1,
     "fields": {
@@ -43153,7 +43241,15 @@
         3414,
         3415,
         3416,
-        3417
+        3417,
+        3418,
+        3419,
+        3420,
+        3421,
+        3422,
+        3423,
+        3424,
+        3425
       ]
     }
   }

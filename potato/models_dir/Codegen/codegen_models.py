@@ -88,7 +88,10 @@ default_bindings = {
         "BINDING_verificationStatus": 'http://hl7.org/fhir/valueset-condition-ver-status.html',
         "BINDING_severity": 'https://build.fhir.org/valueset-condition-severity.html',
         "BINDING_code": 'https://build.fhir.org/valueset-condition-code.html',
-    }
+    },
+    "Observation":{
+        "BINDING_code": 'http://loinc.org',
+    },
 }
 
 default_strs = {

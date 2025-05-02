@@ -9,6 +9,8 @@
 from .FHIR_primitive import *
 from .FHIR_specialpurpose import *
 from django.db import models #for fhir_organization
+from decimal import Decimal, InvalidOperation
+from django.core.exceptions import ValidationError
 
 class FHIR_GP_Attachment(models.Model):
     contentType = FHIR_primitive_CodeField(max_length=256)  # Mime type of the content, with charset etc.
@@ -70,11 +72,12 @@ class FHIR_GP_Quantity(models.Model):
         LESS_THAN_OR_EQUAL = '<=', 'Less than or equal to'
         GREATER_THAN_OR_EQUAL = '>=', 'Greater than or equal to'
         GREATER_THAN = '>', 'Greater than'
-    value = FHIR_primitive_DecimalField(max_digits=18, decimal_places=17)  # Numerical value
+    value = FHIR_primitive_DecimalField()  # Numerical value
     comparator = FHIR_primitive_CodeField(max_length=2, choices=Comparator.choices, blank=True, null=True)  # Optional comparator
     unit = FHIR_primitive_StringField(max_length=64)  # Unit representation
     system = FHIR_primitive_URIField(max_length=255, blank=True, null=True)  # URI for the unit system
     code = FHIR_primitive_CodeField(max_length=64, blank=True, null=True)  # Coded form of the unit
+    
     def clean(self):
         if self.unit and not self.system:
             raise ValidationError("If a code for the unit is present, the system must also be present	")

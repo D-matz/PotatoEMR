@@ -14,9 +14,6 @@ class Command(BaseCommand):
         patient_model_list = FHIR_Patient.objects.all()
         print("patients", patient_model_list)
 
-        FHIR_Observation.objects.all().delete()
-        
-
         FHIR_Condition.objects.all().delete()
         choices_clinicalStatus = FHIR_GP_Coding.objects.filter(codings__binding_rule=FHIR_Condition.BINDING_clinicalStatus)
         choices_verificationStatus = FHIR_GP_Coding.objects.filter(codings__binding_rule=FHIR_Condition.BINDING_verificationStatus)
@@ -82,3 +79,83 @@ class Command(BaseCommand):
         print("practitioners:", FHIR_Practitioner.objects.all())
         print("practitionerRoles", FHIR_PractitionerRole.objects.all())
         print("appointments", FHIR_Appointment.objects.all())
+
+        pedro_patient_model = FHIR_Patient.objects.create(
+            gender=FHIR_Patient.GenderChoices.MALE,
+            birthDate=datetime(2024, 3, 14, tzinfo=timezone.utc)
+        )
+        pedro_patient_name_model = FHIR_Patient_name.objects.create(text="Pedro",  Patient=pedro_patient_model)
+        FHIR_Observation.objects.all().delete()
+        
+        height_codes = FHIR_GP_Coding.objects.filter(
+            system="http://loinc.org", 
+            code__in=["8302-2", "8306-3"]  # Body height and Body height --lying
+        )
+        # Create random observation dates (0-210 days after birth)
+        birth_date = pedro_patient_model.birthDate
+        observation_dates = []
+        for i in range(15):
+            random_days = random.randint(0, 210)
+            observation_date = birth_date + timedelta(days=random_days)
+            observation_dates.append((random_days, observation_date))
+        
+        observation_dates.sort(key=lambda x: x[0])
+        current_height = random.uniform(45, 55)  # Starting height in cm
+        for days, observation_date in observation_dates:
+            observation = FHIR_Observation.objects.create(
+                value_Quantity=FHIR_GP_Quantity.objects.create(value=current_height, unit="cm", system="http://unitsofmeasure.org", code="cm"),
+                subject_Patient=pedro_patient_model,
+                status='final',
+                effective_dateTime=observation_date
+            )
+            height_code = random.choice(height_codes)
+            observation.code_cc.add(height_code)
+            growth = random.uniform(0.5, 1.0) * (210 - days) / 210
+            current_height += growth
+        print(f"Created 15 height observations for Pedro")
+
+        # Add weight observations for Pedro
+        weight_code = FHIR_GP_Coding.objects.get(system="http://loinc.org", code="29463-7")
+        current_weight = random.uniform(2.5, 3.5)  # Starting weight in kg
+        for days, observation_date in observation_dates:
+            observation = FHIR_Observation.objects.create(
+                value_Quantity=FHIR_GP_Quantity.objects.create(value=current_weight, unit="kg", system="http://unitsofmeasure.org", code="kg"),
+                subject_Patient=pedro_patient_model,
+                status='final',
+                effective_dateTime=observation_date
+            )
+            observation.code_cc.add(weight_code)
+            # Weight increases more rapidly in early months
+            growth = random.uniform(0.2, 0.5) * (210 - days) / 210
+            current_weight += growth
+        print(f"Created 15 weight observations for Pedro")
+
+        # Add head circumference observations for Pedro
+        circumference_code = FHIR_GP_Coding.objects.get(system="http://loinc.org", code="9843-4")
+        current_circumference = random.uniform(32, 35)  # Starting head circumference in cm
+        for days, observation_date in observation_dates:
+            circumference_quantity = FHIR_GP_Quantity.objects.create(value=current_circumference, unit="cm", system="http://unitsofmeasure.org", code="cm")
+            observation = FHIR_Observation.objects.create(value_Quantity=circumference_quantity, subject_Patient=pedro_patient_model, status='final', effective_dateTime=observation_date)
+            observation.code_cc.add(circumference_code)
+            # Head circumference grows more in early months
+            growth = random.uniform(0.1, 0.3) * (210 - days) / 210
+            current_circumference += growth
+        print(f"Created 15 head circumference observations for Pedro")
+
+        # Add BMI observations for Pedro
+        bmi_code = FHIR_GP_Coding.objects.get(system="http://loinc.org", code="39156-5")
+        height_observations_models = FHIR_Observation.objects.filter(subject_Patient=pedro_patient_model, code_cc__system="http://loinc.org", code_cc__code="8302-2")
+        weight_observations_models = FHIR_Observation.objects.filter(subject_Patient=pedro_patient_model, code_cc__system="http://loinc.org", code_cc__code="29463-7")
+        for height_observation_model in height_observations_models:
+            # adding BMI observations for days we have both height and weight
+            weight_observation_model = weight_observations_models.filter(effective_dateTime=height_observation_model.effective_dateTime).first()
+            # Using the formula: BMI = weight(kg) / (height(m))²
+            height_in_meters = height_observation_model.value_Quantity.value / 100
+            bmi_value = weight_observation_model.value_Quantity.value / (height_in_meters * height_in_meters)
+            bmi_time = weight_observation_model.effective_dateTime
+            
+            bmi_quantity = FHIR_GP_Quantity.objects.create(value=bmi_value, unit="kg/m2", system="http://unitsofmeasure.org", code="kg/m2")
+            observation = FHIR_Observation.objects.create(value_Quantity=bmi_quantity, subject_Patient=pedro_patient_model, status='final', effective_dateTime=bmi_time)
+            observation.code_cc.add(bmi_code)
+            print("add BMI observation", observation)
+        print(f"Created {FHIR_Observation.objects.filter(subject_Patient=pedro_patient_model, code_cc__system='http://loinc.org', code_cc__code='39156-5').count()} BMI observations for Pedro")

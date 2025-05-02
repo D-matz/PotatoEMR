@@ -7,6 +7,7 @@ from django.db import models
 from decimal import Decimal, ROUND_HALF_UP
 from django import forms
 import time
+import decimal
 
 
 
@@ -70,11 +71,39 @@ class FHIR_primitive_DateTimeField_Precision(models.CharField):
         super().__init__(*args, **kwargs)
 
 
+DECIMAL_REGEX = r'-?(0|[1-9][0-9]{0,17})(\.[0-9]{1,17})?([eE][+-]?[0-9]{1,9}})'
+DECIMAL_ERROR = "Invalid decimal value. Decimals in FHIR cannot have more than 18 digits and a decimal point."
 class FHIR_primitive_DecimalField(models.DecimalField):
     def __init__(self, *args, **kwargs):
-        kwargs['max_digits'] = kwargs.get('max_digits', 18)
+        kwargs['max_digits'] = kwargs.get('max_digits', 35)
         kwargs['decimal_places'] = kwargs.get('decimal_places', 17)
+        #TODO idk about this but lower was causing error on converted decimals
+        #you might think max 18 digits, but that doesn't work
+        #because 17 decimal places means 18-17=1 only 1 digit left before decimal
+        #decimalfield seems kind of janky particularly on sqlite
         super().__init__(*args, **kwargs)
+    
+    #not sure it's even worth making decimalField a django decimal field
+    #FHIR says to use decimal field instead of float, but it's confusing
+    #most likely you'll be working with float and want to save a float
+    #so this converts it to decimal
+
+    def pre_save(self, model_instance, add):
+        value = getattr(model_instance, self.attname)
+        if value is None:
+            return None
+        if not isinstance(value, Decimal):
+            try:
+                value_decimal = Decimal(value)
+                print("FHIR_Primitive.py: FHIR_primitive_DecimalField converted to decimal", value)
+                setattr(model_instance, self.attname, value_decimal)
+            except:
+                raise ValidationError("Invalid decimal value. Could not convert to a valid decimal.")
+        return value
+    
+    #def clean(self, value, model_instance):
+    #    return apply_regex(value, DECIMAL_REGEX, DECIMAL_ERROR)
+
 
 ID_REGEX = r'^[A-Za-z0-9\-\.]{1,64}$'
 ID_ERROR = "Invalid id format. Must only contain letters, numbers, hyphens, and periods, and be no longer than 64 characters."

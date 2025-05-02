@@ -1,0 +1,316 @@
+{% load static %}
+<style>
+  body { font-family: Arial, sans-serif;}
+  .tooltip {
+    position: absolute;
+    pointer-events: none;
+    font-size: 12px;
+  }
+  .title { text-align: center; }
+  /* Make sure axis lines are drawn on top of grid lines */
+  .axis line, .axis path {
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+  .axis text {
+    fill: black;
+  }
+  .grid line {
+    stroke: #b0b0b0;
+    stroke-dasharray: 3,3;
+  }
+  .grid path {
+    stroke-width: 0;
+  }
+  #chart svg {
+    margin: 20px;
+  }
+  
+  .h-100 {
+    height: 100%;
+  }
+  .scrollable-container {
+    overflow-y: auto;
+  }
+</style>
+
+<div class="container-fluid p-4 h-100">
+  <div class="card h-100 shadow-sm">
+    <div class="card-body p-4 scrollable-container">
+      <div id="chart" class="d-flex flex-column align-items-center"></div>
+    </div>
+  </div>
+</div>
+
+
+
+  <script src="{% static 'vendored/d3.7.8.5.min.js' %}" defer></script>
+  <script type="module">
+    // Function to draw the growth chart with data from Django view
+    function drawGraphFromData(config) {
+      console.log(config);
+      const title = config.title;
+      const xLabel = config.xLabel;
+      const y1Label = config.y1Label;
+      const y2Label = config.y2Label;
+      const patientData = config.patientData;
+      const percentileData = config.percentileData;
+      const percentileNames = config.percentileNames || Object.keys(percentileData);
+      const unitConversionRatio = config.unitConversionRatio;
+      
+      // Setup dimensions
+      const margin = {top: 40, right: 60, bottom: 90, left: 60};
+      const width = 800 - margin.left - margin.right;
+      const height = 500 - margin.top - margin.bottom;
+      
+      // Unit conversion function
+      const convertUnit = value => value * unitConversionRatio;
+      
+      // Create SVG
+      const svg = d3.select("#chart")
+        .append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform", `translate(${margin.left},${margin.top})`);
+      
+      // White background with title
+      svg.append("rect")
+          .attr("x", -margin.left)
+          .attr("y", -margin.top)
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .attr("fill", "white");
+      svg.append("text")
+          .attr("x", width/2)
+          .attr("y", -margin.top/2)
+          .attr("text-anchor", "middle")
+          .attr("font-size", "16px")
+          .attr("font-weight", "bold")
+          .text(title);
+      
+      // Find domain ranges from data
+      let xMin = Infinity, xMax = -Infinity;
+      let yMin = Infinity, yMax = -Infinity;
+      
+      // Check patient data for domain
+      patientData.forEach(d => {
+        xMin = Math.min(xMin, d.x);
+        xMax = Math.max(xMax, d.x);
+        yMin = Math.min(yMin, d.y);
+        yMax = Math.max(yMax, d.y);
+      });
+      
+      // Check percentile data for domain
+      Object.values(percentileData).forEach(data => {
+        data.forEach(d => {
+          xMin = Math.min(xMin, d[0]);
+          xMax = Math.max(xMax, d[0]);
+          yMin = Math.min(yMin, d[1]);
+          yMax = Math.max(yMax, d[1]);
+        });
+      });
+      
+      // Add some padding to domains
+      yMin = Math.max(0, yMin * 0.9);
+      yMax = yMax * 1.1;
+      
+      // Scales
+      const xScale = d3.scaleLinear()
+        .domain([xMin, xMax])
+        .range([0, width]);
+      
+      const yScale1 = d3.scaleLinear()
+        .domain([yMin, yMax])
+        .range([height, 0]);
+      
+      const yScale2 = d3.scaleLinear()
+        .domain([yMin, yMax].map(convertUnit))
+        .range([height, 0]);
+      
+      // Add grid lines first (so they appear under the axes)
+      svg.append("g")
+        .attr("class", "grid")
+        .attr("transform", `translate(0,${height})`)
+        .call(d3.axisBottom(xScale)
+          .tickSize(-height)
+          .tickFormat(""));
+      
+      svg.append("g")
+        .attr("class", "grid")
+        .call(d3.axisLeft(yScale1)
+          .tickSize(-width)
+          .tickFormat(""));
+      
+      // Axes (added after grid to ensure they're on top)
+      svg.append("g")
+        .attr("class", "axis")
+        .attr("transform", `translate(0,${height})`)
+        .call(d3.axisBottom(xScale));
+      
+      svg.append("g")
+        .attr("class", "axis")
+        .call(d3.axisLeft(yScale1));
+      
+      svg.append("g")
+        .attr("class", "axis")
+        .attr("transform", `translate(${width},0)`)
+        .call(d3.axisRight(yScale2));
+      
+      // Axis labels
+      svg.append("text")
+        .attr("text-anchor", "middle")
+        .attr("x", width/2)
+        .attr("y", height + 40)
+        .text(xLabel);
+      
+      svg.append("text")
+        .attr("text-anchor", "middle")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -40)
+        .attr("x", -height/2)
+        .text(y1Label);
+      
+      svg.append("text")
+        .attr("text-anchor", "middle")
+        .attr("transform", "rotate(90)")
+        .attr("y", -width-40)
+        .attr("x", height/2)
+        .text(y2Label);
+      
+      // Line generator
+      const line = d3.line()
+        .x(d => xScale(d[0]))
+        .y(d => yScale1(d[1]));
+      
+      // Colors for percentile lines - using d3 color scheme
+      const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+      
+      // Draw percentile lines
+      const percentileEntries = Object.entries(percentileData);
+      percentileEntries.forEach(([percentile, data], i) => {
+        svg.append("path")
+          .datum(data)
+          .attr("fill", "none")
+          .attr("stroke", colorScale(i))
+          .attr("stroke-width", 2)
+          .attr("d", line);
+      });
+      
+      // Create tooltip
+      const tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip card shadow-sm")
+        .style("opacity", 0);
+      
+      // Add patient data points
+      svg.selectAll(".patient-point")
+        .data(patientData)
+        .enter()
+        .append("circle")
+          .attr("cx", d => xScale(d.x))
+          .attr("cy", d => yScale1(d.y))
+          .attr("r", 6)
+          .attr("fill", "white")
+          .attr("stroke", "black")
+          .attr("stroke-width", 2)
+          .on("mouseover", function(event, d) {
+            tooltip.transition()
+              .duration(200)
+              .style("opacity", 1);
+            tooltip.html(`
+              <strong>Patient Data</strong><br>
+              Age: ${d.x} weeks<br>
+              Weight: ${d.y.toFixed(2)} ${y1Label.match(/\(([^)]+)\)/)?.[1] || ''} 
+                    (${convertUnit(d.y).toFixed(2)} ${y2Label.match(/\(([^)]+)\)/)?.[1] || ''})<br>
+              Date: ${d.date || 'N/A'}
+            `)
+              .style("left", (event.pageX + 10) + "px")
+              .style("top", (event.pageY - 28) + "px");
+          })
+          .on("mouseout", function() {
+            tooltip.transition()
+              .duration(500)
+              .style("opacity", 0);
+          });
+      
+      // Add legend below the graph
+      const legendData = [
+        { label: 'Patient', color: 'black', type: 'point' },
+        ...percentileEntries.map(([name, _], i) => ({
+          label: `${name} percentile`,
+          color: colorScale(i),
+          type: 'line'
+        }))
+      ];
+      
+      const legendSpacing = width / legendData.length;
+      const legendG = svg.append("g")
+        .attr("transform", `translate(0, ${height + 55})`);
+        
+      legendData.forEach((item, i) => {
+        const g = legendG.append("g")
+          .attr("transform", `translate(${i * legendSpacing}, 0)`);
+          
+        if (item.type === 'line') {
+          g.append("line")
+            .attr("x1", 0)
+            .attr("y1", 7)
+            .attr("x2", 20)
+            .attr("y2", 7)
+            .attr("stroke", item.color)
+            .attr("stroke-width", 2);
+        } else {
+          g.append("circle")
+            .attr("cx", 10)
+            .attr("cy", 7)
+            .attr("r", 6)
+            .attr("fill", "white")
+            .attr("stroke", "black")
+            .attr("stroke-width", 2);
+        }
+        
+        g.append("text")
+          .attr("x", 25)
+          .attr("y", 10)
+          .attr("text-anchor", "start")
+          .attr("font-size", "12px")
+          .text(item.label);
+      });
+    }
+
+    // Example usage - this would be replaced by data from Django
+    // You can remove this section when integrating with Django
+   /* const exampleConfig = {
+      title: "Fetal Growth Chart",
+      xLabel: "Gestational Age (weeks)",
+      y1Label: "Weight (kg)",
+      y2Label: "Weight (lbs)",
+      patientData: [
+        {age: 26, weight: 0.92, date: "2025-01-15"},
+        {age: 30, weight: 1.45, date: "2025-02-12"},
+        {age: 34, weight: 2.31, date: "2025-03-10"},
+        {age: 37, weight: 2.78, date: "2025-04-01"},
+        {age: 40, weight: 3.39, date: "2025-04-22"}
+      ],
+      percentileData: {
+        '3rd': [[22,0.45],[24,0.59],[26,0.76],[28,0.97],[30,1.21],[32,1.5],[34,1.82],[36,2.18],[38,2.58],[40,2.85],[42,3.03]],
+        '10th': [[22,0.51],[24,0.67],[26,0.86],[28,1.09],[30,1.36],[32,1.68],[34,2.05],[36,2.42],[38,2.82],[40,3.15],[42,3.35]],
+        '50th': [[22,0.64],[24,0.82],[26,1.05],[28,1.32],[30,1.64],[32,2.01],[34,2.42],[36,2.85],[38,3.28],[40,3.65],[42,3.85]],
+        '90th': [[22,0.77],[24,0.99],[26,1.26],[28,1.57],[30,1.95],[32,2.38],[34,2.82],[36,3.3],[38,3.76],[40,4.18],[42,4.38]],
+        '97th': [[22,0.85],[24,1.09],[26,1.38],[28,1.73],[30,2.12],[32,2.58],[34,3.05],[36,3.55],[38,4.02],[40,4.45],[42,4.68]]
+      },
+      unitConversionRatio: 2.20462 // kg to lbs
+    };*/
+    
+    {% for graph in graph_list %}
+    drawGraphFromData({
+        title: "{{ graph.title }}",
+        xLabel: "{{ graph.x_label }}",
+        y1Label: "{{ graph.y1_label }}",
+        y2Label: "{{ graph.y2_label }}",
+        patientData: {{ graph.patientData|safe }},
+        percentileData: {{ graph.percentile_data|safe }},
+        unitConversionRatio: {{ graph.unit_conversion_ratio }}
+    });
+    {% endfor %}
+  </script>

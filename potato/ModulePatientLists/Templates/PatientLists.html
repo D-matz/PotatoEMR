@@ -4,4 +4,11 @@
 
 {% block content %}
   <p>patient lists</p>
+  <ul>
+    {% for patient in patients %}
+      <li>
+        <a href="{% url 'PatientOverview' patient.id %}">{{ patient }}</a>
+      </li>
+    {% endfor %}
+  </ul>
 {% endblock %}
