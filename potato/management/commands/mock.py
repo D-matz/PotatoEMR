@@ -102,6 +102,7 @@ class Command(BaseCommand):
         observation_dates.sort(key=lambda x: x[0])
         current_height = random.uniform(45, 55)  # Starting height in cm
         for days, observation_date in observation_dates:
+            print("observation_date", observation_date, "days", days, "current_height", current_height)
             observation = FHIR_Observation.objects.create(
                 value_Quantity=FHIR_GP_Quantity.objects.create(value=current_height, unit="cm", system="http://unitsofmeasure.org", code="cm"),
                 subject_Patient=pedro_patient_model,
@@ -110,13 +111,14 @@ class Command(BaseCommand):
             )
             height_code = random.choice(height_codes)
             observation.code_cc.add(height_code)
-            growth = random.uniform(0.5, 1.0) * (210 - days) / 210
+            growth = random.uniform(6, 10) * (210 - days) / 210
             current_height += growth
         print(f"Created 15 height observations for Pedro")
 
         # Add weight observations for Pedro
         weight_code = FHIR_GP_Coding.objects.get(system="http://loinc.org", code="29463-7")
-        current_weight = random.uniform(2.5, 3.5)  # Starting weight in kg
+        current_weight = random.uniform(2.5, 3)  # Starting weight in kg
+        current_weight = 2.34
         for days, observation_date in observation_dates:
             observation = FHIR_Observation.objects.create(
                 value_Quantity=FHIR_GP_Quantity.objects.create(value=current_weight, unit="kg", system="http://unitsofmeasure.org", code="kg"),
@@ -125,8 +127,7 @@ class Command(BaseCommand):
                 effective_dateTime=observation_date
             )
             observation.code_cc.add(weight_code)
-            # Weight increases more rapidly in early months
-            growth = random.uniform(0.2, 0.5) * (210 - days) / 210
+            growth = random.uniform(1.5, 2.5) * (210 - days) / 210
             current_weight += growth
         print(f"Created 15 weight observations for Pedro")
 
@@ -138,7 +139,7 @@ class Command(BaseCommand):
             observation = FHIR_Observation.objects.create(value_Quantity=circumference_quantity, subject_Patient=pedro_patient_model, status='final', effective_dateTime=observation_date)
             observation.code_cc.add(circumference_code)
             # Head circumference grows more in early months
-            growth = random.uniform(0.1, 0.3) * (210 - days) / 210
+            growth = random.uniform(2, 3) * (210 - days) / 210
             current_circumference += growth
         print(f"Created 15 head circumference observations for Pedro")
 
