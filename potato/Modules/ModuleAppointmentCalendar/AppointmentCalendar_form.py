@@ -1,8 +1,8 @@
 from django import forms
-from ..models_dir.FHIR_DataTypes.FHIR_generalpurpose import FHIR_GP_Coding
-from potato.models_dir.FHIR_Resources.Location import *
-from potato.models_dir.FHIR_Resources.Practitioner import *
-from potato.models_dir.FHIR_Resources.Appointment import *
+from potato.models import (
+    FHIR_Location,
+    FHIR_Practitioner,
+)
 
 class ApptClndrForm(forms.Form):
     Date = forms.DateField(

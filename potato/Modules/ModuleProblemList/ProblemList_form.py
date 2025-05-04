@@ -1,10 +1,8 @@
 from django import forms
-from django.forms.widgets import Select
-from django.utils.safestring import mark_safe
-from ..models_dir.FHIR_DataTypes.FHIR_generalpurpose import FHIR_GP_Coding
-from potato.models_dir.FHIR_Resources.Condition import (
+from potato.models import (
     FHIR_Condition,
-    FHIR_Condition_note
+    FHIR_Condition_note,
+    FHIR_GP_Coding
 )
 from django.db import transaction
 

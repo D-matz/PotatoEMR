@@ -1,8 +1,15 @@
 from django.shortcuts import render, redirect
 from django.db import transaction
 from .form_registerPatient import RegisterPatientForm
-from ..models_dir.FHIR_DataTypes.FHIR_generalpurpose import *
-from ..models_dir.FHIR_Resources.Patient import *
+from potato.models import (
+    FHIR_Patient,
+    FHIR_Patient_name,
+    FHIR_Patient_address,
+    FHIR_Patient_telecom,
+    FHIR_GP_HumanName,
+    FHIR_GP_ContactPoint,
+    FHIR_GP_Address
+)
 
 def create_patient(request):
     if request.method == "POST":
@@ -18,7 +25,7 @@ def create_patient(request):
                         birthDate_date=form_data['birth_date'],
                     )
 
-                    patient_name = FHIR_Patient_Name.objects.create(
+                    patient_name = FHIR_Patient_name.objects.create(
                         patient=patient_model,
                         text=f"{form_data['prefix']} {form_data['given_name']} {form_data['family_name']} {form_data['suffix']}".strip(),
                         use=form_data.get('name_use', FHIR_GP_HumanName.NameUseChoices.OFFICIAL),
@@ -29,7 +36,7 @@ def create_patient(request):
                     fstate = form_data.get('state')
                     fpostalCode = form_data.get('zip_code')
                     ftext = form_data.get('address') + ", " + fcity + ", " + fstate + ", " + fpostalCode
-                    patient_address = FHIR_Patient_Address.objects.create(
+                    patient_address = FHIR_Patient_address.objects.create(
                         patient=patient_model,
                         use=form_data.get('address_use', FHIR_GP_Address.AddressUse.HOME),
                         type=form_data.get('address_type', FHIR_GP_Address.AddressType.POSTAL),
@@ -41,14 +48,14 @@ def create_patient(request):
                     )
 
                     if form_data.get('phone_number'):
-                        patient_telecom_phone = FHIR_Patient_Telecom.objects.create(
+                        patient_telecom_phone = FHIR_Patient_telecom.objects.create(
                             patient=patient_model,
                             system=FHIR_GP_ContactPoint.System.PHONE,
                             use=form_data.get('phone_use'),
                             value=form_data.get('phone_number')
                         )
                     if form_data.get('email_addr'):
-                        patient_telecom_email = FHIR_Patient_Telecom.objects.create(
+                        patient_telecom_email = FHIR_Patient_telecom.objects.create(
                             patient=patient_model,
                             system=FHIR_GP_ContactPoint.System.EMAIL,
                             value=form_data.get('email_addr')

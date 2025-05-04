@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404
-from ..models_dir.FHIR_DataTypes.FHIR_generalpurpose import *
-from potato.models import FHIR_Immunization, FHIR_Patient
+from potato.models import (
+    FHIR_Immunization,
+    FHIR_Patient
+)
 from .Immunizations_form import Immunization_Combined_Form
 
 def immunization_overview(request, patient_id):

@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
-from ..models_dir.FHIR_DataTypes.FHIR_generalpurpose import *
-from ..models_dir.FHIR_Resources.Patient import FHIR_Patient
-from ..models_dir.FHIR_Resources.AllergyIntolerance import FHIR_AllergyIntolerance, FHIR_AllergyIntolerance_note, FHIR_AllergyIntolerance_reaction, FHIR_AllergyIntolerance_reaction_manifestation, FHIR_AllergyIntolerance_reaction_note
+from potato.models import (
+    FHIR_Patient,
+    FHIR_AllergyIntolerance
+)
 from django.shortcuts import get_object_or_404
 from .AllergyIntoleranceBootstrap_form import AllergyIntolerance_Combined_Form
 

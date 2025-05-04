@@ -1,6 +1,10 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
-from potato.models import FHIR_Patient, FHIR_Encounter, FHIR_Encounter_participant
+from potato.models import (
+    FHIR_Patient,
+    FHIR_Encounter,
+    FHIR_Encounter_participant
+)
 
 def overview(request, patient_id, encounter_id):
     patient_model = get_object_or_404(FHIR_Patient, id=patient_id)

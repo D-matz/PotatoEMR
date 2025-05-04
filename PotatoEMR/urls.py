@@ -19,16 +19,16 @@ from django.http import HttpResponse
 
 from potato.Common import common_views
 from potato.Common.Login import CommonLogin_view
-from potato.ModuleHomePage import CommonHomePage_view
-from potato.ModuleRegisterPatient import view_registerPatient
-from potato.ModulePatientOverview import view_patientOverview
-from potato.ModuleAllergyIntoleranceBootstrap import AllergyIntoleranceBootstrap_view
-from potato.ModuleAppointmentCalendar import AppointmentCalendar_view
-from potato.ModulePatientLists import PatientLists_view
-from potato.ModuleAppointmentEncounter import AppointmentEncounter_view
-from potato.ModuleProblemList import ProblemList_view
-from potato.ModuleImmunizations import Immunizations_view
-from potato.ModuleGrowthChart import GrowthChart_view
+from potato.Modules.ModuleHomePage import CommonHomePage_view
+from potato.Modules.ModuleRegisterPatient import view_registerPatient
+from potato.Modules.ModulePatientOverview import view_patientOverview
+from potato.Modules.ModuleAllergyIntoleranceBootstrap import AllergyIntoleranceBootstrap_view
+from potato.Modules.ModuleAppointmentCalendar import AppointmentCalendar_view
+from potato.Modules.ModulePatientLists import PatientLists_view
+from potato.Modules.ModuleAppointmentEncounter import AppointmentEncounter_view
+from potato.Modules.ModuleProblemList import ProblemList_view
+from potato.Modules.ModuleImmunizations import Immunizations_view
+from potato.Modules.ModuleGrowthChart import GrowthChart_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -57,7 +57,7 @@ urlpatterns = [
 
     path("patient/<int:patient_id>/encounter/<int:encounter_id>", AppointmentEncounter_view.overview, name="AppointmentEncounter_overview"),
 
-    path("patient/<int:patient_id>/growth-chart", GrowthChart_view.growth_chart_overview, name="GrowthChart_overview"),
+    path("patient/<int:patient_id>/growth-chart", GrowthChart_view.GrowthChart_overview, name="GrowthChart_overview"),
 
     path("patient/<int:patient_id>/allergy-intolerance", AllergyIntoleranceBootstrap_view.allergy_intolerance_overview, name="AllergyIntoleranceBootstrap_overview"),
     path("patient/<int:patient_id>/allergy-intolerance-existing/<int:allergy_id>", AllergyIntoleranceBootstrap_view.allergy_intolerance_existing, name="AllergyIntoleranceBootstrap_existing"),

@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404
-from ..models_dir.FHIR_DataTypes.FHIR_generalpurpose import *
-from potato.models import FHIR_Condition, FHIR_Patient
-from potato.ModuleProblemList.ProblemList_form import Condition_Combined_Form
+from potato.models import (
+    FHIR_Condition,
+    FHIR_Patient
+)
+from .ProblemList_form import Condition_Combined_Form
 
 def problem_list_overview(request, patient_id):
     patient_model = get_object_or_404(FHIR_Patient, id=patient_id)

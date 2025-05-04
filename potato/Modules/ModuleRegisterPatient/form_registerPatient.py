@@ -1,6 +1,10 @@
 from django import forms
-from ..models import FHIR_Patient
-from ..models_dir.FHIR_DataTypes.FHIR_generalpurpose import *
+from potato.models import (
+    FHIR_Patient,
+    FHIR_GP_HumanName,
+    FHIR_GP_Address,
+    FHIR_GP_ContactPoint
+)
 
 class RegisterPatientForm(forms.Form):
     #patient's demographics

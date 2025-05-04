@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from ..models_dir.FHIR_DataTypes.FHIR_generalpurpose import *
-from ..models_dir.FHIR_Resources.Patient import FHIR_Patient
+from potato.models import (
+    FHIR_Patient
+)
 from datetime import date
 from dateutil.relativedelta import relativedelta
 

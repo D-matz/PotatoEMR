@@ -1,19 +1,21 @@
 {% load static %}
 <style>
-  body { font-family: Arial, sans-serif;}
   .tooltip {
     position: absolute;
     pointer-events: none;
     font-size: 12px;
   }
-  .title { text-align: center; }
-  /* Make sure axis lines are drawn on top of grid lines */
   .axis line, .axis path {
-    stroke: #000;
+    stroke: black;
     shape-rendering: crispEdges;
   }
   .axis text {
     fill: black;
+    font-size: 10px;
+  }
+  .axis-label {
+    fill: black;
+    font-size: 17px;
   }
   .grid line {
     stroke: #b0b0b0;
@@ -25,13 +27,11 @@
   #chart svg {
     margin: 20px;
   }
-  
-  .h-100 {
-    height: 100%;
-  }
+
   .scrollable-container {
     overflow-y: auto;
     scroll-behavior: smooth;
+    font-family: 'Comic Sans MS', cursive;
   }
 
 </style>
@@ -94,8 +94,7 @@
           .attr("x", width/2)
           .attr("y", -margin.top/2)
           .attr("text-anchor", "middle")
-          .attr("font-size", "16px")
-          .attr("font-weight", "bold")
+          .attr("font-size", "21px")
           .text(title);
       
       // Find domain ranges from data
@@ -172,12 +171,14 @@
       
       // Axis labels
       svg.append("text")
+        .attr("class", "axis-label")
         .attr("text-anchor", "middle")
         .attr("x", width/2)
         .attr("y", height + 40)
         .text(xLabel);
       
       svg.append("text")
+        .attr("class", "axis-label")
         .attr("text-anchor", "middle")
         .attr("transform", "rotate(-90)")
         .attr("y", -40)
@@ -185,6 +186,7 @@
         .text(y1Label);
       
       svg.append("text")
+        .attr("class", "axis-label")
         .attr("text-anchor", "middle")
         .attr("transform", "rotate(90)")
         .attr("y", -width-40)
@@ -255,6 +257,7 @@
         }))
       ];
       
+      console.log(width, legendData.length)
       const legendSpacing = width / legendData.length;
       const legendG = svg.append("g")
         .attr("transform", `translate(0, ${height + 55})`);
@@ -267,14 +270,14 @@
           g.append("line")
             .attr("x1", 0)
             .attr("y1", 7)
-            .attr("x2", 20)
+            .attr("x2", 16)
             .attr("y2", 7)
             .attr("stroke", item.color)
             .attr("stroke-width", 2);
         } else {
           g.append("circle")
             .attr("cx", 10)
-            .attr("cy", 7)
+            .attr("cy", 5)
             .attr("r", 6)
             .attr("fill", "white")
             .attr("stroke", "black")
@@ -282,10 +285,11 @@
         }
         
         g.append("text")
-          .attr("x", 25)
+          .attr("x", 19)
           .attr("y", 10)
           .attr("text-anchor", "start")
           .attr("font-size", "12px")
+          .attr("fill", item.color)
           .text(item.label);
       });
     }

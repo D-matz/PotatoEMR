@@ -1,5 +1,8 @@
 from django.shortcuts import render, get_object_or_404
-from potato.models import FHIR_Patient, FHIR_Observation
+from potato.models import (
+    FHIR_Patient,
+    FHIR_Observation
+)
 from datetime import datetime, time
 from django.utils.timezone import make_aware, get_default_timezone
 from .GrowthChart_percentileData import (
@@ -28,8 +31,10 @@ def obsList_to_PointList(observation_model_list, patient_birthdate, age_divider=
     point_list.sort(key=lambda x: x['x'])
     return point_list
 
-def growth_chart_overview(request, patient_id):
+def GrowthChart_overview(request, patient_id):
     patient_model = get_object_or_404(FHIR_Patient, id=patient_id)
+    if patient_model.birthDate is None:
+        return render(request, 'common_error_patient.html', {'patient': patient_model, 'error_message': "Patient has no birth date at GrowthChart_overview in GrowthChart_view.py"})
     patient_birthdate = make_aware(datetime.combine(patient_model.birthDate, time.min), get_default_timezone())
     heightLOINC_list = ["3137-7", "3138-5", "8301-4", "8302-2", "8305-5", "8306-3", "8307-1", "8308-9", "92999-2"]
     height_observation_model_list = FHIR_Observation.objects.filter(subject_Patient=patient_model, code_cc__system='http://loinc.org', code_cc__code__in=heightLOINC_list)
