@@ -1,5 +1,102 @@
-<b>Patient Overview</b>
+<style>
+    :root {
+        --basics: #db8d8d;
+        --treatment: #8d8ddb;
+        --vitals: #8ddb8d;
+        --explorer: #db8dc4;
+    }
+    
+    [data-bs-theme="dark"] {
+        --basics: #db8d8d7a;
+        --treatment: #8d8ddb6c;
+        --vitals: #8ddb8d75;
+        --explorer: #db8dc479;
+    }
+</style>
+<div class="w-100 d-flex flex-row flex-wrap">
+    <div class="rounded m-2 p-2 bg-body-secondary align-self-start position-relative" style="width: 400px; border: 0px; border-left: 5px solid var(--basics);">
+        <div class="d-inline-block mt-2">
+            <span class="rounded p-2" style="background-color: var(--basics);">Patient Basics</span>
+        </div>
+        <div class="mt-3">
+        <p>{{patient}}</p>
+        <p>{{patient.gender}}</p>
+        <p>{{patientAgeStr}}</p>
+        
+        <p>contact:</p>
+        {% for patient_telecom in patient.patient_telecoms.all %}
+            <li>{{patient_telecom}}</li>
+        {% endfor %}
+        
+        <p>address:</p>
+        {% for patient_address in patient.patient_addresses.all %}
+            <li>{{patient_address}}</li>
+        {% endfor %}
+        </div>
+    </div>
 
-<div style="border: 1px solid black;">
-{% include 'PatientOverview_basics.html' %}
+    <div class="rounded w-25 m-2 p-2 bg-body-secondary align-self-start" style="border: 0px; border-left: 5px solid var(--treatment);">
+        <div class="d-inline-block mt-2">
+            <span class="rounded p-2" style="background-color: var(--treatment);">Treatment Team</span>
+        </div>
+        <div class="mt-3">
+            <p>text</p>
+        </div>
+    </div>
+
+        
+    <div class="rounded w-25 m-2 p-2 bg-body-secondary align-self-start" style="border: 0px; border-left: 5px solid var(--vitals);">
+        <div class="d-inline-block mt-2">
+            <span class="rounded p-2" style="background-color: var(--vitals);">Vital Signs</span>
+        </div>
+        <div class="mt-3">
+            <p>text</p>
+            <p>text</p>
+            <p>text</p>
+            <p>text</p>
+            <p>text</p>
+            <p>text</p>
+            <p>text</p>
+            <p>text</p>
+            <p>text</p>
+            <p>text</p>
+        </div>
+    </div> 
+    
+    <div class="rounded w-100 m-2 p-2 bg-body-secondary align-self-start" style="border: 0px; border-left: 5px solid var(--explorer);">
+        <div class="d-inline-block mt-2">
+            <span class="rounded p-2" style="background-color: var(--explorer);">Patient Explorer</span>
+        </div>
+        <div class="mt-3">
+            <table class="table table-bordered table-hover table-sm">
+                <thead>
+                    <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Handle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>@fat</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">3</th>
+                    <td colspan="2">Larry the Bird</td>
+                    <td>@twitter</td>
+                    </tr>
+                </tbody>
+            </table>              
+        </div>
+    </div> 
 </div>
