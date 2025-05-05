@@ -100,6 +100,9 @@ class Command(BaseCommand):
             observation_dates.append((random_days, observation_date))
         
         observation_dates.sort(key=lambda x: x[0])
+
+
+        
         current_height = random.uniform(45, 55)  # Starting height in cm
         for days, observation_date in observation_dates:
             print("observation_date", observation_date, "days", days, "current_height", current_height)
@@ -160,3 +163,123 @@ class Command(BaseCommand):
             observation.code_cc.add(bmi_code)
             print("add BMI observation", observation)
         print(f"Created {FHIR_Observation.objects.filter(subject_Patient=pedro_patient_model, code_cc__system='http://loinc.org', code_cc__code='39156-5').count()} BMI observations for Pedro")
+
+        # Add respiratory rate observations for Pedro
+        respiratory_rate_code = FHIR_GP_Coding.objects.get(system="http://loinc.org", code="9279-1")
+        for days, observation_date in observation_dates:
+            # Normal respiratory rate for infants: 30-60 breaths per minute
+            respiratory_rate_value = random.uniform(30, 60)
+            respiratory_quantity = FHIR_GP_Quantity.objects.create(
+                value=respiratory_rate_value, 
+                unit="/min", 
+                system="http://unitsofmeasure.org", 
+                code="/min"
+            )
+            observation = FHIR_Observation.objects.create(
+                value_Quantity=respiratory_quantity, 
+                subject_Patient=pedro_patient_model, 
+                status='final', 
+                effective_dateTime=observation_date
+            )
+            observation.code_cc.add(respiratory_rate_code)
+        print(f"Created 15 respiratory rate observations for Pedro")
+
+        # Add heart rate observations for Pedro
+        heart_rate_code = FHIR_GP_Coding.objects.get(system="http://loinc.org", code="8867-4")
+        for days, observation_date in observation_dates:
+            heart_rate_value = random.uniform(80, 160)
+            heart_rate_quantity = FHIR_GP_Quantity.objects.create(
+                value=heart_rate_value, 
+                unit="/min", 
+                system="http://unitsofmeasure.org", 
+                code="/min"
+            )
+            observation = FHIR_Observation.objects.create(
+                value_Quantity=heart_rate_quantity, 
+                subject_Patient=pedro_patient_model, 
+                status='final', 
+                effective_dateTime=observation_date
+            )
+            observation.code_cc.add(heart_rate_code)
+        print(f"Created 15 heart rate observations for Pedro")
+
+        # Add oxygen saturation observations for Pedro
+        oxygen_saturation_code = FHIR_GP_Coding.objects.get(system="http://loinc.org", code="2708-6")
+        for days, observation_date in observation_dates:
+            # Normal oxygen saturation: 95-100%
+            oxygen_saturation_value = random.uniform(95, 100)
+            oxygen_saturation_quantity = FHIR_GP_Quantity.objects.create(
+                value=oxygen_saturation_value, 
+                unit="%", 
+                system="http://unitsofmeasure.org", 
+                code="%"
+            )
+            observation = FHIR_Observation.objects.create(
+                value_Quantity=oxygen_saturation_quantity, 
+                subject_Patient=pedro_patient_model, 
+                status='final', 
+                effective_dateTime=observation_date
+            )
+            observation.code_cc.add(oxygen_saturation_code)
+        print(f"Created 15 oxygen saturation observations for Pedro")
+
+        # Add temperature observations for Pedro
+        temperature_code = FHIR_GP_Coding.objects.get(system="http://loinc.org", code="8310-5")
+        for days, observation_date in observation_dates:
+            # Normal temperature for infants: 36.5-37.5°C
+            temperature_value = random.uniform(36.5, 37.5)
+            temperature_quantity = FHIR_GP_Quantity.objects.create(
+                value=temperature_value, 
+                unit="Cel", 
+                system="http://unitsofmeasure.org", 
+                code="Cel"
+            )
+            observation = FHIR_Observation.objects.create(
+                value_Quantity=temperature_quantity, 
+                subject_Patient=pedro_patient_model, 
+                status='final', 
+                effective_dateTime=observation_date
+            )
+            observation.code_cc.add(temperature_code)
+        print(f"Created 15 temperature observations for Pedro")
+
+        # Add blood pressure observations for Pedro
+        systolic_bp_code = FHIR_GP_Coding.objects.get(system="http://loinc.org", code="8480-6")
+        diastolic_bp_code = FHIR_GP_Coding.objects.get(system="http://loinc.org", code="8462-4")
+        for days, observation_date in observation_dates:
+            # Normal blood pressure for infants: systolic 70-100, diastolic 40-70
+            systolic_value = random.uniform(70, 100)
+            diastolic_value = random.uniform(40, 70)
+            
+            # Create the main blood pressure observation first
+            bp_code = FHIR_GP_Coding.objects.get(system="http://loinc.org", code="85354-9")
+            bp_observation = FHIR_Observation.objects.create(
+                subject_Patient=pedro_patient_model,
+                status='final',
+                effective_dateTime=observation_date
+            )
+            bp_observation.code_cc.add(bp_code)
+            
+            # Now create component observations with the parent observation already set
+            systolic_component = FHIR_Observation_component.objects.create(
+                Observation=bp_observation,
+                value_Quantity=FHIR_GP_Quantity.objects.create(
+                    value=systolic_value, 
+                    unit="mm[Hg]", 
+                    system="http://unitsofmeasure.org", 
+                    code="mm[Hg]"
+                )
+            )
+            systolic_component.code_cc.add(systolic_bp_code)
+            
+            diastolic_component = FHIR_Observation_component.objects.create(
+                Observation=bp_observation,
+                value_Quantity=FHIR_GP_Quantity.objects.create(
+                    value=diastolic_value, 
+                    unit="mm[Hg]", 
+                    system="http://unitsofmeasure.org", 
+                    code="mm[Hg]"
+                )
+            )
+            diastolic_component.code_cc.add(diastolic_bp_code)
+        print(f"Created 15 blood pressure observations for Pedro")

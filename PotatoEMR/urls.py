@@ -50,8 +50,8 @@ urlpatterns = [
 
     path("patient-registration", view_registerPatient.create_patient, name="register_patient"),
 
-    path("patient/<int:id>/", view_patientOverview.patient_overview, name="PatientOverview"),
-    path("patient-partial/<int:id>/", view_patientOverview.patient_overview_partial, name="PatientOverview_partial"),
+    path("patient/<int:patient_id>/", view_patientOverview.patient_overview, name="PatientOverview"),
+    path("explorer/<str:model_name>/<int:model_id>", view_patientOverview.explorer_row, name="PatientOverview_explorer"),
 
     path("patient-lists", PatientLists_view.lists, name="home_patient_lists"),
 
