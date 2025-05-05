@@ -7,7 +7,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta property="og:title" content="🥔PotatoEMR" />
-    <meta property="og:description" content="With the clinician in mind" />
+    <meta property="og:description" content="With the clinician in mind"/>
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/farm.jpeg' %}" />
     <title>{% block title %}PotatoEMR{% endblock %}</title>
     <script src="{% static 'vendored/htmx.min.js' %}"></script>
     <script src="{% static 'vendored/idiomorph.min.js' %}"></script>
