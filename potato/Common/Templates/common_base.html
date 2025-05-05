@@ -3,13 +3,7 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100 w-100">
 <head>
-    <link rel="icon"href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='1em' font-size='80'>🥔</text></svg>"/>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="🥔PotatoEMR" />
-    <meta property="og:description" content="With the clinician in mind"/>
-    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/farm.jpeg' %}" />
-    <title>{% block title %}PotatoEMR{% endblock %}</title>
+    {% include "common_meta.html" %}
     <script src="{% static 'vendored/htmx.min.js' %}"></script>
     <script src="{% static 'vendored/idiomorph.min.js' %}"></script>
     <link href="{% static 'vendored/tom-select.css' %}" rel="stylesheet">
