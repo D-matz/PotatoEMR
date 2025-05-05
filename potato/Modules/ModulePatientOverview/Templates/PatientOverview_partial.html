@@ -13,7 +13,7 @@
         --explorer: #db8dc479;
     }
 
-    #explorer *{
+    #explorer tr{
         padding: 1px;
         margin: 1px;
         border: 1px solid black;
@@ -100,7 +100,13 @@
             <span class="rounded p-2" style="background-color: var(--explorer);">Patient Explorer</span>
         </div>
         <div id="explorer" class="mt-3" hx-push-url="false" hx-swap="outerHTML">
-            {% include 'PatientOverview_explorerRow.html' %}            
+            <div class="patient-related-objects">
+                <table class="related-objects-table">
+                    <tbody>
+                        {% include 'PatientOverview_explorerRow.html' %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div> 
 </div>

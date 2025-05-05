@@ -1,31 +1,29 @@
-<div class="patient-related-objects">
-    <table class="related-objects-table">
-        <tbody>
-            {% for field_name, field_value in related_fields.items %}
-                <tr class="relation-row">
-                    <td>{{ field_name }}</td>
-                    <td>{{ field_value }}</td>
-                </tr>
-            {% endfor %}
-            {% for relation_name, models in related_models.items %}
-                <tr class="relation-row">
-                    <td>{{ relation_name }}</td>
-                    <td>
-                        <table>
-                            <tbody>
-                                {% for model in models %}
-                                    <tr>
-                                        <td class="explorer-row-link"
-                                        hx-get="{% url 'PatientOverview_explorer' model_id=model.id model_name=model.name %}">
-                                            {{ model.str }}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+{% for field_name, field_value in related_fields.items %}
+<tr class="relation-row">
+    <td>{{ field_name }}</td>
+    <td>{{ field_value }}</td>
+</tr>
+{% endfor %}
+{% for relation_name, models in related_models.items %}
+<tr class="relation-row">
+    <td>{{ relation_name }}</td>
+    <td>
+        <table>
+            <tbody>
+                {% for model in models %}
+                    <tr>
+                        <td class="explorer-row-link"">
+                            <a href="{% url 'PatientOverview_explorer' model_id=model.id model_name=model.name %}"
+                            hx-get="{% url 'PatientOverview_explorer' model_id=model.id model_name=model.name %}"
+                            hx-target="closest td"
+                            hx-swap="outerHTML">
+                                {{ model.str }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </td>
+</tr>
+{% endfor %}
