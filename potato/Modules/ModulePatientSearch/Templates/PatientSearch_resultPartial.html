@@ -1,0 +1,9 @@
+{% for list in precise_and_fuzzy %}
+    {% for result in list %}
+    <div>
+        <a href="{% url 'PatientOverview' result.id %}">
+            <p>{{ result.get_name }}</p>
+        </a>
+    </div>
+    {% endfor %}
+{% endfor %}

@@ -286,9 +286,9 @@ class FHIR_GP_AddressLine(models.Model):
 
 class FHIR_GP_ContactPoint(models.Model):
     class System(models.TextChoices): PHONE = 'phone', 'Phone'; FAX = 'fax', 'Fax'; EMAIL = 'email', 'Email'; PAGER = 'pager', 'Pager'; URL = 'url', 'URL'; SMS = 'sms', 'SMS'; OTHER = 'other', 'Other'
-    class Use(models.TextChoices): HOME = 'home', 'Home'; WORK = 'work', 'Work'; TEMP = 'temp', 'Temporary'; OLD = 'old', 'Old'; MOBILE = 'mobile', 'Mobile'
     system = FHIR_primitive_CodeField(max_length=20, choices=System.choices, null=True, blank=True)
     value = FHIR_primitive_StringField(max_length=255, null=True, blank=True)
+    class Use(models.TextChoices): HOME = 'home', 'Home'; WORK = 'work', 'Work'; TEMP = 'temp', 'Temporary'; OLD = 'old', 'Old'; MOBILE = 'mobile', 'Mobile'
     use = FHIR_primitive_CodeField(max_length=20, choices=Use.choices, null=True, blank=True)
     rank = models.PositiveIntegerField(null=True, blank=True)
     period = models.OneToOneField(FHIR_GP_Period, null=True, blank=True, on_delete=models.CASCADE)

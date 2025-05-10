@@ -1,0 +1,18 @@
+<div class="row w-100 h-100 overflow-y-auto overflow-x-hidden">
+    <div class="col-md-8">
+        <form method="post"
+        hx-post="{% url 'SearchPatient' %}"
+        hx-trigger="input delay:100ms"
+        hx-target="#search-results"
+        hx-push-url="false">
+            {% csrf_token %}
+            <table>
+                {{ form.as_table }}
+            </table>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <div id="search-results">
+        </div>
+    </div>
+</div>

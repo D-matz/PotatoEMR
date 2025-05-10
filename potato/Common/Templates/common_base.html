@@ -88,18 +88,16 @@
   })
 })()
 </script>
-    <style>
-
-        /* Dark/light icon styling */
-        .theme-icon-active, .dropdown-item svg.bi {
-            width: 1em;
-            height: 1em;
-        }
-        .dropdown-item.active svg.bi.ms-auto {
-            display: inline-block !important;
-        }
-
-        </style>
+<style>
+/* Dark/light icon styling */
+.theme-icon-active, .dropdown-item svg.bi {
+    width: 1em;
+    height: 1em;
+}
+.dropdown-item.active svg.bi.ms-auto {
+    display: inline-block !important;
+}
+</style>
 </head>
 <body hx-push-url="true" class="d-flex flex-column bg-primary-subtle h-100 w-100">
   <!-- Add the SVG icons for the theme switcher -->
@@ -121,10 +119,24 @@
 
   <nav id="nav-main" class="navbar navbar-expand-lg bg-body w-100">
       <a class="navbar-brand px-0 px-sm-3" href="{% url 'CommonHomePage_index' %}">🥔 PotatoEMR</a>
-      <a href="{% url 'home_calendar' %}" class="px-0 px-sm-3">Calendar</a>
+      <div class="dropdown d-inline-block">
+        <button
+            hx-get="{% url 'SearchPatient' %}"
+            hx-target="#patient-search-dropdown"
+            hx-push-url="false"
+            data-bs-toggle="dropdown" 
+            data-bs-auto-close="outside"
+            aria-expanded="false"
+            class="btn btn-link nav-link px-0 px-sm-3"><a href="{% url 'SearchPatient' %}">Search patient</a></button>
+            
+        <div id="patient-search-dropdown" 
+            class="dropdown-menu p-3 border-5 border-primary-subtle" 
+            style="width: 55vw; max-width: 600px; height:500px;">
+        </div>
+      </div>
       <a href="{% url 'home_patient_lists' %}" class="px-0 px-sm-3">Patient lists</a>
       <a href="{% url 'RegisterPatient' %}" class="px-0 px-sm-3">Register patient</a>
-      <a href="{% url 'home_patient_lists' %}" class="px-0 px-sm-3">Search patient</a>
+      <a href="{% url 'home_calendar' %}" class="px-0 px-sm-3">Calendar</a>
       <a href="{% url 'home_patient_lists' %}" class="px-0 px-sm-3">Schedule appointment todo</a>
 
 

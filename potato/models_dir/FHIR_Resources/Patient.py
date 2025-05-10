@@ -6,8 +6,10 @@ from ..FHIR_DataTypes.FHIR_metadata import *
 from ..FHIR_DataTypes.FHIR_primitive import *
 
 class FHIR_Patient(models.Model):
-    def __str__(self):
+    def get_name(self):
         patient_names = [name.text for name in self.Patient_name.all() if name.text]; return ', '.join(patient_names) if patient_names else 'Unnamed Patient'
+    def __str__(self):
+        return self.get_name()
     active = FHIR_primitive_BooleanField(null=True, blank=True, )
     class GenderChoices(models.TextChoices): MALE = 'male', 'Male'; FEMALE = 'female', 'Female'; OTHER = 'other', 'Other'; UNKNOWN = 'unknown', 'Unknown'; 
     gender = FHIR_primitive_CodeField(choices=GenderChoices.choices, null=True, blank=True, )

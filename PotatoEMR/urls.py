@@ -29,6 +29,7 @@ from potato.Modules.ModuleAppointmentEncounter import AppointmentEncounter_view
 from potato.Modules.ModuleProblemList import ProblemList_view
 from potato.Modules.ModuleImmunizations import Immunizations_view
 from potato.Modules.ModuleGrowthChart import GrowthChart_view
+from potato.Modules.ModulePatientSearch import PatientSearch_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -49,6 +50,7 @@ urlpatterns = [
     path('calendar-appt-peek/<int:appt_id>', AppointmentCalendar_view.calendar_peek, name="home_calendar_peek"),
 
     path("register-patient", view_registerPatient.create_patient, name="RegisterPatient"),
+    path("search-patient", PatientSearch_view.search_patient, name="SearchPatient"),
 
     path("patient/<int:patient_id>/", view_patientOverview.patient_overview, name="PatientOverview"),
     path("explorer/<str:model_name>/<int:model_id>", view_patientOverview.explorer_row, name="PatientOverview_explorer"),
