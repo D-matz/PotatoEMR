@@ -1,31 +1,50 @@
-<form method="post">
-    {% csrf_token %}
-    {{ form.non_field_errors }}
+{% extends "common_base.html" %}
 
+{% block content %}
+
+<style>
+    fieldset > div{
+        margin-bottom: 3px;
+    }
+    #id_suffix, #id_prefix{
+        width: 100px;
+    }
+    #id_city, #id_state, #id_zip_code{
+        width: 100px;
+    }
+    #id_address{
+        width: 400px;
+    }
+</style>
+<div class="container" style="width: 800px; margin: 0 auto;">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
     <fieldset>
-        <legend>Patient Information</legend>
+        <legend>Patient Info</legend>
+        <div>{{ form.prefix.label_tag }} {{ form.prefix }}</div>
+        <div>Name: {{form.given_name}} {{form.middle_name}} {{form.family_name}} {{ form.suffix }}</div>
+        <div>Preferred Name: {{form.nickname}}</div>
         <div>{{ form.gender.label_tag }} {{ form.gender }}</div>
         <div>{{ form.birth_date.label_tag }} {{ form.birth_date }}</div>
-        <div>{{ form.name_use.label_tag }} {{ form.name_use }}</div>
-        <div>{{ form.given_name.label_tag }} {{ form.given_name }}</div>
-        <div>{{ form.family_name.label_tag }} {{ form.family_name }}</div>
-        <div>{{ form.prefix.label_tag }} {{ form.prefix }}</div>
-        <div>{{ form.suffix.label_tag }} {{ form.suffix }}</div>
     </fieldset>
 
     <fieldset>
-        <legend>Address Information</legend>
+        <legend>Contact</legend>
         <div>{{ form.address.label_tag }} {{ form.address }}</div>
-        <div>{{ form.city.label_tag }} {{ form.city }}</div>
-        <div>{{ form.state.label_tag }} {{ form.state }}</div>
-        <div>{{ form.zip_code.label_tag }} {{ form.zip_code }}</div>
+        <div>
+            {{ form.state.label_tag }} {{ form.state }}
+            {{ form.city.label_tag }} {{ form.city }}
+            {{ form.zip_code.label_tag }} {{ form.zip_code }}
+        </div>
+        <div>{{ form.email_addr.label_tag }} {{ form.email_addr }}</div>
+        <div>
+            {{ form.phone_number.label_tag }} {{ form.phone_number }} {{ form.phone_use }}
+        </div>
     </fieldset>
 
-    <fieldset>
-        <legend>Contact Information</legend>
-        <div>{{ form.email_addr.label_tag }} {{ form.email_addr }}</div>
-        <div>{{ form.phone_use.label_tag }} {{ form.phone_use }}</div>
-        <div>{{ form.phone_number.label_tag }} {{ form.phone_number }}</div>
-    </fieldset>
     <button type="submit">Submit</button>
-</form>
+    </form>
+</div>
+
+{% endblock %}

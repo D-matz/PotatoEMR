@@ -5,14 +5,14 @@ from potato.models import (
     FHIR_GP_Address,
     FHIR_GP_ContactPoint
 )
-
 class RegisterPatientForm(forms.Form):
     #patient's demographics
-    given_name = forms.CharField(max_length=255, required=False, label="Given Name")
-    family_name = forms.CharField(max_length=255, required=True, label="Family Name")
-    prefix = forms.CharField(max_length=255, required=False, label="Prefix")
-    suffix = forms.CharField(max_length=255, required=False, label="Suffix")
-    name_use = forms.ChoiceField(choices=FHIR_GP_HumanName.NameUseChoices.choices, required=False, label="Name Type", initial=FHIR_GP_HumanName.NameUseChoices.OFFICIAL)
+    prefix = forms.CharField(max_length=255, required=False, label="Title")
+    given_name = forms.CharField(max_length=255, required=True, widget=forms.TextInput(attrs={'placeholder': 'First'}))
+    middle_name = forms.CharField(max_length=255, required=False, widget=forms.TextInput(attrs={'placeholder': 'Middle'}))
+    family_name = forms.CharField(max_length=255, required=True, widget=forms.TextInput(attrs={'placeholder': 'Last'}))
+    suffix = forms.CharField(max_length=255, required=False, widget=forms.TextInput(attrs={'placeholder': 'suffix'}))
+    nickname = forms.CharField(max_length=255, required=False)
     birth_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), required=True, label="Date of Birth")
     gender = forms.ChoiceField(choices=FHIR_Patient.GenderChoices.choices, required=True, label="Gender")
 

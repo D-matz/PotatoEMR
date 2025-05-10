@@ -48,7 +48,7 @@ urlpatterns = [
     path('calendar-partial', AppointmentCalendar_view.calendar_partial, name="home_calendar_partial"),
     path('calendar-appt-peek/<int:appt_id>', AppointmentCalendar_view.calendar_peek, name="home_calendar_peek"),
 
-    path("patient-registration", view_registerPatient.create_patient, name="register_patient"),
+    path("register-patient", view_registerPatient.create_patient, name="RegisterPatient"),
 
     path("patient/<int:patient_id>/", view_patientOverview.patient_overview, name="PatientOverview"),
     path("explorer/<str:model_name>/<int:model_id>", view_patientOverview.explorer_row, name="PatientOverview_explorer"),
