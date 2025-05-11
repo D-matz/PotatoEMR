@@ -11,15 +11,21 @@ from potato.models import (
     FHIR_GP_Address,
     FHIR_GP_HumanName_Given,
     FHIR_GP_HumanName_Prefix,
-    FHIR_GP_HumanName_Suffix
+    FHIR_GP_HumanName_Suffix,
+    FHIR_Patient_photo,
 )
+from django.utils import timezone
 
 def create_patient(request):
     if request.method == "GET":
         form = RegisterPatientForm()
         return render(request, 'form_registerPatient.html', {'form': form})
     elif request.method == "POST":
-        form = RegisterPatientForm(request.POST)
+        form = RegisterPatientForm(request.POST, request.FILES)
+        print("FILES:", request.FILES)  # Check if the file is in the request
+        print("Form valid:", form.is_valid())  # Check if the form is valid
+        print("Form errors:", form.errors)  # Check if the form is valid
+        print("Cleaned data:", form.cleaned_data)  # See what's in the cleaned data
         if not form.is_valid():
             print(form.errors)
             return render(request, 'form_registerPatient.html', {'form': form})
@@ -72,6 +78,21 @@ def create_patient(request):
                             system=FHIR_GP_ContactPoint.System.EMAIL,
                             value=form_data.get('email_addr')
                         )
+
+                    if form_data.get('photo'):
+                        uploaded_file = form_data.get('photo')
+                        photo_attachment = FHIR_Patient_photo(
+                            Patient=patient_model,
+                            contentType=uploaded_file.content_type,
+                            title=uploaded_file.name,
+                            size=uploaded_file.size,
+                            time_datetime=timezone.now()
+                        )
+                        # Save the file directly to the upload_to field
+                        photo_attachment.upload_to.save(uploaded_file.name, uploaded_file)
+                        
+                        print(f"Photo saved with ID: {photo_attachment.id}")
+                        print(f"Photo saved to: {photo_attachment.upload_to.path}")
 
                     return redirect("PatientOverview", patient_id=patient_model.id)
             except Exception as e:

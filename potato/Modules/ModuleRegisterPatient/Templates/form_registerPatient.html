@@ -17,7 +17,7 @@
     }
 </style>
 <div class="container" style="width: 800px; margin: 0 auto;">
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.non_field_errors }}
     <fieldset>
@@ -43,7 +43,12 @@
         </div>
     </fieldset>
 
-    <button type="submit">Submit</button>
+    <fieldset>
+        <legend>Photo</legend>
+        <div>{{ form.photo.label_tag }} {{ form.photo }}</div>
+    </fieldset>
+
+    <button class="btn btn-primary mt-4" type="submit">Submit</button>
     </form>
 </div>
 

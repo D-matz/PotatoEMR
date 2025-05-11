@@ -1,4 +1,5 @@
 from django import forms
+from PIL import Image
 from potato.models import (
     FHIR_Patient,
     FHIR_GP_HumanName,
@@ -27,3 +28,7 @@ class RegisterPatientForm(forms.Form):
     email_addr = forms.CharField(max_length=255, required=False, label="Email")
     phone_use = forms.ChoiceField(choices=FHIR_GP_ContactPoint.Use.choices, required=False, label="Contact Use", initial=FHIR_GP_ContactPoint.Use.MOBILE)
     phone_number = forms.CharField(max_length=255, required=False, label="Phone Number")
+    
+    #patient's image
+    photo = forms.ImageField(required=False, label="Photo")
+    

@@ -27,6 +27,8 @@ class FHIR_GP_Attachment(models.Model):
     frames = FHIR_primitive_PositiveIntField(null=True, blank=True)  # Number of frames if > 1 (photo)
     duration = FHIR_primitive_DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)  # Length in seconds (audio/video)
     pages = FHIR_primitive_PositiveIntField(null=True, blank=True)  # Number of printed pages
+    upload_to = models.FileField(upload_to='attachments') #django specific for file upload
+    #might remove title/url in favor of upload_to.name and upload_to.url
     def clean(self):
         if self.data and not self.contentType:
             raise ValidationError("If data is provided, contentType must be defined.")
