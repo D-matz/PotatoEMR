@@ -4,12 +4,10 @@ from ..FHIR_DataTypes.FHIR_generalpurpose import *
 from ..FHIR_DataTypes.FHIR_specialpurpose import *
 from ..FHIR_DataTypes.FHIR_metadata import *
 from ..FHIR_DataTypes.FHIR_primitive import *
+from datetime import date
+from dateutil.relativedelta import relativedelta
 
-class FHIR_Patient(models.Model):
-    def get_name(self):
-        patient_names = [name.text for name in self.Patient_name.all() if name.text]; return ', '.join(patient_names) if patient_names else 'Unnamed Patient'
-    def __str__(self):
-        return self.get_name()
+class FHIR_Patient(models.Model):        
     active = FHIR_primitive_BooleanField(null=True, blank=True, )
     class GenderChoices(models.TextChoices): MALE = 'male', 'Male'; FEMALE = 'female', 'Female'; OTHER = 'other', 'Other'; UNKNOWN = 'unknown', 'Unknown'; 
     gender = FHIR_primitive_CodeField(choices=GenderChoices.choices, null=True, blank=True, )
@@ -24,6 +22,35 @@ class FHIR_Patient(models.Model):
     generalPractitioner_Practitioner = models.ManyToManyField("FHIR_Practitioner", related_name="Patient_generalPractitioner", blank=True)
     generalPractitioner_PractitionerRole = models.ManyToManyField("FHIR_PractitionerRole", related_name="Patient_generalPractitioner", blank=True)
     managingOrganization = models.ForeignKey("FHIR_Organization", related_name="Patient_managingOrganization", null=True, blank=True, on_delete=models.SET_NULL)
+    def get_name(self):
+        patient_names = [name.text for name in self.Patient_name.all() if name.text]; return ', '.join(patient_names) if patient_names else 'Unnamed Patient'
+    def __str__(self):
+        return self.get_name()
+    def get_age_display(self):
+        if not self.birthDate:
+            return "Unknown age"
+        today = date.today()
+        birth_date = self.birthDate
+        delta = relativedelta(today, birth_date)        
+        if delta.years > 0:
+            if delta.months > 0 or delta.days > 0:
+                return f"{delta.years}y {delta.months}m {delta.days}d"
+            return f"{delta.years}y"
+        elif delta.months > 0:
+            if delta.days > 0:
+                return f"{delta.months}m {delta.days}d"
+            return f"{delta.months}m"
+        elif delta.days >= 0:
+            return f"{delta.days}d"
+        else:
+            return "Future birth date"
+    def get_phone(self):
+        phone_contacts = self.Patient_telecom.filter(system='phone')
+        return phone_contacts.first().value if phone_contacts.exists() else None
+    def get_email(self):
+        email_contacts = self.Patient_telecom.filter(system='email')
+        return email_contacts.first().value if email_contacts.exists() else None
+
 
 class FHIR_Patient_identifier(FHIR_GP_Identifier):
     Patient = models.ForeignKey(FHIR_Patient, related_name='Patient_identifier', null=False, on_delete=models.CASCADE)

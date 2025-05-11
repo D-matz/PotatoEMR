@@ -76,7 +76,7 @@ def create_patient(request):
                     return redirect("PatientOverview", patient_id=patient_model.id)
             except Exception as e:
                 print("error", e)
-                form.add_error(None, str(e))  # Add the error to form.errors as a non-field error
+                form.add_error(None, str(e))  # Add error saving to form.errors as a non-field error
                 return render(request, 'form_registerPatient.html', {'form': form})
 
 
