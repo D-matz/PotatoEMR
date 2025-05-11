@@ -6,7 +6,7 @@
     <ul class="nav flex-column"
     hx-swap="morph"
     hx-target="body">
-      <li class="nav-item">
+      <li class="nav-item"">
         <a href="{% url 'PatientOverview' patient.id %}" class="nav-link" style="text-align: center"
           hx-get="{% url 'PatientOverview' patient.id %}">
           {% if patient.Patient_photo.first and patient.Patient_photo.first.upload_to.url %}
@@ -18,7 +18,11 @@
             <path fill="#ccc" d="M 92.5675 89.6048 C 90.79484 93.47893 89.39893 102.4504 94.86478 106.9039 C 103.9375 114.2963 106.7064 116.4723 118.3117 118.9462 C 144.0432 124.4314 141.6492 138.1543 146.5244 149.2206 L 4.268444 149.1023 C 8.472223 138.6518 6.505799 124.7812 32.40051 118.387 C 41.80992 116.0635 45.66513 113.8823 53.58659 107.0158 C 58.52744 102.7329 57.52583 93.99267 56.43084 89.26926 C 52.49275 88.83011 94.1739 88.14054 92.5675 89.6048 z" />
           </svg>
           {% endif %}
-          <p>{{ patient }}</p>
+          <div style="min-height: 50px;">
+            {% for name in patient.get_names %}
+              <p class="m-0 lh-1">{{ name }}</p>
+            {% endfor %}
+          </div>
         </a>
       </li>
       <li id="p_allergy" class="nav-item"><a href="{% url 'AllergyIntoleranceBootstrap_overview' patient.id %}" class="nav-link" hx-get="{% url 'AllergyIntoleranceBootstrap_overview' patient.id %}">Allergy/Intolerance</a></li>

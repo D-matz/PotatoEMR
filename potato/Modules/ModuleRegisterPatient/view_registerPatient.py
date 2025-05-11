@@ -62,7 +62,7 @@ def create_patient(request):
                         state=fstate,
                         postalCode=fpostalCode,
                         text=ftext,
-                        country=form_data.get('country', None),  # Add country if available
+                        country=form_data.get('country', None),
                     )
 
                     if form_data.get('phone_number'):

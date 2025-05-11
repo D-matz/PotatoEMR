@@ -254,7 +254,10 @@ class FHIR_GP_HumanName(models.Model):
     family = FHIR_primitive_StringField(max_length=255, null=True, blank=True)
     period = models.OneToOneField(FHIR_GP_Period, null=True, blank=True, on_delete=models.CASCADE)
     def __str__(self):
-        return f"{self.text}"
+        if self.use == self.NameUseChoices.NICKNAME:
+            return f"({self.text})"
+        else:
+            return f"{self.text}"
     #given, prefix, suffix - can have 0 to many, so defined separately with foreign keys
 class FHIR_GP_HumanName_Given(models.Model):
     name_given = FHIR_primitive_StringField(max_length=255)

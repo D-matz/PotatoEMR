@@ -178,12 +178,23 @@ except:
     SOCIALACCOUNT_ENABLED = False
 
 
-if settings_secrets_DEBUG:
+try:
     DEBUG = settings_secrets_DEBUG
-if settings_secrets_ALLOWED_HOSTS:
+except:
+    pass
+
+try:
     ALLOWED_HOSTS = settings_secrets_ALLOWED_HOSTS
-if settings_secrets_STATIC_ROOT:
+except:
+    pass
+
+try:
     STATIC_ROOT = settings_secrets_STATIC_ROOT
-if settings_secrets_MEDIA_ROOT:
+except:
+    pass
+
+try:
     MEDIA_ROOT = settings_secrets_MEDIA_ROOT
+except:
+    pass
 

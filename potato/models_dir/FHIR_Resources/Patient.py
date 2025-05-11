@@ -22,10 +22,15 @@ class FHIR_Patient(models.Model):
     generalPractitioner_Practitioner = models.ManyToManyField("FHIR_Practitioner", related_name="Patient_generalPractitioner", blank=True)
     generalPractitioner_PractitionerRole = models.ManyToManyField("FHIR_PractitionerRole", related_name="Patient_generalPractitioner", blank=True)
     managingOrganization = models.ForeignKey("FHIR_Organization", related_name="Patient_managingOrganization", null=True, blank=True, on_delete=models.SET_NULL)
-    def get_name(self):
-        patient_names = [name.text for name in self.Patient_name.all() if name.text]; return ', '.join(patient_names) if patient_names else 'Unnamed Patient'
+    def get_names(self):
+        return [str(name) for name in self.Patient_name.all()]
+    def get_one_name(self):
+        if self.Patient_name.first(): return str(self.Patient_name.first())
+        else: return "Unnamed Patient"
     def __str__(self):
-        return self.get_name()
+        names = self.get_names()
+        if names: return ', '.join(names)
+        else: return "Unnamed Patient"
     def get_age_display(self):
         if not self.birthDate:
             return "Unknown age"

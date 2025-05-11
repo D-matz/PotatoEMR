@@ -32,12 +32,12 @@
         <p>{{patientAgeStr}}</p>
         
         <p>contact:</p>
-        {% for patient_telecom in patient.patient_telecoms.all %}
+        {% for patient_telecom in patient.Patient_telecom.all %}
             <li>{{patient_telecom}}</li>
         {% endfor %}
         
         <p>address:</p>
-        {% for patient_address in patient.patient_addresses.all %}
+        {% for patient_address in patient.Patient_address.all %}
             <li>{{patient_address}}</li>
         {% endfor %}
         </div>

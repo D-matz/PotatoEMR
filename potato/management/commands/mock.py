@@ -5,13 +5,17 @@ import string
 from datetime import datetime, timedelta, timezone
 
 class Command(BaseCommand):
-    def handle(self, *args, **options):
-        FHIR_Patient.objects.all().delete()
+    def handle(self, *args, **options):  
         patientNames = ["Peter", "Paul", "Patricia", "Paula", "Philip", "Phoebe", "Penelope", "Preston", "Piper", "Patrick", "Priscilla", "Paxton", "Palmer", "Poppy", "Pierce", "Peyton", "Pearl", "Pilar", "Phoenix", "Prudence"]
+        for pt in FHIR_Patient.objects.all():
+            if pt.get_one_name() in patientNames or pt.get_one_name() == "Pedro":
+                pt.delete()
+        patient_model_list = []
         for pname in patientNames:
             patient_model = FHIR_Patient.objects.create()
             patient_name_model = FHIR_Patient_name.objects.create(text=pname, Patient=patient_model)
-        patient_model_list = FHIR_Patient.objects.all()
+            patient_model_list.append(patient_model)
+
         print("patients", patient_model_list)
 
         FHIR_Condition.objects.all().delete()
@@ -50,31 +54,32 @@ class Command(BaseCommand):
             appt_model = FHIR_Appointment.objects.create()
             loc_model = random.choice(location_model_list)
             practitioner_model_list = FHIR_Practitioner.objects.filter(PractitionerRole_practitioner__location=loc_model).distinct()
-            pract_model = random.choice(practitioner_model_list)
-
-            FHIR_Appointment_participant.objects.create(
-                Appointment=appt_model,
-                actor_Location=loc_model
-            )
-            FHIR_Appointment_participant.objects.create(
-                Appointment=appt_model,
-                actor_Practitioner=pract_model
-            )
-            FHIR_Appointment_note.objects.create(
-                Appointment=appt_model,
-                text=''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(13))
-            )
-            appt_model.subject_Patient = random.choice(patient_model_list)
-            appt_model.status = random.choice(FHIR_Appointment.StatusChoices.values)
-            random_seconds = random.randint(0, 3 * 24 * 60 * 60)
-            random_seconds_duration = (15 * 60) + random.randint(0, 30 * 60)
-            future_time_start = datetime.now(timezone.utc) + timedelta(seconds=random_seconds)
-            future_time_end = datetime.now(timezone.utc) + timedelta(seconds=random_seconds + random_seconds_duration)
-            start_isoformat = future_time_start.isoformat(timespec='milliseconds')
-            end_isoformat = future_time_end.isoformat(timespec='milliseconds')
-            appt_model.start = start_isoformat
-            appt_model.end = end_isoformat
-            appt_model.save()
+            if(len(practitioner_model_list) != 0):
+                #can't create any appointmnts for this location if we didn't give it any practitioners
+                pract_model = random.choice(practitioner_model_list)
+                FHIR_Appointment_participant.objects.create(
+                    Appointment=appt_model,
+                    actor_Location=loc_model
+                )
+                FHIR_Appointment_participant.objects.create(
+                    Appointment=appt_model,
+                    actor_Practitioner=pract_model
+                )
+                FHIR_Appointment_note.objects.create(
+                    Appointment=appt_model,
+                    text=''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(13))
+                )
+                appt_model.subject_Patient = random.choice(patient_model_list)
+                appt_model.status = random.choice(FHIR_Appointment.StatusChoices.values)
+                random_seconds = random.randint(0, 3 * 24 * 60 * 60)
+                random_seconds_duration = (15 * 60) + random.randint(0, 30 * 60)
+                future_time_start = datetime.now(timezone.utc) + timedelta(seconds=random_seconds)
+                future_time_end = datetime.now(timezone.utc) + timedelta(seconds=random_seconds + random_seconds_duration)
+                start_isoformat = future_time_start.isoformat(timespec='milliseconds')
+                end_isoformat = future_time_end.isoformat(timespec='milliseconds')
+                appt_model.start = start_isoformat
+                appt_model.end = end_isoformat
+                appt_model.save()
         print("locations:", FHIR_Location.objects.all())
         print("practitioners:", FHIR_Practitioner.objects.all())
         print("practitionerRoles", FHIR_PractitionerRole.objects.all())
