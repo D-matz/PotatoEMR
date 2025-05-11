@@ -176,3 +176,14 @@ try:
 except:
     print("settings_secrets_SOCIALACCOUNT_PROVIDERS not defined in settings_secrets.py so social login is disabled")
     SOCIALACCOUNT_ENABLED = False
+
+
+if settings_secrets_DEBUG:
+    DEBUG = settings_secrets_DEBUG
+if settings_secrets_ALLOWED_HOSTS:
+    ALLOWED_HOSTS = settings_secrets_ALLOWED_HOSTS
+if settings_secrets_STATIC_ROOT:
+    STATIC_ROOT = settings_secrets_STATIC_ROOT
+if settings_secrets_MEDIA_ROOT:
+    MEDIA_ROOT = settings_secrets_MEDIA_ROOT
+
