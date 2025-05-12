@@ -42,6 +42,8 @@ class FHIR_Condition(models.Model):
     asserter_Patient = models.ForeignKey("FHIR_Patient", related_name="Condition_asserter", null=True, blank=True, on_delete=models.SET_NULL)
     asserter_RelatedPerson = models.ForeignKey("FHIR_RelatedPerson", related_name="Condition_asserter", null=True, blank=True, on_delete=models.SET_NULL)
     asserter_Device = models.ForeignKey("FHIR_Device", related_name="Condition_asserter", null=True, blank=True, on_delete=models.SET_NULL)
+    def __str__(self):
+        return ", ".join([str(condition_code) for condition_code in self.code_cc.all()])
 
 class FHIR_Condition_identifier(FHIR_GP_Identifier):
     Condition = models.ForeignKey(FHIR_Condition, related_name='Condition_identifier', null=False, on_delete=models.CASCADE)

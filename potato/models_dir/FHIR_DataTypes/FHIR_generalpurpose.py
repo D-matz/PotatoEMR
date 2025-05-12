@@ -254,21 +254,25 @@ class FHIR_GP_HumanName(models.Model):
     family = FHIR_primitive_StringField(max_length=255, null=True, blank=True)
     period = models.OneToOneField(FHIR_GP_Period, null=True, blank=True, on_delete=models.CASCADE)
     def __str__(self):
-        if self.use == self.NameUseChoices.NICKNAME:
-            return f"({self.text})"
-        else:
-            return f"{self.text}"
+        if self.use == self.NameUseChoices.NICKNAME: ret = f"({self.text})"
+        else: ret = f"{self.text}"
+        #return prefixes, ret, suffixes
+        return " ".join([str(prefix) for prefix in self.prefixes.all()] +
+                        ([ret] if ret else []) + 
+                        [str(suffix) for suffix in self.suffixes.all()])
     #given, prefix, suffix - can have 0 to many, so defined separately with foreign keys
 class FHIR_GP_HumanName_Given(models.Model):
     name_given = FHIR_primitive_StringField(max_length=255)
     human_name = models.ForeignKey(FHIR_GP_HumanName, related_name="given_names", on_delete=models.CASCADE)
+    def __str__(self): return self.name_given
 class FHIR_GP_HumanName_Prefix(models.Model):
     name_prefix = FHIR_primitive_StringField(max_length=255)
     human_name = models.ForeignKey(FHIR_GP_HumanName, related_name="prefixes", on_delete=models.CASCADE)
+    def __str__(self): return self.name_prefix
 class FHIR_GP_HumanName_Suffix(models.Model):
     name_suffix = FHIR_primitive_StringField(max_length=255)
     human_name = models.ForeignKey(FHIR_GP_HumanName, related_name="suffixes", on_delete=models.CASCADE)
-
+    def __str__(self): return self.name_suffix
 
 class FHIR_GP_Address(models.Model):
     class AddressUse(models.TextChoices): HOME = 'home', 'Home'; WORK = 'work', 'Work'; TEMP = 'temp', 'Temporary'; OLD = 'old', 'Old'; BILLING = 'billing', 'Billing'

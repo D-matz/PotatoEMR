@@ -5,6 +5,7 @@ from .models_dir.FHIR_DataTypes.FHIR_metadata import *
 
 from .models_dir.FHIR_Resources.AllergyIntolerance import *
 from .models_dir.FHIR_Resources.Appointment import *
+from .models_dir.FHIR_Resources.CareTeam import *
 from .models_dir.FHIR_Resources.Condition import *
 from .models_dir.FHIR_Resources.Encounter import *
 from .models_dir.FHIR_Resources.Immunization import *
@@ -31,7 +32,6 @@ class FHIR_BodyStructure(models.Model): pass
 class FHIR_Bundle(models.Model): pass
 class FHIR_CapabilityStatement(models.Model): pass
 class FHIR_CarePlan(models.Model): pass
-class FHIR_CareTeam(models.Model): pass
 class FHIR_ChargeItem(models.Model): pass
 class FHIR_ChargeItemDefinition(models.Model): pass
 class FHIR_Citation(models.Model): pass

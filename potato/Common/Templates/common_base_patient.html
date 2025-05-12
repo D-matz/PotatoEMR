@@ -19,6 +19,9 @@
           </svg>
           {% endif %}
           <div style="min-height: 50px;">
+            {% for prefix in patient.get_prefixes %}
+              <p class="m-0 lh-1">{{ prefix }}</p>
+            {% endfor %}
             {% for name in patient.get_names %}
               <p class="m-0 lh-1">{{ name }}</p>
             {% endfor %}

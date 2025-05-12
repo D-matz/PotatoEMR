@@ -10,6 +10,8 @@ from potato.models import (
     FHIR_GP_HumanName,
     FHIR_GP_HumanName_Prefix,
     FHIR_GP_HumanName_Given,
+    FHIR_Practitioner, 
+    FHIR_Practitioner_name,
 )
 import os
 import datetime
@@ -41,16 +43,34 @@ patients = [
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        FHIR_Patient.objects.all().delete()
-        
+
+        luthien_practitioner = FHIR_Practitioner.objects.filter(Practitioner_name__text__contains='Lúthien Tinúviel').first()
+        if not luthien_practitioner:
+            luthien_practitioner, created = FHIR_Practitioner.objects.get_or_create(
+                active=True,
+                gender='female',
+                birthDate=datetime.date.fromisoformat('1000-01-01')
+            )        
+            practitioner_name = FHIR_Practitioner_name.objects.create(
+                Practitioner=luthien_practitioner,
+                text='Lúthien Tinúviel',
+                use=FHIR_GP_HumanName.NameUseChoices.OFFICIAL,
+                family='Tinúviel'
+            )
+            
+
+        #FHIR_Patient.objects.all().delete() #maybe add identifiers to add/delete with at some point
+
         # Path to mock pictures directory
         pictures_dir = os.path.join(os.path.dirname(__file__), 'mock_pictures')
-        
+
         for patient_data in patients:
             patient_model = FHIR_Patient.objects.create(
                 birthDate=datetime.date.fromisoformat(patient_data['birthDate']),
                 gender=patient_data['gender']
             )
+
+            patient_model.generalPractitioner_Practitioner.set([luthien_practitioner])
 
             name_model = FHIR_Patient_name.objects.create(
                 Patient = patient_model,
@@ -105,8 +125,6 @@ class Command(BaseCommand):
                     
                     # Open the file and save it to the upload_to field
                     with open(photo_path, 'rb') as f:
-                        photo_attachment.upload_to.save(photo_filename, f)
-                    
-                    self.stdout.write(f"Added photo {photo_filename} for {patient_data['name']}")
+                        photo_attachment.upload_to.save(photo_filename, f)                    
                 else:
-                    self.stdout.write(self.style.WARNING(f"Photo file not found: {photo_path}"))
+                    print(f"Photo file not found: {photo_path}")

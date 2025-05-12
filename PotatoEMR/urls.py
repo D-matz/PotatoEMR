@@ -56,6 +56,7 @@ urlpatterns = [
     path("explorer/<str:model_name>/<int:model_id>", view_patientOverview.explorer_row, name="PatientOverview_explorer"),
 
     path("patient-lists", PatientLists_view.lists, name="home_patient_lists"),
+    path("patient-lists/<str:practitioner_name>", PatientLists_view.lists_practitioner, name="home_patient_lists_practitioner"),
 
     path("patient/<int:patient_id>/encounter/<int:encounter_id>", AppointmentEncounter_view.overview, name="AppointmentEncounter_overview"),
 
