@@ -2,10 +2,7 @@
 
 {% block content %}
 <div id="page-with-patient" class="d-flex h-100 w-100">
-  <div id="patient-sidebar-here"
-  hx-preserve="true" 
-  style="width: 200px; flex-shrink: 0;"
-  class="bg-body-secondary overflow-auto">
+  <div id="patient-sidebar-here" style="width: 200px; flex-shrink: 0;" class="bg-body-secondary overflow-auto">
     <ul class="nav flex-column">
       <li class="nav-item"">
         <a href="{% url 'PatientOverview' patient.id %}" class="nav-link" style="text-align: center"
