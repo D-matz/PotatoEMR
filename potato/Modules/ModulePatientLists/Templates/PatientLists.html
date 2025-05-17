@@ -3,9 +3,15 @@
 {% block title %}PotatoEMR{% endblock %}
 
 {% block content %}
-  <div class="d-flex flex-column h-100">
-    <h4 class="m-4"><a href="{% url 'home_patient_lists' %}">All Patients</a> <a href="{% url 'home_patient_lists_practitioner' 'Lúthien Tinúviel' %}">Luthien's Patients</a></h4>
-    <div class="m-4 flex-grow-1 overflow-auto" style="width: fit-content;">
+  <div class="d-flex flex-row h-100">
+    <div class="d-flex flex-column border-end" style="width: 300px; overflow-y: auto;">
+      <h3 class="m-3">Patient Lists</h3>
+      <div class="list-group list-group-flush">
+        <a href="{% url 'home_patient_lists' %}" class="list-group-item list-group-item-action">All Patients</a>
+        <a href="{% url 'home_patient_lists_practitioner' 'Lúthien Tinúviel' %}" class="list-group-item list-group-item-action">Luthien's Patients</a>
+      </div>
+    </div>
+    <div class="m-4 overflow-auto" style="width: fit-content;">
       <table class="table table-hover" style="table-layout: fixed; width: auto;">
         <thead>
           <tr>
@@ -18,7 +24,7 @@
         <tbody>
           {% for data in data_list %}
             {% with patient=data.patient conditions=data.conditions %}
-              <tr style="cursor: pointer;" onclick="window.location='{% url 'PatientOverview' patient.id %}'">
+              <tr style="cursor: pointer;" hx-get="{% url 'PatientOverview' patient.id %}" hx-target="body">
                 <td>
                   {% if patient.Patient_photo.first and patient.Patient_photo.first.upload_to.url %}
                     <img src="{{ patient.Patient_photo.first.upload_to.url }}" alt="Patient Photo"

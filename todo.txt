@@ -56,3 +56,13 @@ bundle from http://www.iana.org/assignments/link-relations/link-relations.xhtml#
 add __str__ to models manually idk
 
 chart review (encounters, notes, labs, imaging), growth, pre chart, immunizations, history/ core review, summaries, visit checklist, problem list, notes
+
+note /etc/nginx/sites-available/default
+    location /static/ {
+        alias /var/www/potatoemr.com/static/;
+    }
+
+    location /media/ {
+        alias /var/www/potatoemr.com/media/;
+        autoindex off;
+    }
