@@ -38,14 +38,14 @@ class FHIR_ResearchSubject_subjectState(models.Model):
 
 class FHIR_ResearchSubject_subjectMilestone(models.Model):
     ResearchSubject = models.ForeignKey(FHIR_ResearchSubject, related_name='ResearchSubject_subjectMilestone', null=False, on_delete=models.CASCADE)
-    date = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    BINDING_reason = "TODO"
-    reason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_reason}, related_name='ResearchSubject_subjectMilestone_reason', blank=True)
-    reason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-
-class FHIR_ResearchSubject_subjectMilestone_milestone(models.Model):
-    ResearchSubject_subjectMilestone = models.ForeignKey(FHIR_ResearchSubject_subjectMilestone, related_name='ResearchSubject_subjectMilestone_milestone', null=False, on_delete=models.CASCADE)
     BINDING_milestone = "TODO"
     milestone_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_milestone}, related_name='ResearchSubject_subjectMilestone_milestone', blank=True)
     milestone_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    date = FHIR_primitive_DateTimeField(null=True, blank=True, )
+
+class FHIR_ResearchSubject_subjectMilestone_reason(models.Model):
+    ResearchSubject_subjectMilestone = models.ForeignKey(FHIR_ResearchSubject_subjectMilestone, related_name='ResearchSubject_subjectMilestone_reason', null=False, on_delete=models.CASCADE)
+    BINDING_reason = "TODO"
+    reason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_reason}, related_name='ResearchSubject_subjectMilestone_reason', blank=True)
+    reason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     

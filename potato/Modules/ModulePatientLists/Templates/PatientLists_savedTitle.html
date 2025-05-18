@@ -1,0 +1,12 @@
+<div hx-target="body" hx-swap="outerHTML" style="height: 50px; display: flex; align-items: center;">
+    <button hx-get="{% url 'PatientLists_editTitle' list_model.id %}" class="btn btn-sm btn-secondary">
+        rename list
+    </button>    
+    <h4 class="m-3 d-inline-block">
+        {% if list_model.title %}
+            {{ list_model.title }}
+        {% else %}
+            untitled list
+        {% endif %}
+    </h4>
+</div>

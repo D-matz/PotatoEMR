@@ -41,6 +41,8 @@ class FHIR_MeasureReport(models.Model):
     BINDING_improvementNotation = "TODO"
     improvementNotation_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_improvementNotation}, related_name='MeasureReport_improvementNotation', blank=True)
     improvementNotation_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+                            #skipping Reference(Any) for field supplementalData as MeasureReport supplementalData not in referenceAny_targets
+                            #skipping Reference(Any) for field evaluatedResource as MeasureReport evaluatedResource not in referenceAny_targets
 
 class FHIR_MeasureReport_identifier(FHIR_GP_Identifier):
     MeasureReport = models.ForeignKey(FHIR_MeasureReport, related_name='MeasureReport_identifier', null=False, on_delete=models.CASCADE)

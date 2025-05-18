@@ -1,0 +1,6 @@
+{% extends 'Common_PatientSearch_resultPartial.html' %}
+
+{% block patient_link_attrs %}
+    href="{% url 'PatientOverview' patient.id %}" 
+    onclick="this.closest('.dropdown-menu').classList.remove('show')"
+{% endblock %}

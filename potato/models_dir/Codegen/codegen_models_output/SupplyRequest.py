@@ -10,6 +10,7 @@ class FHIR_SupplyRequest(models.Model):
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
     class IntentChoices(models.TextChoices): PROPOSAL = 'proposal', 'Proposal'; PLAN = 'plan', 'Plan'; DIRECTIVE = 'directive', 'Directive'; ORDER = 'order', 'Order'; ORIGINAL_ORDER = 'original-order', 'Original-order'; REFLEX_ORDER = 'reflex-order', 'Reflex-order'; FILLER_ORDER = 'filler-order', 'Filler-order'; INSTANCE_ORDER = 'instance-order', 'Instance-order'; OPTION = 'option', 'Option'; 
     intent = FHIR_primitive_CodeField(choices=IntentChoices.choices, null=True, blank=True, )
+                            #skipping Reference(Any) for field basedOn as SupplyRequest basedOn not in referenceAny_targets
     BINDING_category = "TODO"
     category_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_category}, related_name='SupplyRequest_category', blank=True)
     category_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)

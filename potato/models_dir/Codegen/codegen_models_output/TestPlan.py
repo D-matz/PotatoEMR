@@ -83,12 +83,15 @@ class FHIR_TestPlan_testCase_testRun_script(models.Model):
     language_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     source_string = FHIR_primitive_StringField(null=True, blank=True, )
     source_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='TestPlan_testCase_testRun_script_source_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field source_Reference as TestPlan source_Reference not in referenceAny_targets
 
 class FHIR_TestPlan_testCase_testData(models.Model):
     TestPlan_testCase = models.ForeignKey(FHIR_TestPlan_testCase, related_name='TestPlan_testCase_testData', null=False, on_delete=models.CASCADE)
     type = models.OneToOneField("FHIR_GP_Coding", related_name='TestPlan_testCase_testData_type', null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field content as TestPlan content not in referenceAny_targets
     source_string = FHIR_primitive_StringField(null=True, blank=True, )
     source_uri = FHIR_primitive_URIField(null=True, blank=True, )
+                            #skipping Reference(Any) for field source_Reference as TestPlan source_Reference not in referenceAny_targets
 
 class FHIR_TestPlan_testCase_assertion(models.Model):
     TestPlan_testCase = models.ForeignKey(FHIR_TestPlan_testCase, related_name='TestPlan_testCase_assertion', null=False, on_delete=models.CASCADE)

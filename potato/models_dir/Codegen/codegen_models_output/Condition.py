@@ -6,10 +6,10 @@ from ..FHIR_DataTypes.FHIR_metadata import *
 from ..FHIR_DataTypes.FHIR_primitive import *
 
 class FHIR_Condition(models.Model):
-    BINDING_clinicalStatus = "https://build.fhir.org/valueset-condition-clinical.html"
+    BINDING_clinicalStatus = "https://hl7.org/fhir/valueset-condition-clinical.html"
     clinicalStatus_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_clinicalStatus}, related_name='Condition_clinicalStatus', blank=True)
     clinicalStatus_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_verificationStatus = "http://hl7.org/fhir/ValueSet/condition-ver-status.html"
+    BINDING_verificationStatus = "http://hl7.org/fhir/valueset-condition-ver-status.html"
     verificationStatus_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_verificationStatus}, related_name='Condition_verificationStatus', blank=True)
     verificationStatus_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     BINDING_severity = "https://build.fhir.org/valueset-condition-severity.html"

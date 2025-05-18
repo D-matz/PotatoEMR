@@ -13,6 +13,7 @@ class FHIR_Composition(models.Model):
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='Composition_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+                            #skipping Reference(Any) for field subject as Composition subject not in referenceAny_targets
     encounter = models.ForeignKey("FHIR_Encounter", related_name="Composition_encounter", null=True, blank=True, on_delete=models.SET_NULL)
     date = FHIR_primitive_DateTimeField(null=True, blank=True, )
     author_Practitioner = models.ManyToManyField("FHIR_Practitioner", related_name="Composition_author", blank=True)
@@ -57,6 +58,7 @@ class FHIR_Composition_relatesTo(models.Model):
     target_uri = FHIR_primitive_URIField(null=True, blank=True, )
     target_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='Composition_relatesTo_target_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
     target_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
+                            #skipping Reference(Any) for field target_Reference as Composition target_Reference not in referenceAny_targets
     target_markdown = FHIR_primitive_MarkdownField(null=True, blank=True, )
 
 class FHIR_Composition_event(models.Model):
@@ -82,9 +84,11 @@ class FHIR_Composition_section(models.Model):
     author_Patient = models.ManyToManyField("FHIR_Patient", related_name="Composition_section_author", blank=True)
     author_RelatedPerson = models.ManyToManyField("FHIR_RelatedPerson", related_name="Composition_section_author", blank=True)
     author_Organization = models.ManyToManyField("FHIR_Organization", related_name="Composition_section_author", blank=True)
+                            #skipping Reference(Any) for field focus as Composition focus not in referenceAny_targets
     BINDING_orderedBy = "TODO"
     orderedBy_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_orderedBy}, related_name='Composition_section_orderedBy', blank=True)
     orderedBy_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+                            #skipping Reference(Any) for field entry as Composition entry not in referenceAny_targets
     BINDING_emptyReason = "TODO"
     emptyReason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_emptyReason}, related_name='Composition_section_emptyReason', blank=True)
     emptyReason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)

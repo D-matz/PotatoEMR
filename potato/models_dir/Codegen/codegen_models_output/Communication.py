@@ -15,6 +15,7 @@ class FHIR_Communication(models.Model):
     basedOn_ServiceRequest = models.ManyToManyField("FHIR_ServiceRequest", related_name="Communication_basedOn", blank=True)
     basedOn_Task = models.ManyToManyField("FHIR_Task", related_name="Communication_basedOn", blank=True)
     basedOn_VisionPrescription = models.ManyToManyField("FHIR_VisionPrescription", related_name="Communication_basedOn", blank=True)
+                            #skipping Reference(Any) for field partOf as Communication partOf not in referenceAny_targets
     inResponseTo = models.ManyToManyField("FHIR_Communication", related_name="Communication_inResponseTo", blank=True)
     class StatusChoices(models.TextChoices): PREPARATION = 'preparation', 'Preparation'; IN_PROGRESS = 'in-progress', 'In-progress'; NOT_DONE = 'not-done', 'Not-done'; ON_HOLD = 'on-hold', 'On-hold'; STOPPED = 'stopped', 'Stopped'; COMPLETED = 'completed', 'Completed'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; UNKNOWN = 'unknown', 'Unknown'; 
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
@@ -28,6 +29,7 @@ class FHIR_Communication(models.Model):
     BINDING_topic = "TODO"
     topic_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_topic}, related_name='Communication_topic', blank=True)
     topic_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+                            #skipping Reference(Any) for field about as Communication about not in referenceAny_targets
     encounter = models.ForeignKey("FHIR_Encounter", related_name="Communication_encounter", null=True, blank=True, on_delete=models.SET_NULL)
     sent = FHIR_primitive_DateTimeField(null=True, blank=True, )
     received = FHIR_primitive_DateTimeField(null=True, blank=True, )
@@ -76,6 +78,7 @@ class FHIR_Communication_reason(models.Model):
 class FHIR_Communication_payload(models.Model):
     Communication = models.ForeignKey(FHIR_Communication, related_name='Communication_payload', null=False, on_delete=models.CASCADE)
     content_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='Communication_payload_content_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field content_Reference as Communication content_Reference not in referenceAny_targets
     BINDING_content_CodeableConcept = "TODO"
     content_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_content_CodeableConcept}, related_name='Communication_payload_content_CodeableConcept', blank=True)
     content_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)

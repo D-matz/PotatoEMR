@@ -23,6 +23,7 @@ class FHIR_MedicationDispense(models.Model):
     subject_Patient = models.ForeignKey("FHIR_Patient", related_name="MedicationDispense_subject", null=True, blank=True, on_delete=models.SET_NULL)
     subject_Group = models.ForeignKey("FHIR_Group", related_name="MedicationDispense_subject", null=True, blank=True, on_delete=models.SET_NULL)
     encounter = models.ForeignKey("FHIR_Encounter", related_name="MedicationDispense_encounter", null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field supportingInformation as MedicationDispense supportingInformation not in referenceAny_targets
     location = models.ForeignKey("FHIR_Location", related_name="MedicationDispense_location", null=True, blank=True, on_delete=models.SET_NULL)
     authorizingPrescription = models.ManyToManyField("FHIR_MedicationRequest", related_name="MedicationDispense_authorizingPrescription", blank=True)
     BINDING_type = "TODO"

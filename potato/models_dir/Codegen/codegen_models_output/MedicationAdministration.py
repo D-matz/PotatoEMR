@@ -19,6 +19,7 @@ class FHIR_MedicationAdministration(models.Model):
     subject_Patient = models.ForeignKey("FHIR_Patient", related_name="MedicationAdministration_subject", null=True, blank=True, on_delete=models.SET_NULL)
     subject_Group = models.ForeignKey("FHIR_Group", related_name="MedicationAdministration_subject", null=True, blank=True, on_delete=models.SET_NULL)
     encounter = models.ForeignKey("FHIR_Encounter", related_name="MedicationAdministration_encounter", null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field supportingInformation as MedicationAdministration supportingInformation not in referenceAny_targets
     occurrence_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
     occurrence_Period = models.OneToOneField("FHIR_GP_Period", related_name='MedicationAdministration_occurrence_Period', null=True, blank=True, on_delete=models.SET_NULL)
     occurrence_Timing = models.OneToOneField("FHIR_GP_Timing", related_name='MedicationAdministration_occurrence_Timing', null=True, blank=True, on_delete=models.SET_NULL)

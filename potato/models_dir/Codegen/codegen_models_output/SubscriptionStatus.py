@@ -16,6 +16,8 @@ class FHIR_SubscriptionStatus(models.Model):
 class FHIR_SubscriptionStatus_notificationEvent(models.Model):
     SubscriptionStatus = models.ForeignKey(FHIR_SubscriptionStatus, related_name='SubscriptionStatus_notificationEvent', null=False, on_delete=models.CASCADE)
     timestamp = FHIR_primitive_InstantField(null=True, blank=True, )
+                            #skipping Reference(Any) for field focus as SubscriptionStatus focus not in referenceAny_targets
+                            #skipping Reference(Any) for field additionalContext as SubscriptionStatus additionalContext not in referenceAny_targets
 
 class FHIR_SubscriptionStatus_notificationEvent_triggerEvent(models.Model):
     SubscriptionStatus_notificationEvent = models.ForeignKey(FHIR_SubscriptionStatus_notificationEvent, related_name='SubscriptionStatus_notificationEvent_triggerEvent', null=False, on_delete=models.CASCADE)

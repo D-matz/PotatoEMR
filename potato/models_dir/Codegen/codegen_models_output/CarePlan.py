@@ -38,6 +38,7 @@ class FHIR_CarePlan(models.Model):
     contributor_Organization = models.ManyToManyField("FHIR_Organization", related_name="CarePlan_contributor", blank=True)
     contributor_CareTeam = models.ManyToManyField("FHIR_CareTeam", related_name="CarePlan_contributor", blank=True)
     careTeam = models.ManyToManyField("FHIR_CareTeam", related_name="CarePlan_careTeam", blank=True)
+                            #skipping Reference(Any) for field supportingInfo as CarePlan supportingInfo not in referenceAny_targets
     goal = models.ManyToManyField("FHIR_Goal", related_name="CarePlan_goal", blank=True)
 
 class FHIR_CarePlan_identifier(FHIR_GP_Identifier):

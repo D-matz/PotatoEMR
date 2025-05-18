@@ -31,6 +31,7 @@ class FHIR_NutritionIntake(models.Model):
     reported_Reference_Organization = models.ForeignKey("FHIR_Organization", related_name="NutritionIntake_reported_Reference", null=True, blank=True, on_delete=models.SET_NULL)
     reported_Reference_Group = models.ForeignKey("FHIR_Group", related_name="NutritionIntake_reported_Reference", null=True, blank=True, on_delete=models.SET_NULL)
     location = models.ForeignKey("FHIR_Location", related_name="NutritionIntake_location", null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field derivedFrom as NutritionIntake derivedFrom not in referenceAny_targets
 
 class FHIR_NutritionIntake_identifier(FHIR_GP_Identifier):
     NutritionIntake = models.ForeignKey(FHIR_NutritionIntake, related_name='NutritionIntake_identifier', null=False, on_delete=models.CASCADE)

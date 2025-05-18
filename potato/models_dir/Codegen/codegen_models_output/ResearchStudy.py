@@ -53,6 +53,7 @@ class FHIR_ResearchStudy_relatesTo(models.Model):
     target_uri = FHIR_primitive_URIField(null=True, blank=True, )
     target_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='ResearchStudy_relatesTo_target_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
     target_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
+                            #skipping Reference(Any) for field target_Reference as ResearchStudy target_Reference not in referenceAny_targets
     target_markdown = FHIR_primitive_MarkdownField(null=True, blank=True, )
 
 class FHIR_ResearchStudy_studyDesign(models.Model):
@@ -132,6 +133,7 @@ class FHIR_ResearchStudy_recruitment(models.Model):
     actualNumber = FHIR_primitive_UnsignedIntField(null=True, blank=True, )
     eligibility = models.ForeignKey("FHIR_Group", related_name="ResearchStudy_recruitment_eligibility", null=True, blank=True, on_delete=models.SET_NULL)
     actualGroup = models.ForeignKey("FHIR_Group", related_name="ResearchStudy_recruitment_actualGroup", null=True, blank=True, on_delete=models.SET_NULL)
+    description = FHIR_primitive_MarkdownField(null=True, blank=True, )
 
 class FHIR_ResearchStudy_comparisonGroup(models.Model):
     ResearchStudy = models.ForeignKey(FHIR_ResearchStudy, related_name='ResearchStudy_comparisonGroup', null=False, on_delete=models.CASCADE)
@@ -139,6 +141,7 @@ class FHIR_ResearchStudy_comparisonGroup(models.Model):
     actualNumber = FHIR_primitive_UnsignedIntField(null=True, blank=True, )
     eligibility = models.ForeignKey("FHIR_Group", related_name="ResearchStudy_comparisonGroup_eligibility", null=True, blank=True, on_delete=models.SET_NULL)
     observedGroup = models.ForeignKey("FHIR_Group", related_name="ResearchStudy_comparisonGroup_observedGroup", null=True, blank=True, on_delete=models.SET_NULL)
+    description = FHIR_primitive_MarkdownField(null=True, blank=True, )
 
 class FHIR_ResearchStudy_objective(models.Model):
     ResearchStudy = models.ForeignKey(FHIR_ResearchStudy, related_name='ResearchStudy_objective', null=False, on_delete=models.CASCADE)
@@ -162,6 +165,7 @@ class FHIR_ResearchStudy_objective_outcomeMeasure(models.Model):
     BINDING_summaryMeasure = "TODO"
     summaryMeasure_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_summaryMeasure}, related_name='ResearchStudy_objective_outcomeMeasure_summaryMeasure', blank=True)
     summaryMeasure_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    endpointAnalysisPlan = models.ForeignKey("FHIR_Evidence", related_name="ResearchStudy_objective_outcomeMeasure_endpointAnalysisPlan", null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_ResearchStudy_objective_outcomeMeasure_eventHandling(models.Model):
     ResearchStudy_objective_outcomeMeasure = models.ForeignKey(FHIR_ResearchStudy_objective_outcomeMeasure, related_name='ResearchStudy_objective_outcomeMeasure_eventHandling', null=False, on_delete=models.CASCADE)

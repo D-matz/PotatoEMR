@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db import transaction
-from .PatientSearch_form import PatientSearchForm
+from .CommonPatientSearch_form import PatientSearchForm
 from potato.models import (
     FHIR_Patient,
     FHIR_Patient_name,
@@ -8,13 +8,17 @@ from potato.models import (
 )
 from django.db.models import Q
 
-def search_patient(request):
+def SearchPatient(request, result_template, result_args):
     if request.method == 'GET':
-        return render(request, 'PatientSearch.html', {'form': PatientSearchForm()})    
+        return render(request, 'Common_PatientSearch.html', {
+            'form': PatientSearchForm(),
+            'result_template': result_template,
+            'result_args': result_args
+        })
     elif request.method == 'POST':
         form = PatientSearchForm(request.POST)
         if not form.is_valid():
-            return render(request, 'PatientSearch_errorPartial.html', {'form': form})
+            return render(request, 'Common_PatientSearch_errorPartial.html', {'form': form})
         else:
             have_data = False
             for field in form.cleaned_data:
@@ -22,7 +26,7 @@ def search_patient(request):
                     have_data = True
                     break
             if not have_data:
-                return render(request, 'PatientSearch_resultPartial.html', {'results': []})
+                return render(request, 'Common_PatientSearch_resultPartial.html', {'results': []})
             
             fuzzy = form.cleaned_data['fuzzy']
             name = form.cleaned_data['Name']
@@ -79,8 +83,10 @@ def search_patient(request):
                     fuzzy_ids = [patient.id for patient in fuzzy_results]
                     fuzzy_results = FHIR_Patient.objects.filter(id__in=fuzzy_ids)
             
-            return render(request, 'PatientSearch_resultPartial.html', {'precise_and_fuzzy': [results, fuzzy_results]})
-        
+            return render(request, result_template, {
+                'precise_and_fuzzy': [results, fuzzy_results], 
+                'result_args': result_args
+            })
 
 def fuzzy_match(str1, str2):
     if str1 == "" or str2 == "":

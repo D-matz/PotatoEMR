@@ -1,8 +1,7 @@
 {% for list in precise_and_fuzzy %}
     {% for patient in list %}
     <div>
-        <a href="{% url 'PatientOverview' patient.id %}" class="text-decoration-none" 
-        onclick="this.closest('.dropdown-menu').classList.remove('show')">
+        <a {% block patient_link_attrs %}{% endblock %} class="text-decoration-none">
             <div class="d-flex flex-row bg-secondary-subtle p-2 rounded shadow-sm mb-2 hover-effect">
                 {% if patient.Patient_photo.first and patient.Patient_photo.first.upload_to.url %}
                 <img src="{{ patient.Patient_photo.first.upload_to.url }}" alt="Patient Photo"

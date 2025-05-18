@@ -30,9 +30,11 @@ class FHIR_DocumentReference(models.Model):
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='DocumentReference_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+                            #skipping Reference(Any) for field subject as DocumentReference subject not in referenceAny_targets
     context_Appointment = models.ManyToManyField("FHIR_Appointment", related_name="DocumentReference_context", blank=True)
     context_Encounter = models.ManyToManyField("FHIR_Encounter", related_name="DocumentReference_context", blank=True)
     context_EpisodeOfCare = models.ManyToManyField("FHIR_EpisodeOfCare", related_name="DocumentReference_context", blank=True)
+                            #skipping Reference(Any) for field related as DocumentReference related not in referenceAny_targets
     BINDING_facilityType = "TODO"
     facilityType_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_facilityType}, related_name='DocumentReference_facilityType', blank=True)
     facilityType_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)

@@ -37,6 +37,7 @@ class FHIR_MedicationRequest(models.Model):
     informationSource_Organization = models.ManyToManyField("FHIR_Organization", related_name="MedicationRequest_informationSource", blank=True)
     informationSource_Group = models.ManyToManyField("FHIR_Group", related_name="MedicationRequest_informationSource", blank=True)
     encounter = models.ForeignKey("FHIR_Encounter", related_name="MedicationRequest_encounter", null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field supportingInformation as MedicationRequest supportingInformation not in referenceAny_targets
     authoredOn = FHIR_primitive_DateTimeField(null=True, blank=True, )
     requester_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="MedicationRequest_requester", null=True, blank=True, on_delete=models.SET_NULL)
     requester_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="MedicationRequest_requester", null=True, blank=True, on_delete=models.SET_NULL)

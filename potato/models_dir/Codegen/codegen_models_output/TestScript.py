@@ -77,6 +77,7 @@ class FHIR_TestScript_fixture(models.Model):
     TestScript = models.ForeignKey(FHIR_TestScript, related_name='TestScript_fixture', null=False, on_delete=models.CASCADE)
     autocreate = FHIR_primitive_BooleanField(null=True, blank=True, )
     autodelete = FHIR_primitive_BooleanField(null=True, blank=True, )
+                            #skipping Reference(Any) for field resource as TestScript resource not in referenceAny_targets
 
 class FHIR_TestScript_profile(models.Model):
     TestScript = models.ForeignKey(FHIR_TestScript, related_name='TestScript_profile', null=False, on_delete=models.CASCADE)

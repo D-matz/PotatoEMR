@@ -8,6 +8,8 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 class FHIR_PaymentNotice(models.Model):
     class StatusChoices(models.TextChoices): ACTIVE = 'active', 'Active'; CANCELLED = 'cancelled', 'Cancelled'; DRAFT = 'draft', 'Draft'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; 
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
+                            #skipping Reference(Any) for field request as PaymentNotice request not in referenceAny_targets
+                            #skipping Reference(Any) for field response as PaymentNotice response not in referenceAny_targets
     created = FHIR_primitive_DateTimeField(null=True, blank=True, )
     reporter_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="PaymentNotice_reporter", null=True, blank=True, on_delete=models.SET_NULL)
     reporter_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="PaymentNotice_reporter", null=True, blank=True, on_delete=models.SET_NULL)

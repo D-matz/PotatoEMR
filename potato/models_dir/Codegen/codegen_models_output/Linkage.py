@@ -15,3 +15,4 @@ class FHIR_Linkage_item(models.Model):
     Linkage = models.ForeignKey(FHIR_Linkage, related_name='Linkage_item', null=False, on_delete=models.CASCADE)
     class TypeChoices(models.TextChoices): SOURCE = 'source', 'Source'; ALTERNATE = 'alternate', 'Alternate'; HISTORICAL = 'historical', 'Historical'; 
     type = FHIR_primitive_CodeField(choices=TypeChoices.choices, null=True, blank=True, )
+                            #skipping Reference(Any) for field resource as Linkage resource not in referenceAny_targets

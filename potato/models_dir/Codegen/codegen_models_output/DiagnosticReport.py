@@ -75,6 +75,7 @@ class FHIR_DiagnosticReport_supportingInfo(models.Model):
     reference_DeviceUsage = models.ForeignKey("FHIR_DeviceUsage", related_name="DiagnosticReport_supportingInfo_reference", null=True, blank=True, on_delete=models.SET_NULL)
     reference_Condition = models.ForeignKey("FHIR_Condition", related_name="DiagnosticReport_supportingInfo_reference", null=True, blank=True, on_delete=models.SET_NULL)
     reference_GenomicStudy = models.ForeignKey("FHIR_GenomicStudy", related_name="DiagnosticReport_supportingInfo_reference", null=True, blank=True, on_delete=models.SET_NULL)
+    reference_ClinicalAssessment = models.ForeignKey("FHIR_ClinicalAssessment", related_name="DiagnosticReport_supportingInfo_reference", null=True, blank=True, on_delete=models.SET_NULL)
 
 class FHIR_DiagnosticReport_media(models.Model):
     DiagnosticReport = models.ForeignKey(FHIR_DiagnosticReport, related_name='DiagnosticReport_media', null=False, on_delete=models.CASCADE)

@@ -83,6 +83,7 @@ class FHIR_Questionnaire_item_enableWhen(models.Model):
     answer_string = FHIR_primitive_StringField(null=True, blank=True, )
     answer_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='Questionnaire_item_enableWhen_answer_Coding', null=True, blank=True, on_delete=models.SET_NULL)
     answer_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Questionnaire_item_enableWhen_answer_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field answer_Reference as Questionnaire answer_Reference not in referenceAny_targets
 
 class FHIR_Questionnaire_item_answerOption(models.Model):
     Questionnaire_item = models.ForeignKey(FHIR_Questionnaire_item, related_name='Questionnaire_item_answerOption', null=False, on_delete=models.CASCADE)
@@ -94,6 +95,7 @@ class FHIR_Questionnaire_item_answerOption(models.Model):
     value_uri = FHIR_primitive_URIField(null=True, blank=True, )
     value_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='Questionnaire_item_answerOption_value_Coding', null=True, blank=True, on_delete=models.SET_NULL)
     value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Questionnaire_item_answerOption_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field value_Reference as Questionnaire value_Reference not in referenceAny_targets
     initialSelected = FHIR_primitive_BooleanField(null=True, blank=True, )
 
 class FHIR_Questionnaire_item_initial(models.Model):
@@ -108,3 +110,4 @@ class FHIR_Questionnaire_item_initial(models.Model):
     value_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='Questionnaire_item_initial_value_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
     value_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='Questionnaire_item_initial_value_Coding', null=True, blank=True, on_delete=models.SET_NULL)
     value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Questionnaire_item_initial_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field value_Reference as Questionnaire value_Reference not in referenceAny_targets

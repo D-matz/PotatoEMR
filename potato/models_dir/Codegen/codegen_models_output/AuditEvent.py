@@ -16,6 +16,7 @@ class FHIR_AuditEvent(models.Model):
     occurred_Period = models.OneToOneField("FHIR_GP_Period", related_name='AuditEvent_occurred_Period', null=True, blank=True, on_delete=models.SET_NULL)
     occurred_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
     recorded = FHIR_primitive_InstantField(null=True, blank=True, )
+                            #skipping Reference(Any) for field basedOn as AuditEvent basedOn not in referenceAny_targets
     patient = models.ForeignKey("FHIR_Patient", related_name="AuditEvent_patient", null=True, blank=True, on_delete=models.SET_NULL)
     encounter = models.ForeignKey("FHIR_Encounter", related_name="AuditEvent_encounter", null=True, blank=True, on_delete=models.SET_NULL)
 
@@ -98,6 +99,7 @@ class FHIR_AuditEvent_source_type(models.Model):
     
 class FHIR_AuditEvent_entity(models.Model):
     AuditEvent = models.ForeignKey(FHIR_AuditEvent, related_name='AuditEvent_entity', null=False, on_delete=models.CASCADE)
+                            #skipping Reference(Any) for field what as AuditEvent what not in referenceAny_targets
     BINDING_role = "TODO"
     role_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_role}, related_name='AuditEvent_entity_role', blank=True)
     role_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)

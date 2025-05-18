@@ -23,7 +23,7 @@ class FHIR_Observation(models.Model):
     partOf_GenomicStudy = models.ManyToManyField("FHIR_GenomicStudy", related_name="Observation_partOf", blank=True)
     class StatusChoices(models.TextChoices): REGISTERED = 'registered', 'Registered'; SPECIMEN_IN_PROCESS = 'specimen-in-process', 'Specimen-in-process'; PRELIMINARY = 'preliminary', 'Preliminary'; FINAL = 'final', 'Final'; AMENDED = 'amended', 'Amended'; CORRECTED = 'corrected', 'Corrected'; APPENDED = 'appended', 'Appended'; CANCELLED = 'cancelled', 'Cancelled'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; UNKNOWN = 'unknown', 'Unknown'; CANNOT_BE_OBTAINED = 'cannot-be-obtained', 'Cannot-be-obtained'; 
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
-    BINDING_code = "TODO"
+    BINDING_code = "http://loinc.org"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='Observation_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     subject_Patient = models.ForeignKey("FHIR_Patient", related_name="Observation_subject", null=True, blank=True, on_delete=models.SET_NULL)
@@ -37,6 +37,7 @@ class FHIR_Observation(models.Model):
     subject_Substance = models.ForeignKey("FHIR_Substance", related_name="Observation_subject", null=True, blank=True, on_delete=models.SET_NULL)
     subject_BiologicallyDerivedProduct = models.ForeignKey("FHIR_BiologicallyDerivedProduct", related_name="Observation_subject", null=True, blank=True, on_delete=models.SET_NULL)
     subject_NutritionProduct = models.ForeignKey("FHIR_NutritionProduct", related_name="Observation_subject", null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field focus as Observation focus not in referenceAny_targets
     organizer = FHIR_primitive_BooleanField(null=True, blank=True, )
     encounter = models.ForeignKey("FHIR_Encounter", related_name="Observation_encounter", null=True, blank=True, on_delete=models.SET_NULL)
     effective_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
@@ -136,7 +137,7 @@ class FHIR_Observation_referenceRange_appliesTo(models.Model):
     
 class FHIR_Observation_component(models.Model):
     Observation = models.ForeignKey(FHIR_Observation, related_name='Observation_component', null=False, on_delete=models.CASCADE)
-    BINDING_code = "TODO"
+    BINDING_code = "http://loinc.org"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='Observation_component_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Observation_component_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)

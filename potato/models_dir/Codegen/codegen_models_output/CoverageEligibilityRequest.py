@@ -43,6 +43,7 @@ class FHIR_CoverageEligibilityRequest_event(models.Model):
 class FHIR_CoverageEligibilityRequest_supportingInfo(models.Model):
     CoverageEligibilityRequest = models.ForeignKey(FHIR_CoverageEligibilityRequest, related_name='CoverageEligibilityRequest_supportingInfo', null=False, on_delete=models.CASCADE)
     sequence = FHIR_primitive_PositiveIntField(null=True, blank=True, )
+                            #skipping Reference(Any) for field information as CoverageEligibilityRequest information not in referenceAny_targets
     appliesToAll = FHIR_primitive_BooleanField(null=True, blank=True, )
 
 class FHIR_CoverageEligibilityRequest_insurance(models.Model):
@@ -65,6 +66,7 @@ class FHIR_CoverageEligibilityRequest_item(models.Model):
     unitPrice = models.OneToOneField("FHIR_GP_Quantity_Money", related_name='CoverageEligibilityRequest_item_unitPrice', null=True, blank=True, on_delete=models.SET_NULL)
     facility_Location = models.ForeignKey("FHIR_Location", related_name="CoverageEligibilityRequest_item_facility", null=True, blank=True, on_delete=models.SET_NULL)
     facility_Organization = models.ForeignKey("FHIR_Organization", related_name="CoverageEligibilityRequest_item_facility", null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field detail as CoverageEligibilityRequest detail not in referenceAny_targets
 
 class FHIR_CoverageEligibilityRequest_item_supportingInfoSequence(models.Model):
     CoverageEligibilityRequest_item = models.ForeignKey(FHIR_CoverageEligibilityRequest_item, related_name='CoverageEligibilityRequest_item_supportingInfoSequence', null=False, on_delete=models.CASCADE)

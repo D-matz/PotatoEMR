@@ -19,6 +19,7 @@ from django.http import HttpResponse
 
 from potato.Common import common_views
 from potato.Common.Login import CommonLogin_view
+from potato.Common.PatientSearch import CommonPatientSearch_view
 from potato.Modules.ModuleHomePage import CommonHomePage_view
 from potato.Modules.ModuleRegisterPatient import view_registerPatient
 from potato.Modules.ModulePatientOverview import view_patientOverview
@@ -29,7 +30,6 @@ from potato.Modules.ModuleAppointmentEncounter import AppointmentEncounter_view
 from potato.Modules.ModuleProblemList import ProblemList_view
 from potato.Modules.ModuleImmunizations import Immunizations_view
 from potato.Modules.ModuleGrowthChart import GrowthChart_view
-from potato.Modules.ModulePatientSearch import PatientSearch_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -50,13 +50,19 @@ urlpatterns = [
     path('calendar-appt-peek/<int:appt_id>', AppointmentCalendar_view.calendar_peek, name="home_calendar_peek"),
 
     path("register-patient", view_registerPatient.create_patient, name="RegisterPatient"),
-    path("search-patient", PatientSearch_view.search_patient, name="SearchPatient"),
+    path("search-patient/<str:result_template>/<str:result_args>", CommonPatientSearch_view.SearchPatient, name="SearchPatient"),
 
     path("patient/<int:patient_id>/", view_patientOverview.patient_overview, name="PatientOverview"),
     path("explorer/<str:model_name>/<int:model_id>", view_patientOverview.explorer_row, name="PatientOverview_explorer"),
 
     path("patient-lists", PatientLists_view.lists, name="home_patient_lists"),
-    path("patient-lists/<str:practitioner_name>", PatientLists_view.lists_practitioner, name="home_patient_lists_practitioner"),
+    path("patient-lists/<int:list_id>", PatientLists_view.get_patient_list, name="PatientLists_get"),
+    path("patient-lists/create", PatientLists_view.create_patient_list, name="PatientLists_create"),
+    path("patient-lists/edit-title/<int:list_id>", PatientLists_view.edit_title, name="PatientLists_editTitle"),
+    path("patient-lists/saved-title/<int:list_id>", PatientLists_view.saved_title, name="PatientLists_savedTitle"),
+    path("patient-lists/delete/<int:list_id>", PatientLists_view.delete_list, name="PatientLists_delete"),
+    path("patient-lists/searchModal/<int:list_id>", PatientLists_view.searchModal, name="PatientLists_searchModal"),
+    path("patient-lists/add-patient/<int:list_id>/<int:patient_id>", PatientLists_view.add_patient, name="PatientLists_addPatient"),
 
     path("patient/<int:patient_id>/encounter/<int:encounter_id>", AppointmentEncounter_view.overview, name="AppointmentEncounter_overview"),
 

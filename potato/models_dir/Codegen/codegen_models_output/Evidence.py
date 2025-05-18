@@ -36,6 +36,7 @@ class FHIR_Evidence_relatesTo(models.Model):
     target_uri = FHIR_primitive_URIField(null=True, blank=True, )
     target_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='Evidence_relatesTo_target_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
     target_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
+                            #skipping Reference(Any) for field target_Reference as Evidence target_Reference not in referenceAny_targets
     target_markdown = FHIR_primitive_MarkdownField(null=True, blank=True, )
 
 class FHIR_Evidence_note(FHIR_GP_Annotation):

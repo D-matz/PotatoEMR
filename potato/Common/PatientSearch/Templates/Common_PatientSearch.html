@@ -1,11 +1,12 @@
 <div class="d-flex flex-column h-100 position-relative">
-    <!-- Close button in top right -->
-    <button type="button" class="btn-close position-absolute top-0 end-0 m-2" aria-label="Close"
-    onclick="this.closest('.dropdown-menu').classList.remove('show')"></button>
+    
+    <div class="position-absolute top-0 end-0 p-2">
+        <button type="button" class="btn-close" onclick="this.closest('.dropdown-menu').classList.remove('show')"></button>
+    </div>
     
     <div class="px-2 py-0 mt-2 me-4">
         <form method="post"
-        hx-post="{% url 'SearchPatient' %}"
+        hx-post="{% url 'SearchPatient' result_template=result_template result_args=result_args %}"
         hx-trigger="input delay:100ms"
         hx-target="#search-results"
         hx-push-url="false">

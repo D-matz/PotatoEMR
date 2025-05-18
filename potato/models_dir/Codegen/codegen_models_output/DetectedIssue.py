@@ -34,6 +34,7 @@ class FHIR_DetectedIssue(models.Model):
     author_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="DetectedIssue_author", null=True, blank=True, on_delete=models.SET_NULL)
     author_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="DetectedIssue_author", null=True, blank=True, on_delete=models.SET_NULL)
     author_Device = models.ForeignKey("FHIR_Device", related_name="DetectedIssue_author", null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field implicated as DetectedIssue implicated not in referenceAny_targets
     detail = FHIR_primitive_MarkdownField(null=True, blank=True, )
     reference = FHIR_primitive_URIField(null=True, blank=True, )
     BINDING_qualityOfEvidence = "TODO"
@@ -54,6 +55,7 @@ class FHIR_DetectedIssue_category(models.Model):
     
 class FHIR_DetectedIssue_evidence(models.Model):
     DetectedIssue = models.ForeignKey(FHIR_DetectedIssue, related_name='DetectedIssue_evidence', null=False, on_delete=models.CASCADE)
+                            #skipping Reference(Any) for field detail as DetectedIssue detail not in referenceAny_targets
 
 class FHIR_DetectedIssue_evidence_code(models.Model):
     DetectedIssue_evidence = models.ForeignKey(FHIR_DetectedIssue_evidence, related_name='DetectedIssue_evidence_code', null=False, on_delete=models.CASCADE)

@@ -9,6 +9,7 @@ from .models_dir.FHIR_Resources.CareTeam import *
 from .models_dir.FHIR_Resources.Condition import *
 from .models_dir.FHIR_Resources.Encounter import *
 from .models_dir.FHIR_Resources.Immunization import *
+from .models_dir.FHIR_Resources.List import *
 from .models_dir.FHIR_Resources.Location import *
 from .models_dir.FHIR_Resources.Observation import *
 from .models_dir.FHIR_Resources.Patient import *
@@ -94,7 +95,6 @@ class FHIR_InventoryReport(models.Model): pass
 class FHIR_Invoice(models.Model): pass
 class FHIR_Library(models.Model): pass
 class FHIR_Linkage(models.Model): pass
-class FHIR_List(models.Model): pass
 class FHIR_ManufacturedItemDefinition(models.Model): pass
 class FHIR_Measure(models.Model): pass
 class FHIR_MeasureReport(models.Model): pass

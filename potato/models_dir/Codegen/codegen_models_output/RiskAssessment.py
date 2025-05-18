@@ -6,6 +6,8 @@ from ..FHIR_DataTypes.FHIR_metadata import *
 from ..FHIR_DataTypes.FHIR_primitive import *
 
 class FHIR_RiskAssessment(models.Model):
+                            #skipping Reference(Any) for field basedOn as RiskAssessment basedOn not in referenceAny_targets
+                            #skipping Reference(Any) for field parent as RiskAssessment parent not in referenceAny_targets
     class StatusChoices(models.TextChoices): REGISTERED = 'registered', 'Registered'; SPECIMEN_IN_PROCESS = 'specimen-in-process', 'Specimen-in-process'; PRELIMINARY = 'preliminary', 'Preliminary'; FINAL = 'final', 'Final'; AMENDED = 'amended', 'Amended'; CORRECTED = 'corrected', 'Corrected'; APPENDED = 'appended', 'Appended'; CANCELLED = 'cancelled', 'Cancelled'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; UNKNOWN = 'unknown', 'Unknown'; CANNOT_BE_OBTAINED = 'cannot-be-obtained', 'Cannot-be-obtained'; 
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
     BINDING_method = "TODO"
@@ -25,6 +27,7 @@ class FHIR_RiskAssessment(models.Model):
     performer_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="RiskAssessment_performer", null=True, blank=True, on_delete=models.SET_NULL)
     performer_RelatedPerson = models.ForeignKey("FHIR_RelatedPerson", related_name="RiskAssessment_performer", null=True, blank=True, on_delete=models.SET_NULL)
     performer_Device = models.ForeignKey("FHIR_Device", related_name="RiskAssessment_performer", null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field basis as RiskAssessment basis not in referenceAny_targets
     mitigation = FHIR_primitive_StringField(null=True, blank=True, )
 
 class FHIR_RiskAssessment_identifier(FHIR_GP_Identifier):

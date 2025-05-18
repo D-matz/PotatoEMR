@@ -33,6 +33,7 @@ class FHIR_ChargeItem(models.Model):
     enterer_RelatedPerson = models.ForeignKey("FHIR_RelatedPerson", related_name="ChargeItem_enterer", null=True, blank=True, on_delete=models.SET_NULL)
     enteredDate = FHIR_primitive_DateTimeField(null=True, blank=True, )
     account = models.ManyToManyField("FHIR_Account", related_name="ChargeItem_account", blank=True)
+                            #skipping Reference(Any) for field supportingInformation as ChargeItem supportingInformation not in referenceAny_targets
 
 class FHIR_ChargeItem_identifier(FHIR_GP_Identifier):
     ChargeItem = models.ForeignKey(FHIR_ChargeItem, related_name='ChargeItem_identifier', null=False, on_delete=models.CASCADE)

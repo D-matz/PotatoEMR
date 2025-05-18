@@ -13,6 +13,7 @@ class FHIR_QuestionnaireResponse(models.Model):
     questionnaire = FHIR_primitive_CanonicalField(null=True, blank=True, )
     class StatusChoices(models.TextChoices): IN_PROGRESS = 'in-progress', 'In-progress'; COMPLETED = 'completed', 'Completed'; AMENDED = 'amended', 'Amended'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; STOPPED = 'stopped', 'Stopped'; 
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
+                            #skipping Reference(Any) for field subject as QuestionnaireResponse subject not in referenceAny_targets
     encounter = models.ForeignKey("FHIR_Encounter", related_name="QuestionnaireResponse_encounter", null=True, blank=True, on_delete=models.SET_NULL)
     authored = FHIR_primitive_DateTimeField(null=True, blank=True, )
     author_Device = models.ForeignKey("FHIR_Device", related_name="QuestionnaireResponse_author", null=True, blank=True, on_delete=models.SET_NULL)
@@ -54,3 +55,4 @@ class FHIR_QuestionnaireResponse_item_answer(models.Model):
     value_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='QuestionnaireResponse_item_answer_value_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
     value_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='QuestionnaireResponse_item_answer_value_Coding', null=True, blank=True, on_delete=models.SET_NULL)
     value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='QuestionnaireResponse_item_answer_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field value_Reference as QuestionnaireResponse value_Reference not in referenceAny_targets

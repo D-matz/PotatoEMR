@@ -9,6 +9,7 @@ class FHIR_Basic(models.Model):
     BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='Basic_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+                            #skipping Reference(Any) for field subject as Basic subject not in referenceAny_targets
     created = FHIR_primitive_DateTimeField(null=True, blank=True, )
     author_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="Basic_author", null=True, blank=True, on_delete=models.SET_NULL)
     author_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="Basic_author", null=True, blank=True, on_delete=models.SET_NULL)

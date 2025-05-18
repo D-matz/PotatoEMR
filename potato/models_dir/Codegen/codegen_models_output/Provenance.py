@@ -6,6 +6,7 @@ from ..FHIR_DataTypes.FHIR_metadata import *
 from ..FHIR_DataTypes.FHIR_primitive import *
 
 class FHIR_Provenance(models.Model):
+                            #skipping Reference(Any) for field target as Provenance target not in referenceAny_targets
     occurred_Period = models.OneToOneField("FHIR_GP_Period", related_name='Provenance_occurred_Period', null=True, blank=True, on_delete=models.SET_NULL)
     occurred_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
     recorded = FHIR_primitive_InstantField(null=True, blank=True, )
@@ -14,6 +15,7 @@ class FHIR_Provenance(models.Model):
     BINDING_activity = "TODO"
     activity_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_activity}, related_name='Provenance_activity', blank=True)
     activity_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+                            #skipping Reference(Any) for field basedOn as Provenance basedOn not in referenceAny_targets
     patient = models.ForeignKey("FHIR_Patient", related_name="Provenance_patient", null=True, blank=True, on_delete=models.SET_NULL)
     encounter = models.ForeignKey("FHIR_Encounter", related_name="Provenance_encounter", null=True, blank=True, on_delete=models.SET_NULL)
 
@@ -54,6 +56,7 @@ class FHIR_Provenance_entity(models.Model):
     Provenance = models.ForeignKey(FHIR_Provenance, related_name='Provenance_entity', null=False, on_delete=models.CASCADE)
     class RoleChoices(models.TextChoices): REVISION = 'revision', 'Revision'; QUOTATION = 'quotation', 'Quotation'; SOURCE = 'source', 'Source'; INSTANTIATES = 'instantiates', 'Instantiates'; REMOVAL = 'removal', 'Removal'; 
     role = FHIR_primitive_CodeField(choices=RoleChoices.choices, null=True, blank=True, )
+                            #skipping Reference(Any) for field what as Provenance what not in referenceAny_targets
 
 class FHIR_Provenance_signature(FHIR_GP_Signature):
     Provenance = models.ForeignKey(FHIR_Provenance, related_name='Provenance_signature', null=False, on_delete=models.CASCADE)

@@ -14,6 +14,10 @@ class FHIR_List(models.Model):
     BINDING_code = "TODO"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='List_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+    subject_Device = models.ManyToManyField("FHIR_Device", related_name="List_subject", blank=True)
+    subject_Group = models.ManyToManyField("FHIR_Group", related_name="List_subject", blank=True)
+    subject_Patient = models.ManyToManyField("FHIR_Patient", related_name="List_subject", blank=True)
+    subject_Practitioner = models.ManyToManyField("FHIR_Practitioner", related_name="List_subject", blank=True)
     encounter = models.ForeignKey("FHIR_Encounter", related_name="List_encounter", null=True, blank=True, on_delete=models.SET_NULL)
     date = FHIR_primitive_DateTimeField(null=True, blank=True, )
     source_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="List_source", null=True, blank=True, on_delete=models.SET_NULL)
@@ -44,3 +48,7 @@ class FHIR_List_entry(models.Model):
     flag_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     deleted = FHIR_primitive_BooleanField(null=True, blank=True, )
     date = FHIR_primitive_DateTimeField(null=True, blank=True, )
+    item_Device = models.ForeignKey("FHIR_Device", related_name="List_entry_item", null=True, blank=True, on_delete=models.SET_NULL)
+    item_Group = models.ForeignKey("FHIR_Group", related_name="List_entry_item", null=True, blank=True, on_delete=models.SET_NULL)
+    item_Patient = models.ForeignKey("FHIR_Patient", related_name="List_entry_item", null=True, blank=True, on_delete=models.SET_NULL)
+    item_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="List_entry_item", null=True, blank=True, on_delete=models.SET_NULL)

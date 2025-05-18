@@ -1,0 +1,5 @@
+{% extends 'Common_PatientSearch_resultPartial.html' %}
+
+{% block patient_link_attrs %}
+    href="{% url 'PatientLists_addPatient' list_id=result_args patient_id=patient.id %}"
+{% endblock %}

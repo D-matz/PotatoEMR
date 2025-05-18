@@ -1,0 +1,11 @@
+<div style="height: 50px; display: flex; align-items: center;">
+    <form hx-post="{% url 'PatientLists_editTitle' list_model.id %}"
+        hx-target="body"
+        hx-swap="outerHTML"
+        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+        <input type="text" name="title"
+        value="{% if list_model.title %}{{ list_model.title }}{% else %}untitled list{% endif %}">
+        <button class="btn btn-sm btn-secondary">Save</button>
+        <button class="btn btn-sm btn-danger" hx-get="{% url 'PatientLists_savedTitle' list_model.id %}">Cancel</button>
+    </form>
+</div>

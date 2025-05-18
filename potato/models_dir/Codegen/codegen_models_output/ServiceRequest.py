@@ -32,6 +32,7 @@ class FHIR_ServiceRequest(models.Model):
     subject_Group = models.ForeignKey("FHIR_Group", related_name="ServiceRequest_subject", null=True, blank=True, on_delete=models.SET_NULL)
     subject_Location = models.ForeignKey("FHIR_Location", related_name="ServiceRequest_subject", null=True, blank=True, on_delete=models.SET_NULL)
     subject_Device = models.ForeignKey("FHIR_Device", related_name="ServiceRequest_subject", null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field focus as ServiceRequest focus not in referenceAny_targets
     encounter = models.ForeignKey("FHIR_Encounter", related_name="ServiceRequest_encounter", null=True, blank=True, on_delete=models.SET_NULL)
     occurrence_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
     occurrence_Period = models.OneToOneField("FHIR_GP_Period", related_name='ServiceRequest_occurrence_Period', null=True, blank=True, on_delete=models.SET_NULL)

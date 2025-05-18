@@ -63,6 +63,7 @@ class FHIR_ImplementationGuide_definition_grouping(models.Model):
 
 class FHIR_ImplementationGuide_definition_resource(models.Model):
     ImplementationGuide_definition = models.ForeignKey(FHIR_ImplementationGuide_definition, related_name='ImplementationGuide_definition_resource', null=False, on_delete=models.CASCADE)
+                            #skipping Reference(Any) for field reference as ImplementationGuide reference not in referenceAny_targets
     name = FHIR_primitive_StringField(null=True, blank=True, )
     description = FHIR_primitive_MarkdownField(null=True, blank=True, )
     isExample = FHIR_primitive_BooleanField(null=True, blank=True, )
@@ -107,6 +108,7 @@ class FHIR_ImplementationGuide_manifest(models.Model):
 
 class FHIR_ImplementationGuide_manifest_resource(models.Model):
     ImplementationGuide_manifest = models.ForeignKey(FHIR_ImplementationGuide_manifest, related_name='ImplementationGuide_manifest_resource', null=False, on_delete=models.CASCADE)
+                            #skipping Reference(Any) for field reference as ImplementationGuide reference not in referenceAny_targets
     isExample = FHIR_primitive_BooleanField(null=True, blank=True, )
     relativePath = FHIR_primitive_URLField(null=True, blank=True, )
 

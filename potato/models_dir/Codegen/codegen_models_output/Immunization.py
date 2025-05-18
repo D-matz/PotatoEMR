@@ -30,6 +30,7 @@ class FHIR_Immunization(models.Model):
     expirationDate = FHIR_primitive_DateField(null=True, blank=True, )
     patient = models.ForeignKey("FHIR_Patient", related_name="Immunization_patient", null=True, blank=True, on_delete=models.SET_NULL)
     encounter = models.ForeignKey("FHIR_Encounter", related_name="Immunization_encounter", null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field supportingInformation as Immunization supportingInformation not in referenceAny_targets
     occurrence_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
     occurrence_string = FHIR_primitive_StringField(null=True, blank=True, )
     primarySource = FHIR_primitive_BooleanField(null=True, blank=True, )

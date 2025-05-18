@@ -111,6 +111,7 @@ class FHIR_Claim_supportingInfo(models.Model):
     value_string = FHIR_primitive_StringField(null=True, blank=True, )
     value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Claim_supportingInfo_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
     value_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='Claim_supportingInfo_value_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field value_Reference as Claim value_Reference not in referenceAny_targets
     value_Identifier = models.OneToOneField("FHIR_GP_Identifier", related_name='Claim_supportingInfo_value_Identifier', null=True, blank=True, on_delete=models.SET_NULL)
     BINDING_reason = "TODO"
     reason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_reason}, related_name='Claim_supportingInfo_reason', blank=True)

@@ -29,6 +29,7 @@ class FHIR_Permission_date(models.Model):
     
 class FHIR_Permission_justification(models.Model):
     Permission = models.ForeignKey(FHIR_Permission, related_name='Permission_justification', null=False, on_delete=models.CASCADE)
+                            #skipping Reference(Any) for field evidence as Permission evidence not in referenceAny_targets
 
 class FHIR_Permission_justification_basis(models.Model):
     Permission_justification = models.ForeignKey(FHIR_Permission_justification, related_name='Permission_justification_basis', null=False, on_delete=models.CASCADE)
@@ -50,6 +51,7 @@ class FHIR_Permission_rule_data_resource(models.Model):
     Permission_rule_data = models.ForeignKey(FHIR_Permission_rule_data, related_name='Permission_rule_data_resource', null=False, on_delete=models.CASCADE)
     class MeaningChoices(models.TextChoices): INSTANCE = 'instance', 'Instance'; RELATED = 'related', 'Related'; DEPENDENTS = 'dependents', 'Dependents'; AUTHOREDBY = 'authoredby', 'Authoredby'; 
     meaning = FHIR_primitive_CodeField(choices=MeaningChoices.choices, null=True, blank=True, )
+                            #skipping Reference(Any) for field reference as Permission reference not in referenceAny_targets
 
 class FHIR_Permission_rule_data_security(FHIR_GP_Coding):
     Permission_rule_data = models.ForeignKey(FHIR_Permission_rule_data, related_name='Permission_rule_data_security', null=False, on_delete=models.CASCADE)

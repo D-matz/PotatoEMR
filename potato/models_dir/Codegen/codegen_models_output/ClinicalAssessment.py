@@ -28,6 +28,7 @@ class FHIR_ClinicalAssessment(models.Model):
     changePattern_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     summary = FHIR_primitive_MarkdownField(null=True, blank=True, )
     prognosisReference = models.ManyToManyField("FHIR_RiskAssessment", related_name="ClinicalAssessment_prognosisReference", blank=True)
+                            #skipping Reference(Any) for field supportingInfo as ClinicalAssessment supportingInfo not in referenceAny_targets
 
 class FHIR_ClinicalAssessment_identifier(FHIR_GP_Identifier):
     ClinicalAssessment = models.ForeignKey(FHIR_ClinicalAssessment, related_name='ClinicalAssessment_identifier', null=False, on_delete=models.CASCADE)

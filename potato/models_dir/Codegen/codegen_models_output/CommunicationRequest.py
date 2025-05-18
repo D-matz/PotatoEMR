@@ -6,6 +6,7 @@ from ..FHIR_DataTypes.FHIR_metadata import *
 from ..FHIR_DataTypes.FHIR_primitive import *
 
 class FHIR_CommunicationRequest(models.Model):
+                            #skipping Reference(Any) for field basedOn as CommunicationRequest basedOn not in referenceAny_targets
     replaces = models.ManyToManyField("FHIR_CommunicationRequest", related_name="CommunicationRequest_replaces", blank=True)
     groupIdentifier = models.OneToOneField("FHIR_GP_Identifier", related_name='CommunicationRequest_groupIdentifier', null=True, blank=True, on_delete=models.SET_NULL)
     class StatusChoices(models.TextChoices): DRAFT = 'draft', 'Draft'; ACTIVE = 'active', 'Active'; ON_HOLD = 'on-hold', 'On-hold'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; ENDED = 'ended', 'Ended'; COMPLETED = 'completed', 'Completed'; REVOKED = 'revoked', 'Revoked'; UNKNOWN = 'unknown', 'Unknown'; 
@@ -20,6 +21,7 @@ class FHIR_CommunicationRequest(models.Model):
     doNotPerform = FHIR_primitive_BooleanField(null=True, blank=True, )
     subject_Patient = models.ForeignKey("FHIR_Patient", related_name="CommunicationRequest_subject", null=True, blank=True, on_delete=models.SET_NULL)
     subject_Group = models.ForeignKey("FHIR_Group", related_name="CommunicationRequest_subject", null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field about as CommunicationRequest about not in referenceAny_targets
     encounter = models.ForeignKey("FHIR_Encounter", related_name="CommunicationRequest_encounter", null=True, blank=True, on_delete=models.SET_NULL)
     occurrence_dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
     occurrence_Period = models.OneToOneField("FHIR_GP_Period", related_name='CommunicationRequest_occurrence_Period', null=True, blank=True, on_delete=models.SET_NULL)
@@ -69,6 +71,7 @@ class FHIR_CommunicationRequest_medium(models.Model):
 class FHIR_CommunicationRequest_payload(models.Model):
     CommunicationRequest = models.ForeignKey(FHIR_CommunicationRequest, related_name='CommunicationRequest_payload', null=False, on_delete=models.CASCADE)
     content_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='CommunicationRequest_payload_content_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field content_Reference as CommunicationRequest content_Reference not in referenceAny_targets
     BINDING_content_CodeableConcept = "TODO"
     content_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_content_CodeableConcept}, related_name='CommunicationRequest_payload_content_CodeableConcept', blank=True)
     content_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)

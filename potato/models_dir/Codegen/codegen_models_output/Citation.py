@@ -77,6 +77,7 @@ class FHIR_Citation_relatesTo(models.Model):
     target_uri = FHIR_primitive_URIField(null=True, blank=True, )
     target_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='Citation_relatesTo_target_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
     target_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
+                            #skipping Reference(Any) for field target_Reference as Citation target_Reference not in referenceAny_targets
     target_markdown = FHIR_primitive_MarkdownField(null=True, blank=True, )
 
 class FHIR_Citation_citedArtifact(models.Model):
@@ -147,6 +148,7 @@ class FHIR_Citation_citedArtifact_relatesTo(models.Model):
     target_uri = FHIR_primitive_URIField(null=True, blank=True, )
     target_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='Citation_citedArtifact_relatesTo_target_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
     target_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
+                            #skipping Reference(Any) for field target_Reference as Citation target_Reference not in referenceAny_targets
 
 class FHIR_Citation_citedArtifact_relatesTo_classifier(models.Model):
     Citation_citedArtifact_relatesTo = models.ForeignKey(FHIR_Citation_citedArtifact_relatesTo, related_name='Citation_citedArtifact_relatesTo_classifier', null=False, on_delete=models.CASCADE)

@@ -57,6 +57,7 @@ class FHIR_Procedure(models.Model):
     report_DiagnosticReport = models.ManyToManyField("FHIR_DiagnosticReport", related_name="Procedure_report", blank=True)
     report_DocumentReference = models.ManyToManyField("FHIR_DocumentReference", related_name="Procedure_report", blank=True)
     report_Composition = models.ManyToManyField("FHIR_Composition", related_name="Procedure_report", blank=True)
+                            #skipping Reference(Any) for field supportingInfo as Procedure supportingInfo not in referenceAny_targets
 
 class FHIR_Procedure_identifier(FHIR_GP_Identifier):
     Procedure = models.ForeignKey(FHIR_Procedure, related_name='Procedure_identifier', null=False, on_delete=models.CASCADE)

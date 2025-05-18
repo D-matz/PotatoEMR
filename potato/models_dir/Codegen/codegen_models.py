@@ -98,6 +98,16 @@ default_strs = {
     "FHIR_Patient": "patient_names = [name.text for name in self.Patient_name.all() if name.text]; return ', '.join(patient_names) if patient_names else 'Unnamed Patient'"
 }
 
+#Reference(Any) can supposedly reference any FHIR resource
+#but I don't want to use generic foreign key
+#so instead of Any, FHIR_List item has a set of references it can use
+referenceAny_targets = {
+    "List": {
+        "item": ["Device", "Group", "Patient", "Practitioner"],
+        "subject": ["CareTeam", "Device", "Group", "Patient", "Practitioner", "PractitionerRole"]
+    }
+}
+
 def elementArray_to_ModelString(element_array, FHIR_Resource_name):
     #print("call with num elements", len(element_array))
     this_model_lines = ""
@@ -229,13 +239,21 @@ class FHIR_{"_".join(id_split)}({use_type_model}):
                 #not going to do anything with Reference(<no target resource here)
                 if 'targetProfile' in field['type'][0]:
                     reference_targets =  field['type'][0]['targetProfile']
+                    if FHIR_Resource_name in referenceAny_targets and field_name in referenceAny_targets[FHIR_Resource_name]:
+                        reference_targets = referenceAny_targets[FHIR_Resource_name][field_name]
                     for ref_target in reference_targets:
                         model_target = ref_target.replace("http://hl7.org/fhir/StructureDefinition/", "")
-                        if model_target == "Resource": continue #skip "Any" fields that can be any fhir resource
-                        ref_field_name = field_name + "_" + model_target #add model target in case field can be actor_Patient, actor_Group, etc
+                        if model_target == "Resource":
+                            this_model_lines += f'''
+                            #skipping Reference(Any) for field {field_name} as {FHIR_Resource_name} {field_name} not in referenceAny_targets'''
+                            continue #skip "Any" fields that can be any fhir resource
+                        ref_field_name = field_name + "_" + model_target
+                        #add model target in case field can be actor_Patient, actor_Group, etc
                         if len(reference_targets) == 1:
-                            ref_field_name = field_name #dumb looking to have actor_Patient if actor can only be Patient, then just actor is good
+                            ref_field_name = field_name
+                            #dumb looking to have actor_Patient if actor can only be Patient, then just actor is good
                         if use_max == '*':
+                            print("related_name", related_name)
                             this_model_lines += f'''
     {ref_field_name} = models.ManyToManyField("FHIR_{model_target}", related_name="{related_name}", blank=True)'''
                         else:

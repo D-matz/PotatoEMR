@@ -6,6 +6,8 @@ from ..FHIR_DataTypes.FHIR_metadata import *
 from ..FHIR_DataTypes.FHIR_primitive import *
 
 class FHIR_RequestOrchestration(models.Model):
+                            #skipping Reference(Any) for field basedOn as RequestOrchestration basedOn not in referenceAny_targets
+                            #skipping Reference(Any) for field replaces as RequestOrchestration replaces not in referenceAny_targets
     groupIdentifier = models.OneToOneField("FHIR_GP_Identifier", related_name='RequestOrchestration_groupIdentifier', null=True, blank=True, on_delete=models.SET_NULL)
     class StatusChoices(models.TextChoices): DRAFT = 'draft', 'Draft'; ACTIVE = 'active', 'Active'; ON_HOLD = 'on-hold', 'On-hold'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; ENDED = 'ended', 'Ended'; COMPLETED = 'completed', 'Completed'; REVOKED = 'revoked', 'Revoked'; UNKNOWN = 'unknown', 'Unknown'; 
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
@@ -92,6 +94,7 @@ class FHIR_RequestOrchestration_action(models.Model):
     precheckBehavior = FHIR_primitive_CodeField(choices=PrecheckbehaviorChoices.choices, null=True, blank=True, )
     class CardinalitybehaviorChoices(models.TextChoices): SINGLE = 'single', 'Single'; MULTIPLE = 'multiple', 'Multiple'; 
     cardinalityBehavior = FHIR_primitive_CodeField(choices=CardinalitybehaviorChoices.choices, null=True, blank=True, )
+                            #skipping Reference(Any) for field resource as RequestOrchestration resource not in referenceAny_targets
     definition_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
     definition_uri = FHIR_primitive_URIField(null=True, blank=True, )
     transform = FHIR_primitive_CanonicalField(null=True, blank=True, )

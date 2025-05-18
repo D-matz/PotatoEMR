@@ -53,6 +53,7 @@ class FHIR_GenomicStudy_analysis(models.Model):
     instantiatesCanonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
     instantiatesUri = FHIR_primitive_URIField(null=True, blank=True, )
     title = FHIR_primitive_StringField(null=True, blank=True, )
+                            #skipping Reference(Any) for field focus as GenomicStudy focus not in referenceAny_targets
     specimen = models.ManyToManyField("FHIR_Specimen", related_name="GenomicStudy_analysis_specimen", blank=True)
     date = FHIR_primitive_DateTimeField(null=True, blank=True, )
     protocolPerformed_Procedure = models.ForeignKey("FHIR_Procedure", related_name="GenomicStudy_analysis_protocolPerformed", null=True, blank=True, on_delete=models.SET_NULL)

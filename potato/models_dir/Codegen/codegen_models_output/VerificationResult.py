@@ -6,6 +6,7 @@ from ..FHIR_DataTypes.FHIR_metadata import *
 from ..FHIR_DataTypes.FHIR_primitive import *
 
 class FHIR_VerificationResult(models.Model):
+                            #skipping Reference(Any) for field target as VerificationResult target not in referenceAny_targets
     BINDING_need = "TODO"
     need_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_need}, related_name='VerificationResult_need', blank=True)
     need_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)

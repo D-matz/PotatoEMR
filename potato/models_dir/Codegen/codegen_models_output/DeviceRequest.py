@@ -6,6 +6,7 @@ from ..FHIR_DataTypes.FHIR_metadata import *
 from ..FHIR_DataTypes.FHIR_primitive import *
 
 class FHIR_DeviceRequest(models.Model):
+                            #skipping Reference(Any) for field basedOn as DeviceRequest basedOn not in referenceAny_targets
     replaces = models.ManyToManyField("FHIR_DeviceRequest", related_name="DeviceRequest_replaces", blank=True)
     groupIdentifier = models.OneToOneField("FHIR_GP_Identifier", related_name='DeviceRequest_groupIdentifier', null=True, blank=True, on_delete=models.SET_NULL)
     class StatusChoices(models.TextChoices): DRAFT = 'draft', 'Draft'; ACTIVE = 'active', 'Active'; ON_HOLD = 'on-hold', 'On-hold'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; ENDED = 'ended', 'Ended'; COMPLETED = 'completed', 'Completed'; REVOKED = 'revoked', 'Revoked'; UNKNOWN = 'unknown', 'Unknown'; 
@@ -50,6 +51,7 @@ class FHIR_DeviceRequest(models.Model):
     asNeededFor_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     insurance_Coverage = models.ManyToManyField("FHIR_Coverage", related_name="DeviceRequest_insurance", blank=True)
     insurance_ClaimResponse = models.ManyToManyField("FHIR_ClaimResponse", related_name="DeviceRequest_insurance", blank=True)
+                            #skipping Reference(Any) for field supportingInfo as DeviceRequest supportingInfo not in referenceAny_targets
     relevantHistory = models.ManyToManyField("FHIR_Provenance", related_name="DeviceRequest_relevantHistory", blank=True)
 
 class FHIR_DeviceRequest_identifier(FHIR_GP_Identifier):

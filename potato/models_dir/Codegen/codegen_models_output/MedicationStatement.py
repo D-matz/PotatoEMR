@@ -34,6 +34,7 @@ class FHIR_MedicationStatement(models.Model):
     informationSource_RelatedPerson = models.ManyToManyField("FHIR_RelatedPerson", related_name="MedicationStatement_informationSource", blank=True)
     informationSource_Organization = models.ManyToManyField("FHIR_Organization", related_name="MedicationStatement_informationSource", blank=True)
     informationSource_Group = models.ManyToManyField("FHIR_Group", related_name="MedicationStatement_informationSource", blank=True)
+                            #skipping Reference(Any) for field derivedFrom as MedicationStatement derivedFrom not in referenceAny_targets
     relatedClinicalInformation_Observation = models.ManyToManyField("FHIR_Observation", related_name="MedicationStatement_relatedClinicalInformation", blank=True)
     relatedClinicalInformation_Condition = models.ManyToManyField("FHIR_Condition", related_name="MedicationStatement_relatedClinicalInformation", blank=True)
     renderedDosageInstruction = FHIR_primitive_MarkdownField(null=True, blank=True, )

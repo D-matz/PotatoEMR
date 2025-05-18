@@ -48,6 +48,7 @@ class FHIR_EvidenceVariable_relatesTo(models.Model):
     target_uri = FHIR_primitive_URIField(null=True, blank=True, )
     target_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='EvidenceVariable_relatesTo_target_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
     target_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
+                            #skipping Reference(Any) for field target_Reference as EvidenceVariable target_Reference not in referenceAny_targets
     target_markdown = FHIR_primitive_MarkdownField(null=True, blank=True, )
 
 class FHIR_EvidenceVariable_definitionModifier(models.Model):
@@ -62,6 +63,7 @@ class FHIR_EvidenceVariable_definitionModifier(models.Model):
     value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='EvidenceVariable_definitionModifier_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
     value_Range = models.OneToOneField("FHIR_GP_Range", related_name='EvidenceVariable_definitionModifier_value_Range', null=True, blank=True, on_delete=models.SET_NULL)
     value_Period = models.OneToOneField("FHIR_GP_Period", related_name='EvidenceVariable_definitionModifier_value_Period', null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field value_Reference as EvidenceVariable value_Reference not in referenceAny_targets
     value_uri = FHIR_primitive_URIField(null=True, blank=True, )
 
 class FHIR_EvidenceVariable_category(models.Model):

@@ -12,6 +12,7 @@ class FHIR_MessageHeader(models.Model):
     BINDING_reason = "TODO"
     reason_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_reason}, related_name='MessageHeader_reason', blank=True)
     reason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+                            #skipping Reference(Any) for field focus as MessageHeader focus not in referenceAny_targets
     definition = FHIR_primitive_CanonicalField(null=True, blank=True, )
 
 class FHIR_MessageHeader_destination(models.Model):

@@ -20,6 +20,7 @@ class FHIR_NutritionOrder(models.Model):
     subject_Patient = models.ForeignKey("FHIR_Patient", related_name="NutritionOrder_subject", null=True, blank=True, on_delete=models.SET_NULL)
     subject_Group = models.ForeignKey("FHIR_Group", related_name="NutritionOrder_subject", null=True, blank=True, on_delete=models.SET_NULL)
     encounter = models.ForeignKey("FHIR_Encounter", related_name="NutritionOrder_encounter", null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field supportingInformation as NutritionOrder supportingInformation not in referenceAny_targets
     dateTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
     requester_Practitioner = models.ForeignKey("FHIR_Practitioner", related_name="NutritionOrder_requester", null=True, blank=True, on_delete=models.SET_NULL)
     requester_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="NutritionOrder_requester", null=True, blank=True, on_delete=models.SET_NULL)

@@ -132,6 +132,7 @@ class FHIR_ExplanationOfBenefit_supportingInfo(models.Model):
     value_string = FHIR_primitive_StringField(null=True, blank=True, )
     value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='ExplanationOfBenefit_supportingInfo_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
     value_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='ExplanationOfBenefit_supportingInfo_value_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field value_Reference as ExplanationOfBenefit value_Reference not in referenceAny_targets
     value_Identifier = models.OneToOneField("FHIR_GP_Identifier", related_name='ExplanationOfBenefit_supportingInfo_value_Identifier', null=True, blank=True, on_delete=models.SET_NULL)
     reason = models.OneToOneField("FHIR_GP_Coding", related_name='ExplanationOfBenefit_supportingInfo_reason', null=True, blank=True, on_delete=models.SET_NULL)
 

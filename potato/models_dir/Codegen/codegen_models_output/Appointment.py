@@ -19,6 +19,7 @@ class FHIR_Appointment(models.Model):
     priority_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     description = FHIR_primitive_StringField(null=True, blank=True, )
     replaces = models.ManyToManyField("FHIR_Appointment", related_name="Appointment_replaces", blank=True)
+                            #skipping Reference(Any) for field supportingInformation as Appointment supportingInformation not in referenceAny_targets
     previousAppointment = models.ForeignKey("FHIR_Appointment", related_name="Appointment_previousAppointment", null=True, blank=True, on_delete=models.SET_NULL)
     originatingAppointment = models.ForeignKey("FHIR_Appointment", related_name="Appointment_originatingAppointment", null=True, blank=True, on_delete=models.SET_NULL)
     start = FHIR_primitive_InstantField(null=True, blank=True, )

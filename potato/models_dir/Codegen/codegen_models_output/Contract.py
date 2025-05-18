@@ -23,6 +23,7 @@ class FHIR_Contract(models.Model):
     BINDING_expirationType = "TODO"
     expirationType_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_expirationType}, related_name='Contract_expirationType', blank=True)
     expirationType_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+                            #skipping Reference(Any) for field subject as Contract subject not in referenceAny_targets
     authority = models.ManyToManyField("FHIR_Organization", related_name="Contract_authority", blank=True)
     domain = models.ManyToManyField("FHIR_Location", related_name="Contract_domain", blank=True)
     site = models.ManyToManyField("FHIR_Location", related_name="Contract_site", blank=True)
@@ -39,9 +40,11 @@ class FHIR_Contract(models.Model):
     BINDING_topic_CodeableConcept = "TODO"
     topic_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_topic_CodeableConcept}, related_name='Contract_topic_CodeableConcept', blank=True)
     topic_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+                            #skipping Reference(Any) for field topic_Reference as Contract topic_Reference not in referenceAny_targets
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='Contract_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+                            #skipping Reference(Any) for field supportingInfo as Contract supportingInfo not in referenceAny_targets
     relevantHistory = models.ManyToManyField("FHIR_Provenance", related_name="Contract_relevantHistory", blank=True)
     legallyBinding_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='Contract_legallyBinding_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
     legallyBinding_Reference_Composition = models.ForeignKey("FHIR_Composition", related_name="Contract_legallyBinding_Reference", null=True, blank=True, on_delete=models.SET_NULL)
@@ -87,6 +90,7 @@ class FHIR_Contract_term(models.Model):
     BINDING_topic_CodeableConcept = "TODO"
     topic_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_topic_CodeableConcept}, related_name='Contract_term_topic_CodeableConcept', blank=True)
     topic_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+                            #skipping Reference(Any) for field topic_Reference as Contract topic_Reference not in referenceAny_targets
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='Contract_term_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
@@ -112,6 +116,7 @@ class FHIR_Contract_term_securityLabel_control(FHIR_GP_Coding):
 
 class FHIR_Contract_term_offer(models.Model):
     Contract_term = models.ForeignKey(FHIR_Contract_term, related_name='Contract_term_offer', null=False, on_delete=models.CASCADE)
+                            #skipping Reference(Any) for field topic as Contract topic not in referenceAny_targets
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='Contract_term_offer_type', blank=True)
     type_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
@@ -154,6 +159,7 @@ class FHIR_Contract_term_offer_answer(models.Model):
     value_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='Contract_term_offer_answer_value_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
     value_Coding = models.OneToOneField("FHIR_GP_Coding", related_name='Contract_term_offer_answer_value_Coding', null=True, blank=True, on_delete=models.SET_NULL)
     value_Quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Contract_term_offer_answer_value_Quantity', null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field value_Reference as Contract value_Reference not in referenceAny_targets
 
 class FHIR_Contract_term_offer_linkId(models.Model):
     Contract_term_offer = models.ForeignKey(FHIR_Contract_term_offer, related_name='Contract_term_offer_linkId', null=False, on_delete=models.CASCADE)
@@ -170,6 +176,7 @@ class FHIR_Contract_term_asset(models.Model):
     BINDING_scope = "TODO"
     scope_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_scope}, related_name='Contract_term_asset_scope', blank=True)
     scope_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+                            #skipping Reference(Any) for field typeReference as Contract typeReference not in referenceAny_targets
     relationship = models.OneToOneField("FHIR_GP_Coding", related_name='Contract_term_asset_relationship', null=True, blank=True, on_delete=models.SET_NULL)
     condition = FHIR_primitive_StringField(null=True, blank=True, )
     text = FHIR_primitive_StringField(null=True, blank=True, )
@@ -188,6 +195,7 @@ class FHIR_Contract_term_asset_subtype(models.Model):
     
 class FHIR_Contract_term_asset_context(models.Model):
     Contract_term_asset = models.ForeignKey(FHIR_Contract_term_asset, related_name='Contract_term_asset_context', null=False, on_delete=models.CASCADE)
+                            #skipping Reference(Any) for field reference as Contract reference not in referenceAny_targets
     text = FHIR_primitive_StringField(null=True, blank=True, )
 
 class FHIR_Contract_term_asset_context_code(models.Model):
@@ -223,6 +231,7 @@ class FHIR_Contract_term_asset_valuedItem(models.Model):
     BINDING_entity_CodeableConcept = "TODO"
     entity_CodeableConcept_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_entity_CodeableConcept}, related_name='Contract_term_asset_valuedItem_entity_CodeableConcept', blank=True)
     entity_CodeableConcept_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
+                            #skipping Reference(Any) for field entity_Reference as Contract entity_Reference not in referenceAny_targets
     identifier = models.OneToOneField("FHIR_GP_Identifier", related_name='Contract_term_asset_valuedItem_identifier', null=True, blank=True, on_delete=models.SET_NULL)
     effectiveTime = FHIR_primitive_DateTimeField(null=True, blank=True, )
     quantity = models.OneToOneField("FHIR_GP_Quantity", related_name='Contract_term_asset_valuedItem_quantity', null=True, blank=True, on_delete=models.SET_NULL)

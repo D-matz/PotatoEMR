@@ -8,6 +8,7 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 class FHIR_Task(models.Model):
     instantiatesCanonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
     instantiatesUri = FHIR_primitive_URIField(null=True, blank=True, )
+                            #skipping Reference(Any) for field basedOn as Task basedOn not in referenceAny_targets
     groupIdentifier = models.OneToOneField("FHIR_GP_Identifier", related_name='Task_groupIdentifier', null=True, blank=True, on_delete=models.SET_NULL)
     partOf = models.ManyToManyField("FHIR_Task", related_name="Task_partOf", blank=True)
     class StatusChoices(models.TextChoices): DRAFT = 'draft', 'Draft'; REQUESTED = 'requested', 'Requested'; RECEIVED = 'received', 'Received'; ACCEPTED = 'accepted', 'Accepted'; PLUS = '+', '+'; 
@@ -24,6 +25,8 @@ class FHIR_Task(models.Model):
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='Task_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     description = FHIR_primitive_MarkdownField(null=True, blank=True, )
+                            #skipping Reference(Any) for field focus as Task focus not in referenceAny_targets
+                            #skipping Reference(Any) for field for as Task for not in referenceAny_targets
     encounter = models.ForeignKey("FHIR_Encounter", related_name="Task_encounter", null=True, blank=True, on_delete=models.SET_NULL)
     requestedPeriod = models.OneToOneField("FHIR_GP_Period", related_name='Task_requestedPeriod', null=True, blank=True, on_delete=models.SET_NULL)
     executionPeriod = models.OneToOneField("FHIR_GP_Period", related_name='Task_executionPeriod', null=True, blank=True, on_delete=models.SET_NULL)

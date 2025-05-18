@@ -28,6 +28,7 @@ class FHIR_ImmunizationRecommendation_recommendation(models.Model):
     seriesDoses_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     supportingImmunization_Immunization = models.ManyToManyField("FHIR_Immunization", related_name="ImmunizationRecommendation_recommendation_supportingImmunization", blank=True)
     supportingImmunization_ImmunizationEvaluation = models.ManyToManyField("FHIR_ImmunizationEvaluation", related_name="ImmunizationRecommendation_recommendation_supportingImmunization", blank=True)
+                            #skipping Reference(Any) for field supportingPatientInformation as ImmunizationRecommendation supportingPatientInformation not in referenceAny_targets
 
 class FHIR_ImmunizationRecommendation_recommendation_vaccineCode(models.Model):
     ImmunizationRecommendation_recommendation = models.ForeignKey(FHIR_ImmunizationRecommendation_recommendation, related_name='ImmunizationRecommendation_recommendation_vaccineCode', null=False, on_delete=models.CASCADE)

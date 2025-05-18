@@ -28,6 +28,7 @@ class FHIR_DeviceDispense(models.Model):
     receiver_Location = models.ForeignKey("FHIR_Location", related_name="DeviceDispense_receiver", null=True, blank=True, on_delete=models.SET_NULL)
     receiver_PractitionerRole = models.ForeignKey("FHIR_PractitionerRole", related_name="DeviceDispense_receiver", null=True, blank=True, on_delete=models.SET_NULL)
     encounter = models.ForeignKey("FHIR_Encounter", related_name="DeviceDispense_encounter", null=True, blank=True, on_delete=models.SET_NULL)
+                            #skipping Reference(Any) for field supportingInformation as DeviceDispense supportingInformation not in referenceAny_targets
     location = models.ForeignKey("FHIR_Location", related_name="DeviceDispense_location", null=True, blank=True, on_delete=models.SET_NULL)
     BINDING_type = "TODO"
     type_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_type}, related_name='DeviceDispense_type', blank=True)

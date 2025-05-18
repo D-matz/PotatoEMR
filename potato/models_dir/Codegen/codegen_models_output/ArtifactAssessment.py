@@ -8,6 +8,7 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 class FHIR_ArtifactAssessment(models.Model):
     title = FHIR_primitive_StringField(null=True, blank=True, )
     citeAs = FHIR_primitive_MarkdownField(null=True, blank=True, )
+                            #skipping Reference(Any) for field artifact_Reference as ArtifactAssessment artifact_Reference not in referenceAny_targets
     artifact_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
     artifact_uri = FHIR_primitive_URIField(null=True, blank=True, )
     date = FHIR_primitive_DateTimeField(null=True, blank=True, )
@@ -29,6 +30,7 @@ class FHIR_ArtifactAssessment_relatesTo(models.Model):
     target_uri = FHIR_primitive_URIField(null=True, blank=True, )
     target_Attachment = models.OneToOneField("FHIR_GP_Attachment", related_name='ArtifactAssessment_relatesTo_target_Attachment', null=True, blank=True, on_delete=models.SET_NULL)
     target_canonical = FHIR_primitive_CanonicalField(null=True, blank=True, )
+                            #skipping Reference(Any) for field target_Reference as ArtifactAssessment target_Reference not in referenceAny_targets
     target_markdown = FHIR_primitive_MarkdownField(null=True, blank=True, )
 
 class FHIR_ArtifactAssessment_content(models.Model):

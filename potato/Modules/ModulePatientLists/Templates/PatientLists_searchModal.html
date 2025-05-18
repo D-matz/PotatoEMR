@@ -1,0 +1,30 @@
+<div class="container mt-4 p-4 rounded-3 bg-body" style="height: 85vh; overflow-y: auto">
+    <div class="d-flex flex-column h-100 position-relative">
+        <!-- Close button in top right -->
+        <button type="button" class="btn-close position-absolute top-0 end-0 m-2" aria-label="Close"
+        data-bs-dismiss="modal" aria-label="Close"></button>
+        
+        <div class="px-2 py-0 mt-2 me-4">
+            <form method="post"
+            hx-post="{% url 'SearchPatient' result_template='PatientLists_searchResult.html' result_args=list_model.id %}"
+            hx-trigger="input delay:100ms"
+            hx-target="#search-results"
+            hx-push-url="false">
+                {% csrf_token %}
+                <div class="d-flex flex-row flex-wrap w-100 gap-1">
+                {% for field in form %}
+                <span>
+                    {{ field.label_tag }}
+                    {{ field }}
+                </span>
+                {% endfor %}
+                </div>
+            </form>
+        </div>
+        
+        <div class="px-2 py-0 mt-2 overflow-y-auto flex-grow-1" id="search-results-container">
+            <div id="search-results">
+            </div>
+        </div>
+    </div>    
+</div>

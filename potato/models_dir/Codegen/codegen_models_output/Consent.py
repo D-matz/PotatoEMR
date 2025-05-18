@@ -67,6 +67,7 @@ class FHIR_Consent_regulatoryBasis(models.Model):
     
 class FHIR_Consent_policyBasis(models.Model):
     Consent = models.ForeignKey(FHIR_Consent, related_name='Consent_policyBasis', null=False, on_delete=models.CASCADE)
+                            #skipping Reference(Any) for field reference as Consent reference not in referenceAny_targets
     uri = FHIR_primitive_URIField(null=True, blank=True, )
 
 class FHIR_Consent_verification(models.Model):
@@ -134,3 +135,4 @@ class FHIR_Consent_provision_data(models.Model):
     Consent_provision = models.ForeignKey(FHIR_Consent_provision, related_name='Consent_provision_data', null=False, on_delete=models.CASCADE)
     class MeaningChoices(models.TextChoices): INSTANCE = 'instance', 'Instance'; RELATED = 'related', 'Related'; DEPENDENTS = 'dependents', 'Dependents'; AUTHOREDBY = 'authoredby', 'Authoredby'; 
     meaning = FHIR_primitive_CodeField(choices=MeaningChoices.choices, null=True, blank=True, )
+                            #skipping Reference(Any) for field reference as Consent reference not in referenceAny_targets
