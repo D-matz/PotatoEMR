@@ -12,6 +12,8 @@ from potato.models import (
     FHIR_GP_HumanName_Given,
     FHIR_Practitioner, 
     FHIR_Practitioner_name,
+    FHIR_List,
+    FHIR_List_entry,
 )
 import os
 import datetime
@@ -57,7 +59,7 @@ class Command(BaseCommand):
                 use=FHIR_GP_HumanName.NameUseChoices.OFFICIAL,
                 family='Tinúviel'
             )
-            
+
 
         #FHIR_Patient.objects.all().delete() #maybe add identifiers to add/delete with at some point
 
@@ -94,12 +96,18 @@ class Command(BaseCommand):
 
             nickname = patient_data['photo'].split('.')[0]
             if nickname == "howardshore":
-                nickname = "Concerning Hobbits"
-            nickname_model = FHIR_Patient_name.objects.create(
-                text = nickname,
-                Patient = patient_model,
-                use = FHIR_GP_HumanName.NameUseChoices.NICKNAME
-            )
+                nickname = "musician"
+            if nickname == "gandalf":
+                nicknames = ["gandalf", "the grey pilgrim", "mithrandir"]
+            else:
+                nicknames = [nickname]
+
+            for nickname in nicknames:
+                nickname_model = FHIR_Patient_name.objects.create(
+                    text = nickname,
+                    Patient = patient_model,
+                    use = FHIR_GP_HumanName.NameUseChoices.NICKNAME
+                )
 
             address_model = FHIR_Patient_address.objects.create(
                 Patient=patient_model,
