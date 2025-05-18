@@ -66,6 +66,11 @@ def searchModal(request, list_id):
         "form": PatientSearchForm()
     })
 
+def remove_patient(request, list_id, patient_id):
+    list_model = get_object_or_404(FHIR_List, id=list_id)
+    FHIR_List_entry.objects.filter(List=list_model, item_Patient=patient_id).delete()
+    return render_patient_list(request, list_model)
+
 def add_patient(request, list_id, patient_id):
     list_model = get_object_or_404(FHIR_List, id=list_id)
     patient = get_object_or_404(FHIR_Patient, id=patient_id)

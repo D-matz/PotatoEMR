@@ -62,6 +62,7 @@ urlpatterns = [
     path("patient-lists/saved-title/<int:list_id>", PatientLists_view.saved_title, name="PatientLists_savedTitle"),
     path("patient-lists/delete/<int:list_id>", PatientLists_view.delete_list, name="PatientLists_delete"),
     path("patient-lists/searchModal/<int:list_id>", PatientLists_view.searchModal, name="PatientLists_searchModal"),
+    path("patient-lists/remove-patient/<int:list_id>/<int:patient_id>", PatientLists_view.remove_patient, name="PatientLists_removePatient"),
     path("patient-lists/add-patient/<int:list_id>/<int:patient_id>", PatientLists_view.add_patient, name="PatientLists_addPatient"),
 
     path("patient/<int:patient_id>/encounter/<int:encounter_id>", AppointmentEncounter_view.overview, name="AppointmentEncounter_overview"),
