@@ -56,7 +56,7 @@
 
       <div class="ms-auto d-flex align-items-center pe-3">
         <a href="/" class="px-0 px-sm-3">{{ user.get_username }}</a>
-        <a href="{% url 'CommonLogout_index' %}" class="px-0 px-sm-3">Logout</a>
+        <a href="{% url 'CommonLogout_index' %}" hx-boost="false" class="px-0 px-sm-3">Logout</a>
         
 
         <button id="dark-mode-toggle" class="btn btn-link p-0 ms-2"

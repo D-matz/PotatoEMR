@@ -6,7 +6,24 @@
     {% include "common_meta.html" %}
     <link href="{% static 'vendored/bootstrap.min.css' %}" rel="stylesheet">
     <script defer src="{% static 'vendored/bootstrap.bundle.min.js' %}"></script>
-    <script defer src="{% static 'vendored/htmx.min.js' %}"></script>
+    <script defer src="{% static 'vendored/htmx.min.js' %}"></script>    
+    <script defer>
+      function togglePassword(passwordFieldId, eyeOpenId, eyeClosedId) {
+        const passwordField = document.getElementById(passwordFieldId);
+        const eyeOpen = document.getElementById(eyeOpenId);
+        const eyeClosed = document.getElementById(eyeClosedId);
+        
+        if (passwordField.type === "password") {
+          passwordField.type = "text";
+          eyeOpen.style.display = "none";
+          eyeClosed.style.display = "block";
+        } else {
+          passwordField.type = "password";
+          eyeOpen.style.display = "block";
+          eyeClosed.style.display = "none";
+        }
+      }
+    </script>
 </head>
 <body>
   <div style="background-image: url('{% static '/images/farm.jpeg' %}'); background-size: cover;">
