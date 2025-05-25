@@ -73,7 +73,7 @@
           <tbody>
             {% for data in data_list %}
               {% with patient=data.patient conditions=data.conditions %}
-                <tr style="cursor: pointer;" hx-get="{% url 'PatientOverview' patient.id %}" hx-target="body">
+                <tr style="cursor: pointer;" hx-get="{% url 'PatientOverview' patient.id %}" hx-target="body" hx-push-url="true">
                   <td>
                     {% if patient.Patient_photo.first and patient.Patient_photo.first.upload_to.url %}
                       <img src="{{ patient.Patient_photo.first.upload_to.url }}" alt="Patient Photo"
