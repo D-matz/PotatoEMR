@@ -42,52 +42,53 @@ def getOrCreateApptEncounter(appt_model):
         return encounter_models.first()
 
 def calendar(request, template, apptInfo):
-    print(apptInfo['Location'], apptInfo['Practitioner'], apptInfo['Date'])
-    if isinstance(apptInfo['Date'], str):
-        chosenDate = datetime.strptime(apptInfo['Date'], "%Y-%m-%d").date()
-    else:
-        chosenDate = apptInfo['Date']
-    next_day = chosenDate + timedelta(days=1)
-    chosenDate_iso = chosenDate.isoformat()
-    chosenDateTmrw_iso = next_day.isoformat()
-
-    appointment_model_list = (FHIR_Appointment.objects
-        .filter(Appointment_participant__actor_Practitioner=apptInfo['Practitioner'])
-        .filter(Appointment_participant__actor_Location=apptInfo['Location'])
-        .filter(
-            Q(start__gte=chosenDate_iso, start__lt=next_day.isoformat()) |
-            Q(end__gte=chosenDateTmrw_iso, end__lt=next_day.isoformat()))
-        .distinct())
-    print("num apts:", len(appointment_model_list))
-
-    sorted_appts = sorted(appointment_model_list, key=lambda appt: datetime.fromisoformat(appt.start))
+    #print(apptInfo['Location'], apptInfo['Practitioner'], apptInfo['Date'])
 
     appt_list = []
-    for appt_model in sorted_appts:
-        encounter_model = getOrCreateApptEncounter(appt_model)
-        print("encounter", encounter_model, encounter_model.id)
-        appt_list_item = {
-            'id': appt_model.id,
-            'patient': str(appt_model.subject_Patient),
-            'patient_id': appt_model.subject_Patient.id,
-            'status': str(appt_model.status),
-            'notes': str(appt_model.Appointment_note.first()),
-            'start': datetime.fromisoformat(appt_model.start).strftime("%H:%M"),
-            'end': datetime.fromisoformat(appt_model.end).strftime("%H:%M"),
-            'encounter_id': encounter_model.id
-        }
-        for participant in appt_model.Appointment_participant.all():
-            practitioner = participant.actor_Practitioner
-            if practitioner: appt_list_item['provider'] = str(practitioner)
-        appt_list.append(appt_list_item)
+    if apptInfo['Practitioner'] is not None:
+        if isinstance(apptInfo['Date'], str):
+            chosenDate = datetime.strptime(apptInfo['Date'], "%Y-%m-%d").date()
+        else:
+            chosenDate = apptInfo['Date']
+        next_day = chosenDate + timedelta(days=1)
+        chosenDate_iso = chosenDate.isoformat()
+        chosenDateTmrw_iso = next_day.isoformat()
 
-    #print(appt_list)
+        appointment_model_list = (FHIR_Appointment.objects
+            .filter(Appointment_participant__actor_Practitioner=apptInfo['Practitioner'])
+            .filter(Appointment_participant__actor_Location=apptInfo['Location'])
+            .filter(
+                Q(start__gte=chosenDate_iso, start__lt=next_day.isoformat()) |
+                Q(end__gte=chosenDateTmrw_iso, end__lt=next_day.isoformat()))
+            .distinct())
+        print("num apts:", len(appointment_model_list))
+
+        sorted_appts = sorted(appointment_model_list, key=lambda appt: datetime.fromisoformat(appt.start))
+
+        for appt_model in sorted_appts:
+            encounter_model = getOrCreateApptEncounter(appt_model)
+            print("encounter", encounter_model, encounter_model.id)
+            appt_list_item = {
+                'id': appt_model.id,
+                'patient': str(appt_model.subject_Patient),
+                'patient_id': appt_model.subject_Patient.id,
+                'status': str(appt_model.status),
+                'notes': str(appt_model.Appointment_note.first()),
+                'start': datetime.fromisoformat(appt_model.start).strftime("%H:%M"),
+                'end': datetime.fromisoformat(appt_model.end).strftime("%H:%M"),
+                'encounter_id': encounter_model.id
+            }
+            for participant in appt_model.Appointment_participant.all():
+                practitioner = participant.actor_Practitioner
+                if practitioner: appt_list_item['provider'] = str(practitioner)
+            appt_list.append(appt_list_item)
     return render(request, template, {'ApptClndrForm': ApptClndrForm(apptInfo), 'appt_list': appt_list})
 
 def calendar_whole(request):
     if not FHIR_Location.objects.exists(): return HttpResponse("error no locations saved")
     default_location = FHIR_Location.objects.first()
-    if default_location is None: practitioner_id = None
+    if default_location is None:
+        practitioner_id = None
     else:
         practitioner_models =  FHIR_Practitioner.objects.filter(PractitionerRole_practitioner__location=default_location.id)
         if not practitioner_models.exists(): practitioner_id = None
@@ -101,14 +102,19 @@ def calendar_whole(request):
 
 
 def calendar_partial(request):
+    print("calendar_partial", request.GET)
     #receive form, they may change to new location or new practitioner
     #should only show practitioners from the chosen location
     #so if they changed location, set practitioner field to first practitioner for that location
     chosen_location_id = request.GET['Location']
-    chosen_practitioner_id = request.GET['Practitioner']
+    if 'Practitioner' not in request.GET:
+        chosen_practitioner_id = None
+    else:
+        chosen_practitioner_id = request.GET['Practitioner']
     chosen_location_practitioners = FHIR_Practitioner.objects.filter(PractitionerRole_practitioner__location=chosen_location_id).distinct()
-    if FHIR_Practitioner.objects.get(id=chosen_practitioner_id) not in chosen_location_practitioners:
-        chosen_practitioner_id = chosen_location_practitioners.first().id
+    if chosen_practitioner_id == None or FHIR_Practitioner.objects.get(id=chosen_practitioner_id) not in chosen_location_practitioners:
+        if chosen_location_practitioners.count() != 0:
+            chosen_practitioner_id = chosen_location_practitioners.first().id
     apptInfo = {
         'Date': request.GET['Date'],
         'Location': chosen_location_id,

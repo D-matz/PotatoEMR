@@ -21,9 +21,12 @@ class ApptClndrForm(forms.Form):
         practitioners = FHIR_Practitioner.objects.filter(
             PractitionerRole_practitioner__location=args[0].get('Location')
         ).distinct()
-
-        self.fields['Practitioner'] = forms.ModelChoiceField(
-            queryset=practitioners,
-            widget=forms.Select(),
-            empty_label=None,
-        )
+        
+        if practitioners.exists():
+            self.fields['Practitioner'] = forms.ModelChoiceField(
+                queryset=practitioners,
+                widget=forms.Select(),
+                empty_label=None,
+            )
+        else:
+            self.add_error('Location', f'No practitioners working at this location')
