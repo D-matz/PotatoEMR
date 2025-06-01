@@ -27,14 +27,13 @@
         </a>
       </li>
       <li id="p_allergy" class="nav-item"><a href="{% url 'AllergyIntoleranceBootstrap_overview' patient.id %}" class="nav-link">Allergy/Intolerance</a></li>
-      <li id="p_results" class="nav-item"><a class="nav-link" href="#">Chart review todo</a></li>
-      <li id="p_results1" class="nav-item"><a class="nav-link" href="#">Encounter</a></li>
-      <li id="p_results1" class="nav-item"><a class="nav-link" href="#">Family history todo</a></li>
+      <li id="p_results1" class="nav-item"><a class="nav-link" href="#">Encounters todo</a></li>
+      <li id="p_results1" class="nav-item"><a class="nav-link" href="#">Notes todo</a></li>
       <li id="p_growth" class="nav-item"><a href="{% url 'GrowthChart_overview' patient.id %}" class="nav-link">Growth chart</a></li>
       <li id="p_immunization" class="nav-item"><a href="{% url 'Immunizations_overview' patient.id %}" class="nav-link">Immunizations</a></li>
-      <li id="p_MAR" class="nav-item"><a class="nav-link" href="#">Medications todo</a></li>
+      <li id="p_MAR" class="nav-item"><a class="nav-link" href="{% url 'Medication_table' patient.id %}">Medications</a></li>
       <li id="p_results3" class="nav-item"><a href="{% url 'ProblemList_overview' patient.id %}" class="nav-link">Problem list</a></li>
-      <li id="p_results4" class="nav-item"><a class="nav-link" href="#">Results todo</a></li>
+      <li id="p_labResults" class="nav-item"><a class="nav-link" href="{% url 'LabResults_table' patient.id %}">Lab results</a></li>
     </ul>
   </div>
 
@@ -46,10 +45,99 @@
 
     <div id="patient-footer-here" class="container-fluid m-0 p-0 w-100">
       <ul class="nav flex-row bg-body">
-        <li id="p_orders5" class="nav-item"><a class="nav-link" href="#">Orders todo</a></li>
-        <li id="p_orders6" class="nav-item"><a class="nav-link" href="#">Diagnoses todo</a></li>
+        <li id="p_orders5" class="nav-item">
+          <a class="nav-link"
+              href="#"
+              data-bs-toggle="modal"
+              data-bs-target="#ordersModal"
+              hx-get="{% url 'Orders_table' patient.id %}"
+              hx-target="#ordersModalBody"
+              hx-push-url="false">
+          Orders
+          </a>
+        </li>
+        <!-- <li id="p_orders6" class="nav-item"><a class="nav-link" href="#">Diagnoses</a></li> -->
       </ul>
     </div>
   </div>
 </div>
+
+<!-- Orders Modal -->
+<div class="modal" id="ordersModal" tabindex="-1" aria-labelledby="ordersModalLabel" aria-hidden="true" data-bs-backdrop="false" style="pointer-events: none;" hx-preserve="true">
+  <div class="modal-dialog modal-dialog-centered" style="pointer-events: auto; width: fit-content; max-width: 95vw;">
+    <div class="modal-content border-5 border-primary-subtle">
+      <div class="modal-header" style="cursor: move;">
+        <h5 class="modal-title" id="ordersModalLabel">Orders</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="ordersModalBody" hx-push-url="false">
+        <!-- Content will be loaded here via HTMX -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('htmx:afterSettle', initDraggableModal);
+document.addEventListener('DOMContentLoaded', initDraggableModal);
+
+function initDraggableModal() {
+  const modal = document.querySelector('#ordersModal .modal-dialog');
+  if (!modal) return;
+  
+  const header = modal.querySelector('.modal-header');
+  
+  let isDragging = false;
+  let currentX;
+  let currentY;
+  let initialX;
+  let initialY;
+
+  let xOffset = Number(modal.dataset.xOffset || 0);
+  let yOffset = Number(modal.dataset.yOffset || 0);
+
+  setTranslate(xOffset, yOffset, modal);
+
+  header.addEventListener('mousedown', dragStart);
+  document.addEventListener('mousemove', drag);
+  document.addEventListener('mouseup', dragEnd);
+
+  function dragStart(e) {
+    initialX = e.clientX - xOffset;
+    initialY = e.clientY - yOffset;
+
+    if (e.target === header || header.contains(e.target)) {
+      isDragging = true;
+      modal.style.userSelect = 'none';  // Only apply to modal instead of whole body
+      modal.style.pointerEvents = 'all'; // Ensure modal remains interactive while dragging
+    }
+  }
+
+  function drag(e) {
+    if (isDragging) {
+      e.preventDefault();
+      currentX = e.clientX - initialX;
+      currentY = e.clientY - initialY;
+      xOffset = currentX;
+      yOffset = currentY;
+
+      // Store current position in dataset
+      modal.dataset.xOffset = xOffset;
+      modal.dataset.yOffset = yOffset;
+
+      setTranslate(currentX, currentY, modal);
+    }
+  }
+
+  function setTranslate(xPos, yPos, el) {
+    el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+  }
+
+  function dragEnd() {
+    isDragging = false;
+    modal.style.userSelect = '';  // Reset user-select
+    modal.style.pointerEvents = ''; // Reset pointer-events
+  }
+}
+</script>
 {% endblock %}

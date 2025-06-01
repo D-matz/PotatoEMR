@@ -24,7 +24,7 @@ class FHIR_MedicationRequest(models.Model):
     class PriorityChoices(models.TextChoices): ROUTINE = 'routine', 'Routine'; URGENT = 'urgent', 'Urgent'; ASAP = 'asap', 'Asap'; STAT = 'stat', 'Stat'; 
     priority = FHIR_primitive_CodeField(choices=PriorityChoices.choices, null=True, blank=True, )
     doNotPerform = FHIR_primitive_BooleanField(null=True, blank=True, )
-    BINDING_medication = "TODO"
+    BINDING_medication = "https://build.fhir.org/valueset-medication-codes.html"
     medication_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_medication}, related_name='MedicationRequest_medication', blank=True)
     medication_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     medication_Medication_ref = models.ForeignKey("FHIR_Medication", related_name="MedicationRequest_medication_Medication", null=True, blank=True, on_delete=models.SET_NULL)

@@ -1,0 +1,13 @@
+{% extends "LabResults_table_row_edit.html" %}
+
+{% block buttons %}
+    <button class="btn btn-sm btn-primary m-1"
+        hx-post="{% url 'LabResults_existing_edit' patient_id=patient.id diagnosticReport_id=report.id %}"
+        hx-include="closest tr">
+        Save
+    </button>
+    <button class="btn btn-sm btn-danger m-1"
+        hx-get="{% url 'LabResults_existing_cancel' patient_id=patient.id diagnosticReport_id=report.id %}">
+        Cancel
+    </button>
+{% endblock %}

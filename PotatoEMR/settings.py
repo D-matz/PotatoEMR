@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.discord',
     'allauth.socialaccount.providers.reddit',
 
-    'django_tomselect',
+    # 'django_tomselect',
     'potato.apps.PotatoConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -51,7 +51,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'django_tomselect.middleware.TomSelectMiddleware',
+    # 'django_tomselect.middleware.TomSelectMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -87,7 +87,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django_tomselect.context_processors.tomselect',
+                # 'django_tomselect.context_processors.tomselect',
             ],
         },
     },

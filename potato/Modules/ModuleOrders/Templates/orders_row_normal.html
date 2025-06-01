@@ -1,0 +1,13 @@
+<tr>
+    <td>{{ med_request.medication_cc.first }}</td>
+    <td>{{ med_request.get_status_display }}</td>
+    <td>{{ med_request.get_priority_display }}</td>
+    <td>{{ med_request.MedicationRequest_note.first.text }}</td>
+    <td>{{ med_request.authoredOn|date:"Y-m-d H:i" }}</td>
+    <td>
+        <button class="btn btn-sm btn-primary m-1"
+                hx-get="{% url 'Orders_medicationRequest_existing_edit' patient_id=patient.id med_request_id=med_request.id %}">
+            Edit
+        </button>
+    </td>        
+</tr>

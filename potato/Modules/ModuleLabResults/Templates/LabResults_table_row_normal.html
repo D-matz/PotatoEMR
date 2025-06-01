@@ -1,0 +1,23 @@
+{% load common_filters %}
+<tr>
+    {% csrf_token %}
+    {% for form in formlist %}
+        {% for field in form %}
+        <td>
+            {% if field.value %}
+
+            {{ field|values_objects }}
+
+            {% else %}
+                -
+            {% endif %}
+        </td>
+        {% endfor %}
+    {% endfor %}
+    <td>
+        <button class="btn btn-sm btn-primary m-1"
+                hx-get="{% url 'LabResults_existing_edit' patient_id=patient.id diagnosticReport_id=report.id %}">
+            Edit
+        </button>
+    </td>
+</tr>

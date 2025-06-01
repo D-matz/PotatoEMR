@@ -16,7 +16,7 @@ class Command(BaseCommand):
         combined_data = json.loads(codings_json) + json.loads(bindings_json)
 
         # Write to file
-        file_path = os.path.join(os.getcwd(), 'CodingsAndBindings.json')
+        file_path = os.path.join(os.getcwd(), 'potato', 'management', 'commands', 'CodingsAndBindings.json')
         with open(file_path, 'w') as f:
             json.dump(combined_data, f, indent=2)
 

@@ -1,0 +1,13 @@
+{% extends "orders_row_edit.html" %}
+
+{% block buttons %}
+    <button class="btn btn-sm btn-primary m-1"
+        hx-post="{% url 'Orders_medicationRequest_existing_edit' patient_id=patient.id med_request_id=med_request.id %}"
+        hx-include="closest tr">
+        Save
+    </button>
+    <button class="btn btn-sm btn-danger m-1"
+        hx-get="{% url 'Orders_medicationRequest_existing_cancel' patient_id=patient.id med_request_id=med_request.id %}">
+        Cancel
+    </button>
+{% endblock %}

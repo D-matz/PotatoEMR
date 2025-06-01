@@ -16,7 +16,7 @@ class FHIR_MedicationDispense(models.Model):
     notPerformedReason_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     notPerformedReason_DetectedIssue_ref = models.ForeignKey("FHIR_DetectedIssue", related_name="MedicationDispense_notPerformedReason_DetectedIssue", null=True, blank=True, on_delete=models.SET_NULL)
     statusChanged = FHIR_primitive_DateTimeField(null=True, blank=True, )
-    BINDING_medication = "TODO"
+    BINDING_medication = "https://build.fhir.org/valueset-medication-codes.html"
     medication_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_medication}, related_name='MedicationDispense_medication', blank=True)
     medication_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     medication_Medication_ref = models.ForeignKey("FHIR_Medication", related_name="MedicationDispense_medication_Medication", null=True, blank=True, on_delete=models.SET_NULL)

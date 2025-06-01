@@ -7,7 +7,6 @@
 #for 0..* or 1..* fields, create a model inherting from the appropriate FHIR_GP_model, with a foreign key to the parent model
 
 from .FHIR_primitive import *
-from .FHIR_specialpurpose import *
 from django.db import models #for fhir_organization
 from decimal import Decimal, InvalidOperation
 from django.core.exceptions import ValidationError

@@ -13,7 +13,7 @@ import decimal
 
 def apply_regex(value, regex, error_msg):
     if value and not re.match(regex, value):
-        raise ValidationError(error_msg)
+        raise ValidationError("FHIR_primitive " + value + " " + error_msg)
     return value
 
 BASE64_REGEX = r'^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$'
@@ -105,7 +105,7 @@ class FHIR_primitive_DecimalField(models.DecimalField):
     #    return apply_regex(value, DECIMAL_REGEX, DECIMAL_ERROR)
 
 
-ID_REGEX = r'^[A-Za-z0-9\-\.]{1,64}$'
+ID_REGEX = r'[A-Za-z0-9\-\.]{1,64}'
 ID_ERROR = "Invalid id format. Must only contain letters, numbers, hyphens, and periods, and be no longer than 64 characters."
 class FHIR_primitive_IdField(models.CharField):
     def __init__(self, *args, **kwargs):
@@ -113,10 +113,16 @@ class FHIR_primitive_IdField(models.CharField):
         super().__init__(*args, **kwargs)
     def clean(self, value, model_instance): return apply_regex(value, ID_REGEX, ID_ERROR)
 
-INSTANT_REGEX = r'^([0-9]{4})(-(0[1-9]|1[0-2]))?(-(0[1-9]|[12][0-9]|3[01]))T([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]|60)(\.[0-9]{1,9})?(Z|([+-])((0[0-9]|1[0-3]):[0-5][0-9]|14:00))$'
+from datetime import datetime
+INSTANT_REGEX = r'([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\.[0-9]{1,9})?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))'
 INSTANT_ERROR = "Invalid instant format. Must match the format: YYYY-MM-DDThh:mm:ss.sss+zz:zz or Z."
 class FHIR_primitive_InstantField(models.CharField):
-    def clean(self, value, model_instance): return apply_regex(value, INSTANT_REGEX, INSTANT_ERROR)
+    def clean(self, value, model_instance):
+        if isinstance(value, str) and value:
+            # datetime form saves as string that doesn't match regex
+            if re.match(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$', value):
+                value = value + ':00Z'
+        return apply_regex(value, INSTANT_REGEX, INSTANT_ERROR)
 
 class FHIR_primitive_SignedIntField(models.IntegerField):
     pass

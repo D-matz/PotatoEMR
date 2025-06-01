@@ -13,7 +13,7 @@ class FHIR_DiagnosticReport(models.Model):
     basedOn_ServiceRequest = models.ManyToManyField("FHIR_ServiceRequest", related_name="DiagnosticReport_basedOn", blank=True)
     class StatusChoices(models.TextChoices): REGISTERED = 'registered', 'Registered'; PARTIAL = 'partial', 'Partial'; PRELIMINARY = 'preliminary', 'Preliminary'; MODIFIED = 'modified', 'Modified'; FINAL = 'final', 'Final'; AMENDED = 'amended', 'Amended'; CORRECTED = 'corrected', 'Corrected'; APPENDED = 'appended', 'Appended'; CANCELLED = 'cancelled', 'Cancelled'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; UNKNOWN = 'unknown', 'Unknown'; 
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
-    BINDING_code = "TODO"
+    BINDING_code = "https://build.fhir.org/valueset-report-codes.html"
     code_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_code}, related_name='DiagnosticReport_code', blank=True)
     code_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     subject_Patient = models.ForeignKey("FHIR_Patient", related_name="DiagnosticReport_subject", null=True, blank=True, on_delete=models.SET_NULL)
@@ -83,7 +83,7 @@ class FHIR_DiagnosticReport_media(models.Model):
 
 class FHIR_DiagnosticReport_conclusionCode(models.Model):
     DiagnosticReport = models.ForeignKey(FHIR_DiagnosticReport, related_name='DiagnosticReport_conclusionCode', null=False, on_delete=models.CASCADE)
-    BINDING_conclusionCode = "TODO"
+    BINDING_conclusionCode = "https://www.hl7.org/fhir/valueset-clinical-findings.html"
     conclusionCode_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_conclusionCode}, related_name='DiagnosticReport_conclusionCode', blank=True)
     conclusionCode_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     conclusionCode_Observation_ref = models.ForeignKey("FHIR_Observation", related_name="DiagnosticReport_conclusionCode_Observation", null=True, blank=True, on_delete=models.SET_NULL)

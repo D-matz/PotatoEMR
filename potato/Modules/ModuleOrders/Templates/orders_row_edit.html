@@ -1,0 +1,32 @@
+<tr>
+    {% csrf_token %}
+    {% for field in med_request_form %}
+    <td>
+        {{ field }}
+        {% if field.errors %}
+        <div class="invalid-feedback d-block">
+            {% for error in field.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </td>
+    {% endfor %}
+    {% for field in note_form %}
+    <td>
+        {{ field }}
+        {% if field.errors %}
+        <div class="invalid-feedback d-block">
+            {% for error in field.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </td>
+    {% endfor %}
+    <td></td> <!-- empty date td as date set on submit automatically -->
+    <td>
+        {% block buttons %}
+        {% endblock %}
+    </td>
+</tr>

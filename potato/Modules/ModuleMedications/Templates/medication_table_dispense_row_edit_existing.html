@@ -1,0 +1,13 @@
+{% extends "medication_table_dispense_row_edit.html" %}
+
+{% block buttons %}
+    <button class="btn btn-sm btn-primary m-1"
+        hx-post="{% url 'Medication_dispense_edit' patient_id=patient.id med_dispense_id=med_dispense.id %}"
+        hx-include="closest tr">
+        Save
+    </button>
+    <button class="btn btn-sm btn-danger m-1"
+        hx-get="{% url 'Medication_dispense_cancel' patient_id=patient.id med_dispense_id=med_dispense.id %}">
+        Cancel
+    </button>
+{% endblock %}

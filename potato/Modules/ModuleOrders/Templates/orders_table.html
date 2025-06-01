@@ -1,0 +1,24 @@
+<button class="btn btn-primary"
+        hx-get="{% url 'Orders_medicationRequest_new' patient_id=patient.id %}"
+        hx-target="#medication-requests-table tbody"
+        hx-swap="afterbegin">
+    Add Medication Request
+</button>
+
+<table class="table" id="medication-requests-table" style="width: 80vw; max-width: 1500px;">
+    <thead>
+        <tr>
+            <th style="width:20%">Medication</th>
+            <th style="width:15%">Status</th>
+            <th style="width:15%">Priority</th>
+            <th style="width:25%">Note</th>
+            <th style="width:15%">Date</th>
+            <th style="width:10%"></th>
+        </tr>
+    </thead>
+    <tbody hx-target="closest tr" hx-swap="outerHTML" style="text-overflow:ellipsis;overflow:hidden">
+    {% for med_request in medication_requests %}
+        {% include "orders_row_normal.html" with med_request=med_request%}
+    {% endfor %}
+    </tbody>
+</table>

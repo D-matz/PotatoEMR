@@ -1,0 +1,30 @@
+{% extends "common_base_patient.html" %}
+
+{% block patientPage %}
+<div id="LabResults" class="m-4 bg-body-secondary p-4" hx-push-url="false">
+    <button class="btn btn-primary m-2"
+    hx-get="{% url 'LabResults_new' patient_id=patient.id %}"
+    hx-target="#diagnostic-reports-table tbody"
+    hx-swap="afterbegin">
+    Record Diagnostic Report
+    </button>
+
+    <table class="table" id="diagnostic-reports-table">
+        <thead>
+            <tr>
+                {% for form in label_formlist %}
+                    {% for field in form %}
+                        <th>{{ field.label }}</th>
+                    {% endfor %}
+                {% endfor %}
+                <th></th><!--edit or save/cancel-->
+            </tr>
+        </thead>
+        <tbody hx-target="closest tr" hx-swap="outerHTML" style="text-overflow:ellipsis;overflow:hidden">
+            {% for report, formlist in report_and_form %}
+                {% include "LabResults_table_row_normal.html" with report=report formlist=formlist %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

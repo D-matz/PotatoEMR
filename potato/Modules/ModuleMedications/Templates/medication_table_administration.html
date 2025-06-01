@@ -1,0 +1,34 @@
+{% extends "medication_tabs.html" %}
+
+{% block tab_list %}
+    {% with active_tab='administration' %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block tab_content %}
+    <button class="btn btn-primary m-2"
+    hx-get="{% url 'Medication_administration_new' patient_id=patient.id %}"
+    hx-target="#medication-administration-table tbody"
+    hx-swap="afterbegin">
+    Record Administered Medication
+    </button>
+
+    <table class="table" id="medication-administration-table">
+        <thead>
+            <tr>
+                {% for form in label_formlist %}
+                    {% for field in form %}
+                        <th>{{ field.label }}</th>
+                    {% endfor %}
+                {% endfor %}
+                <th></th><!--edit or save/cancel-->
+            </tr>
+        </thead>
+        <tbody hx-target="closest tr" hx-swap="outerHTML">
+            {% for medAdmin, formlist in medAdmin_and_form %}
+                {% include "medication_table_administration_row_normal.html" with med_admin=medAdmin formlist=formlist %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

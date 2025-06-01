@@ -23,7 +23,12 @@
             <div class="row mb-2">
                 <label for="{{ allergy_form.code_cc.id_for_label }}" class="col-2 col-form-label-sm p-0">Agent:</label>
                 <div class="col-10">
-                    {{ allergy_form.code_cc }}
+                    <input type="text" list="code_cc_options" id="{{ allergy_form.code_cc.id_for_label }}" name="{{ allergy_form.code_cc.html_name }}" class="form-control" {% if allergy_form.code_cc.value %}value="{{ allergy_form.code_cc.value }}"{% endif %}>
+                    <datalist id="code_cc_options">
+                        {% for choice in allergy_form.code_cc.field.choices %}
+                            <option value="{{ choice.0 }}" label="{{ choice.1 }}"></option>
+                        {% endfor %}
+                    </datalist>
                 </div>
             </div>
             <div class="row">
@@ -95,51 +100,4 @@
             </div>
         {% endif %}
     </div>
-</form>
-
-<script>
-    document.querySelectorAll('.tomselect').forEach(function(el){
-    //  new TomSelect(el, {});
-    });
-</script>
-
-
-
-<style>
-    .fade-me-out.htmx-swapping {
-    opacity: 0;
-    transition: opacity 2s ease-out;
-    }
-
-
-    .ts-dropdown {
-      color: var(--bs-body-color);
-      background-color: var(--bs-body-bg);
-      border-color: var(--bs-border-color);
-    }
-
-
-    .ts-dropdown .option.active {
-      background-color: var(--bs-secondary);
-      color: var(--bs-body-color);
-    }
-
-    .ts-control, .ts-wrapper.single.input-active .ts-control, .ts-wrapper{
-      background-color: var(--bs-body-tertiary);
-      color: var(--bs-body-color);
-    }
-
-    .ts-control > input{
-      color: var(--bs-body-color);
-    }
-
-    .ts-control {
-      border-color: var(--bs-border-color);
-    }
-
-
-    .full .ts-control{
-      background-color: var(--bs-body-tertiary);
-      color: var(--bs-body-color);
-    }
-</style>
+  </form>

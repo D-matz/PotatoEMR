@@ -10,7 +10,7 @@ class Command(BaseCommand):
     #hard question is what to do if models are using codings/bindings not in this json
     #if we delete those codings/bindings, those codeableconcept fields in model will go blank
     def handle(self, *args, **options):
-        file_path = os.path.join(os.getcwd(), 'CodingsAndBindings.json')
+        file_path = os.path.join(os.getcwd(), 'potato', 'management', 'commands', 'CodingsAndBindings.json')
         try:
             with open(file_path, 'r') as f:
                 combined_data = json.load(f)

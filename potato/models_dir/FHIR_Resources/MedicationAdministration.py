@@ -12,7 +12,7 @@ class FHIR_MedicationAdministration(models.Model):
     partOf_MedicationDispense = models.ManyToManyField("FHIR_MedicationDispense", related_name="MedicationAdministration_partOf", blank=True)
     class StatusChoices(models.TextChoices): IN_PROGRESS = 'in-progress', 'In-progress'; NOT_DONE = 'not-done', 'Not-done'; ON_HOLD = 'on-hold', 'On-hold'; COMPLETED = 'completed', 'Completed'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; STOPPED = 'stopped', 'Stopped'; UNKNOWN = 'unknown', 'Unknown'; 
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
-    BINDING_medication = "TODO"
+    BINDING_medication = "https://build.fhir.org/valueset-medication-codes.html"
     medication_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_medication}, related_name='MedicationAdministration_medication', blank=True)
     medication_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     medication_Medication_ref = models.ForeignKey("FHIR_Medication", related_name="MedicationAdministration_medication_Medication", null=True, blank=True, on_delete=models.SET_NULL)
@@ -86,13 +86,13 @@ class FHIR_MedicationAdministration_note(FHIR_GP_Annotation):
 class FHIR_MedicationAdministration_dosage(models.Model):
     MedicationAdministration = models.ForeignKey(FHIR_MedicationAdministration, related_name='MedicationAdministration_dosage', null=False, on_delete=models.CASCADE)
     text = FHIR_primitive_StringField(null=True, blank=True, )
-    BINDING_site = "TODO"
+    BINDING_site = "https://hl7.org/fhir/valueset-approach-site-codes.html"
     site_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_site}, related_name='MedicationAdministration_dosage_site', blank=True)
     site_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_route = "TODO"
+    BINDING_route = "https://hl7.org/fhir/valueset-route-codes.html"
     route_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_route}, related_name='MedicationAdministration_dosage_route', blank=True)
     route_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
-    BINDING_method = "TODO"
+    BINDING_method = "https://hl7.org/fhir/valueset-administration-method-codes.html"
     method_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_method}, related_name='MedicationAdministration_dosage_method', blank=True)
     method_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     dose = models.OneToOneField("FHIR_GP_Quantity", related_name='MedicationAdministration_dosage_dose', null=True, blank=True, on_delete=models.SET_NULL)

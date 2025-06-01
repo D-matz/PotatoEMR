@@ -7,14 +7,20 @@ from .models_dir.FHIR_Resources.AllergyIntolerance import *
 from .models_dir.FHIR_Resources.Appointment import *
 from .models_dir.FHIR_Resources.CareTeam import *
 from .models_dir.FHIR_Resources.Condition import *
+from .models_dir.FHIR_Resources.DiagnosticReport import *
+from .models_dir.FHIR_Resources.DocumentReference import *
 from .models_dir.FHIR_Resources.Encounter import *
 from .models_dir.FHIR_Resources.Immunization import *
 from .models_dir.FHIR_Resources.List import *
 from .models_dir.FHIR_Resources.Location import *
+from .models_dir.FHIR_Resources.MedicationAdministration import *
+from .models_dir.FHIR_Resources.MedicationDispense import *
+from .models_dir.FHIR_Resources.MedicationRequest import *
 from .models_dir.FHIR_Resources.Observation import *
 from .models_dir.FHIR_Resources.Patient import *
 from .models_dir.FHIR_Resources.Practitioner import *
 from .models_dir.FHIR_Resources.PractitionerRole import *
+from .models_dir.FHIR_Resources.ServiceRequest import *
 from .models_dir.FHIR_Resources.Slot import *
 
 class FHIR_Account(models.Model): pass
@@ -61,8 +67,6 @@ class FHIR_DeviceDispense(models.Model): pass
 class FHIR_DeviceMetric(models.Model): pass
 class FHIR_DeviceRequest(models.Model): pass
 class FHIR_DeviceUsage(models.Model): pass
-class FHIR_DiagnosticReport(models.Model): pass
-class FHIR_DocumentReference(models.Model): pass
 class FHIR_EncounterHistory(models.Model): pass
 class FHIR_Endpoint(models.Model): pass
 class FHIR_EnrollmentRequest(models.Model): pass
@@ -99,10 +103,7 @@ class FHIR_ManufacturedItemDefinition(models.Model): pass
 class FHIR_Measure(models.Model): pass
 class FHIR_MeasureReport(models.Model): pass
 class FHIR_Medication(models.Model): pass
-class FHIR_MedicationAdministration(models.Model): pass
-class FHIR_MedicationDispense(models.Model): pass
 class FHIR_MedicationKnowledge(models.Model): pass
-class FHIR_MedicationRequest(models.Model): pass
 class FHIR_MedicationStatement(models.Model): pass
 class FHIR_MedicinalProductDefinition(models.Model): pass
 class FHIR_MessageDefinition(models.Model): pass
@@ -139,7 +140,6 @@ class FHIR_ResearchSubject(models.Model): pass
 class FHIR_RiskAssessment(models.Model): pass
 class FHIR_Schedule(models.Model): pass
 class FHIR_SearchParameter(models.Model): pass
-class FHIR_ServiceRequest(models.Model): pass
 class FHIR_SpecimenDefinition(models.Model): pass
 class FHIR_Specimen(models.Model): pass
 class FHIR_StructureDefinition(models.Model): pass

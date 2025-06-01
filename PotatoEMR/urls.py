@@ -30,6 +30,9 @@ from potato.Modules.ModuleAppointmentEncounter import AppointmentEncounter_view
 from potato.Modules.ModuleProblemList import ProblemList_view
 from potato.Modules.ModuleImmunizations import Immunizations_view
 from potato.Modules.ModuleGrowthChart import GrowthChart_view
+from potato.Modules.ModuleOrders import Orders_view
+from potato.Modules.ModuleMedications import Medications_view
+from potato.Modules.ModuleLabResults import LabResults_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -68,6 +71,27 @@ urlpatterns = [
     path("patient/<int:patient_id>/encounter/<int:encounter_id>", AppointmentEncounter_view.overview, name="AppointmentEncounter_overview"),
 
     path("patient/<int:patient_id>/growth-chart", GrowthChart_view.GrowthChart_overview, name="GrowthChart_overview"),
+
+    path("patient/<int:patient_id>/orders", Orders_view.orders_table, name="Orders_table"),
+    path("patient/<int:patient_id>/medication-request/new", Orders_view.medicationRequest_new, name="Orders_medicationRequest_new"),
+    path("patient/<int:patient_id>/medication-request/<int:med_request_id>/edit", Orders_view.medicationRequest_existing_edit, name="Orders_medicationRequest_existing_edit"),
+    path("patient/<int:patient_id>/medication-request/<int:med_request_id>/cancel", Orders_view.medicationRequest_existing_cancel, name="Orders_medicationRequest_existing_cancel"),
+
+    path("patient/<int:patient_id>/lab-results", LabResults_view.labResults_table, name="LabResults_table"),
+    path("patient/<int:patient_id>/lab-results/new", LabResults_view.labResults_new, name="LabResults_new"),
+    path("patient/<int:patient_id>/lab-results/<int:diagnosticReport_id>/edit", LabResults_view.labResults_existing_edit, name="LabResults_existing_edit"),
+    path("patient/<int:patient_id>/lab-results/<int:diagnosticReport_id>/cancel", LabResults_view.labResults_existing_cancel, name="LabResults_existing_cancel"),
+
+    path("patient/<int:patient_id>/medication", Medications_view.medication_table, name="Medication_table"),
+    path("patient/<int:patient_id>/medication/dispense", Medications_view.medication_dispense_table, name="Medication_dispense_table"),
+    path("patient/<int:patient_id>/medication/dispense/new", Medications_view.medicationDispense_new, name="Medication_dispense_new"),
+    path("patient/<int:patient_id>/medication/dispense/<int:med_dispense_id>/edit", Medications_view.medicationDispense_existing_edit, name="Medication_dispense_edit"),
+    path("patient/<int:patient_id>/medication/dispense/<int:med_dispense_id>/cancel", Medications_view.medicationDispense_existing_cancel, name="Medication_dispense_cancel"),
+    path("patient/<int:patient_id>/medication/administration", Medications_view.medication_administration_table, name="Medication_administration_table"),
+    path("patient/<int:patient_id>/medication/administration/new", Medications_view.medicationAdministration_new, name="Medication_administration_new"),
+    path("patient/<int:patient_id>/medication/administration/<int:med_admin_id>/edit", Medications_view.medicationAdministration_existing_edit, name="Medication_administration_edit"),
+    path("patient/<int:patient_id>/medication/administration/<int:med_admin_id>/cancel", Medications_view.medicationAdministration_existing_cancel, name="Medication_administration_cancel"),
+    
 
     path("patient/<int:patient_id>/allergy-intolerance", AllergyIntoleranceBootstrap_view.allergy_intolerance_overview, name="AllergyIntoleranceBootstrap_overview"),
     path("patient/<int:patient_id>/allergy-intolerance-existing/<int:allergy_id>", AllergyIntoleranceBootstrap_view.allergy_intolerance_existing, name="AllergyIntoleranceBootstrap_existing"),
