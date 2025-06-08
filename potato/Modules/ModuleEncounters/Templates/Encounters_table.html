@@ -1,0 +1,51 @@
+{% extends "common_base_patient.html" %}
+
+{% block patientPage %}
+<div class="d-flex m-4 bg-body-secondary p-4" hx-push-url="false">
+    <div class="d-flex flex-column">
+        <button class="btn btn-primary mb-2" style="width: fit-content;"
+        hx-get="{% url 'Encounters_new' patient_id=patient.id %}"
+        hx-target="body">
+        Add Encounter
+        </button>
+
+    <table class="table" style="width: 500px; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th style="width: 100px;">Time</th>
+                <th style="width: 100px;">Status</th>
+                <th style="width: 100px;">Provider</th>
+                <th style="width: 100px;">Notes</th>
+                <th style="width: 100px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for encounter in encounters %}
+                <tr>
+                    <td>{{ encounter.plannedStartDate|date:"Y-m-d H:i" }} — {{ encounter.plannedEndDate|date:"Y-m-d H:i" }}</td>
+                    <td>{{ encounter.status }}</td>
+                    <td>{{ encounter.Encounter_participant.first.actor_Practitioner }}</td>
+                    <td>{{ encounter.note }}</td>
+                    <td>
+                    <button class="btn btn-primary"
+                        hx-get="{% url 'Encounters_edit' patient_id=patient.id encounter_id=encounter.id %}"
+                        hx-target="body">
+                        Edit
+                    </button>
+                </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
+
+    <div id="encounter-info"class="flex-grow-1 p-2">
+        {% if moreInfo_fragment == 'Encounters_edit_new' %}
+            {% include "Encounters_edit_new.html" %}
+        {% elif moreInfo_fragment == 'Encounters_edit_existing' %}
+            {% include "Encounters_edit_existing.html" %}
+        {% else %}
+            More info
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

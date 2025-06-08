@@ -8,12 +8,12 @@ from ..FHIR_DataTypes.FHIR_primitive import *
 class FHIR_Encounter(models.Model):
     class StatusChoices(models.TextChoices): PLANNED = 'planned', 'Planned'; IN_PROGRESS = 'in-progress', 'In-progress'; ON_HOLD = 'on-hold', 'On-hold'; DISCHARGED = 'discharged', 'Discharged'; COMPLETED = 'completed', 'Completed'; CANCELLED = 'cancelled', 'Cancelled'; DISCONTINUED = 'discontinued', 'Discontinued'; ENTERED_IN_ERROR = 'entered-in-error', 'Entered-in-error'; UNKNOWN = 'unknown', 'Unknown'; 
     status = FHIR_primitive_CodeField(choices=StatusChoices.choices, null=True, blank=True, )
-    BINDING_priority = "TODO"
+    BINDING_priority = "https://terminology.hl7.org/6.4.0/ValueSet-v3-ActPriority.html"
     priority_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_priority}, related_name='Encounter_priority', blank=True)
     priority_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     subject_Patient = models.ForeignKey("FHIR_Patient", related_name="Encounter_subject", null=True, blank=True, on_delete=models.SET_NULL)
     subject_Group = models.ForeignKey("FHIR_Group", related_name="Encounter_subject", null=True, blank=True, on_delete=models.SET_NULL)
-    BINDING_subjectStatus = "TODO"
+    BINDING_subjectStatus = "https://build.fhir.org/valueset-encounter-subject-status.html"
     subjectStatus_cc = models.ManyToManyField(FHIR_GP_Coding, limit_choices_to={"codings__binding_rule": BINDING_subjectStatus}, related_name='Encounter_subjectStatus', blank=True)
     subjectStatus_cctext = FHIR_primitive_StringField(max_length=5000, null=True, blank=True)
     episodeOfCare = models.ManyToManyField("FHIR_EpisodeOfCare", related_name="Encounter_episodeOfCare", blank=True)

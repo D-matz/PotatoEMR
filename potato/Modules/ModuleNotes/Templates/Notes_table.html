@@ -1,0 +1,51 @@
+{% extends "common_base_patient.html" %}
+
+{% block patientPage %}
+<div class="d-flex m-4 bg-body-secondary p-4" hx-push-url="false">
+    <div class="d-flex flex-column">
+        <button class="btn btn-primary mb-2" style="width: fit-content;"
+        hx-get="{% url 'Notes_new' patient_id=patient.id %}"
+        hx-target="body">
+        Add Note
+        </button>
+
+    <table class="table" style="width: 600px; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th style="width: 120px;">Date</th>
+                <th style="width: 120px;">Author</th>
+                <th style="width: 150px;">Description</th>
+                <th style="width: 150px;">Content Preview</th>
+                <th style="width: 60px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for note in notes %}
+                <tr>
+                    <td>{{ note.date|date:"Y-m-d H:i" }}</td>
+                    <td>{{ note.author_Practitioner.first|default:"No author" }}</td>
+                    <td>{{ note.description|default:"Untitled Note" }}</td>
+                    <td>{{ note.content_preview|default:"No content" }}</td>
+                    <td>
+                    <button class="btn btn-primary btn-sm"
+                        hx-get="{% url 'Notes_edit' patient_id=patient.id note_id=note.id %}"
+                        hx-target="body">
+                        Edit
+                    </button>
+                </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
+
+    <div id="note-info"class="flex-grow-1 p-2">
+        {% if moreInfo_fragment == 'Notes_edit_new' %}
+            {% include "Notes_edit_new.html" %}
+        {% elif moreInfo_fragment == 'Notes_edit_existing' %}
+            {% include "Notes_edit_existing.html" %}
+        {% else %}
+            Select a note to view or create a new note
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

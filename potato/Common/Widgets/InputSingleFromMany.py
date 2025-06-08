@@ -11,8 +11,11 @@ class InputSingleFromMany(Input):
     input_type = 'hidden'
 
     def render(self, name, value, attrs=None, renderer=None):
-        if value is not None and isinstance(value, (list, tuple)) and len(value) == 1:
-            value = value[0]
+        if value:
+            value_list = list(value)
+            value = value_list[0] if value_list else None
+        else:
+            value = None
             
         final_attrs = self.build_attrs(self.attrs, attrs)
         hidden_input = super().render(name, value, final_attrs, renderer)
@@ -65,4 +68,4 @@ class InputSingleFromMany(Input):
         value = super().value_from_datadict(data, files, name)
         if value:
             return [value]
-        return [] 
+        return []

@@ -1,0 +1,19 @@
+{% extends "Notes_edit.html" %}
+
+{% block formname %}
+    Edit Note {{ note.description|default:"Untitled" }}
+{% endblock %}
+
+{% block buttons %}
+    <button class="btn btn-sm btn-primary m-1"
+        hx-post="{% url 'Notes_edit' patient_id=patient.id note_id=note.id %}"
+        hx-include="#note-info"
+        hx-target="body">
+        Save
+    </button>
+    <button class="btn btn-sm btn-danger m-1"
+        hx-get="{% url 'Notes_table' patient_id=patient.id %}"
+        hx-target="body">
+        Cancel
+    </button>
+{% endblock %} 

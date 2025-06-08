@@ -70895,6 +70895,226 @@
     }
   },
   {
+    "model": "potato.fhir_gp_coding",
+    "pk": 6446,
+    "fields": {
+      "system": "http://terminology.hl7.org/CodeSystem/v3-ActPriority",
+      "version": "???",
+      "code": "\u00c2\u00a0\u00c2A",
+      "display": "",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 6447,
+    "fields": {
+      "system": "http://terminology.hl7.org/CodeSystem/v3-ActPriority",
+      "version": "???",
+      "code": "\u00c2\u00a0\u00c2CR",
+      "display": "",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 6448,
+    "fields": {
+      "system": "http://terminology.hl7.org/CodeSystem/v3-ActPriority",
+      "version": "???",
+      "code": "\u00c2\u00a0\u00c2EL",
+      "display": "",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 6449,
+    "fields": {
+      "system": "http://terminology.hl7.org/CodeSystem/v3-ActPriority",
+      "version": "???",
+      "code": "\u00c2\u00a0\u00c2EM",
+      "display": "",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 6450,
+    "fields": {
+      "system": "http://terminology.hl7.org/CodeSystem/v3-ActPriority",
+      "version": "???",
+      "code": "\u00c2\u00a0\u00c2P",
+      "display": "",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 6451,
+    "fields": {
+      "system": "http://terminology.hl7.org/CodeSystem/v3-ActPriority",
+      "version": "???",
+      "code": "\u00c2\u00a0\u00c2PRN",
+      "display": "",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 6452,
+    "fields": {
+      "system": "http://terminology.hl7.org/CodeSystem/v3-ActPriority",
+      "version": "???",
+      "code": "\u00c2\u00a0\u00c2R",
+      "display": "",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 6453,
+    "fields": {
+      "system": "http://terminology.hl7.org/CodeSystem/v3-ActPriority",
+      "version": "???",
+      "code": "\u00c2\u00a0\u00c2RR",
+      "display": "",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 6454,
+    "fields": {
+      "system": "http://terminology.hl7.org/CodeSystem/v3-ActPriority",
+      "version": "???",
+      "code": "\u00c2\u00a0\u00c2S",
+      "display": "",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 6455,
+    "fields": {
+      "system": "http://terminology.hl7.org/CodeSystem/v3-ActPriority",
+      "version": "???",
+      "code": "\u00c2\u00a0\u00c2T",
+      "display": "",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 6456,
+    "fields": {
+      "system": "http://terminology.hl7.org/CodeSystem/v3-ActPriority",
+      "version": "???",
+      "code": "\u00c2\u00a0\u00c2UD",
+      "display": "",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 6457,
+    "fields": {
+      "system": "http://terminology.hl7.org/CodeSystem/v3-ActPriority",
+      "version": "???",
+      "code": "\u00c2\u00a0\u00c2UR",
+      "display": "",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 6458,
+    "fields": {
+      "system": "http://terminology.hl7.org/CodeSystem/v3-ActPriority",
+      "version": "???",
+      "code": "\u00c2\u00a0\u00c2CS",
+      "display": "",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 6459,
+    "fields": {
+      "system": "http://terminology.hl7.org/CodeSystem/v3-ActPriority",
+      "version": "???",
+      "code": "\u00c2\u00a0\u00c2CSP",
+      "display": "",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 6460,
+    "fields": {
+      "system": "http://terminology.hl7.org/CodeSystem/v3-ActPriority",
+      "version": "???",
+      "code": "\u00c2\u00a0\u00c2CSR",
+      "display": "",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 6461,
+    "fields": {
+      "system": "http://terminology.hl7.org/CodeSystem/encounter-subject-status",
+      "version": "???",
+      "code": "arrived",
+      "display": "Arrived",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 6462,
+    "fields": {
+      "system": "http://terminology.hl7.org/CodeSystem/encounter-subject-status",
+      "version": "???",
+      "code": "triaged",
+      "display": "Triaged",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 6463,
+    "fields": {
+      "system": "http://terminology.hl7.org/CodeSystem/encounter-subject-status",
+      "version": "???",
+      "code": "receiving-care",
+      "display": "Receiving Care",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 6464,
+    "fields": {
+      "system": "http://terminology.hl7.org/CodeSystem/encounter-subject-status",
+      "version": "???",
+      "code": "on-leave",
+      "display": "On Leave",
+      "userSelected": false
+    }
+  },
+  {
+    "model": "potato.fhir_gp_coding",
+    "pk": 6465,
+    "fields": {
+      "system": "http://terminology.hl7.org/CodeSystem/encounter-subject-status",
+      "version": "???",
+      "code": "departed",
+      "display": "Departed",
+      "userSelected": false
+    }
+  },
+  {
     "model": "potato.fhir_gp_binding",
     "pk": 1,
     "fields": {
@@ -79698,6 +79918,44 @@
         6443,
         6444,
         6445
+      ]
+    }
+  },
+  {
+    "model": "potato.fhir_gp_binding",
+    "pk": 27,
+    "fields": {
+      "binding_rule": "https://terminology.hl7.org/6.4.0/ValueSet-v3-ActPriority.html",
+      "binding_codings": [
+        6446,
+        6447,
+        6448,
+        6449,
+        6450,
+        6451,
+        6452,
+        6453,
+        6454,
+        6455,
+        6456,
+        6457,
+        6458,
+        6459,
+        6460
+      ]
+    }
+  },
+  {
+    "model": "potato.fhir_gp_binding",
+    "pk": 28,
+    "fields": {
+      "binding_rule": "https://build.fhir.org/valueset-encounter-subject-status.html",
+      "binding_codings": [
+        6461,
+        6462,
+        6463,
+        6464,
+        6465
       ]
     }
   }

@@ -1,0 +1,35 @@
+{% extends "common_base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Save Codings from URL</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="bindingURL" class="form-label">Binding URL</label>
+                            <input type="url" class="form-control" id="bindingURL" name="bindingURL" 
+                                   placeholder="https://hl7.org/fhir/valueset-condition-clinical.html" required>
+                            <div class="form-text">Enter the FHIR ValueSet URL to save codings from</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Codings</button>
+                    </form>
+                    
+                    {% if response %}
+                        <div class="mt-4">
+                            <div class="alert alert-info">
+                                <strong>Result:</strong> {{ response }}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

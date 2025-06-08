@@ -27,11 +27,11 @@
         </a>
       </li>
       <li id="p_allergy" class="nav-item"><a href="{% url 'AllergyIntoleranceBootstrap_overview' patient.id %}" class="nav-link">Allergy/Intolerance</a></li>
-      <li id="p_results1" class="nav-item"><a class="nav-link" href="#">Encounters todo</a></li>
-      <li id="p_results1" class="nav-item"><a class="nav-link" href="#">Notes todo</a></li>
+      <li id="p_encounters" class="nav-item"><a href="{% url 'Encounters_table' patient.id %}" class="nav-link">Encounters</a></li>
+      <li id="p_notes" class="nav-item"><a class="nav-link" href="{% url 'Notes_table' patient.id %}">Notes</a></li>
       <li id="p_growth" class="nav-item"><a href="{% url 'GrowthChart_overview' patient.id %}" class="nav-link">Growth chart</a></li>
       <li id="p_immunization" class="nav-item"><a href="{% url 'Immunizations_overview' patient.id %}" class="nav-link">Immunizations</a></li>
-      <li id="p_MAR" class="nav-item"><a class="nav-link" href="{% url 'Medication_table' patient.id %}">Medications</a></li>
+      <li id="p_medications" class="nav-item"><a class="nav-link" href="{% url 'Medication_table' patient.id %}">Medications</a></li>
       <li id="p_results3" class="nav-item"><a href="{% url 'ProblemList_overview' patient.id %}" class="nav-link">Problem list</a></li>
       <li id="p_labResults" class="nav-item"><a class="nav-link" href="{% url 'LabResults_table' patient.id %}">Lab results</a></li>
     </ul>

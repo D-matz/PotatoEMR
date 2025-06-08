@@ -27,16 +27,19 @@ from potato.Modules.ModuleAllergyIntoleranceBootstrap import AllergyIntoleranceB
 from potato.Modules.ModuleAppointmentCalendar import AppointmentCalendar_view
 from potato.Modules.ModulePatientLists import PatientLists_view
 from potato.Modules.ModuleAppointmentEncounter import AppointmentEncounter_view
+from potato.Modules.ModuleEncounters import Encounters_view
 from potato.Modules.ModuleProblemList import ProblemList_view
 from potato.Modules.ModuleImmunizations import Immunizations_view
 from potato.Modules.ModuleGrowthChart import GrowthChart_view
 from potato.Modules.ModuleOrders import Orders_view
 from potato.Modules.ModuleMedications import Medications_view
 from potato.Modules.ModuleLabResults import LabResults_view
+from potato.Modules.ModuleNotes import Notes_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('empty', common_views.empty_view, name="empty"),
+    path('save-codings/', common_views.save_codings_from_url, name="save_codings_from_url"),
     path('', CommonHomePage_view.home_page, name="CommonHomePage_index"),
     path("login", CommonLogin_view.CustomLoginView.as_view(), name="CommonLogin_loginIndex"),
     path("login/", CommonLogin_view.CustomLoginView.as_view(), name="CommonLogin_loginIndex"),
@@ -68,7 +71,12 @@ urlpatterns = [
     path("patient-lists/remove-patient/<int:list_id>/<int:patient_id>", PatientLists_view.remove_patient, name="PatientLists_removePatient"),
     path("patient-lists/add-patient/<int:list_id>/<int:patient_id>", PatientLists_view.add_patient, name="PatientLists_addPatient"),
 
-    path("patient/<int:patient_id>/encounter/<int:encounter_id>", AppointmentEncounter_view.overview, name="AppointmentEncounter_overview"),
+    path("patient/<int:patient_id>/appointment-encounter/<int:encounter_id>", AppointmentEncounter_view.overview, name="AppointmentEncounter_overview"),
+
+    path("patient/<int:patient_id>/encounters", Encounters_view.encounters_table, name="Encounters_table"),
+    path("patient/<int:patient_id>/encounters/new", Encounters_view.encounters_new, name="Encounters_new"),
+    path("patient/<int:patient_id>/encounters/<int:encounter_id>/edit", Encounters_view.encounters_existing_edit, name="Encounters_edit"),
+    path("patient/<int:patient_id>/encounters/<int:encounter_id>/cancel", Encounters_view.encounters_existing_cancel, name="Encounters_cancel"),
 
     path("patient/<int:patient_id>/growth-chart", GrowthChart_view.GrowthChart_overview, name="GrowthChart_overview"),
 
@@ -104,6 +112,11 @@ urlpatterns = [
     path("patient/<int:patient_id>/problem-list", ProblemList_view.problem_list_overview, name="ProblemList_overview"),
     path("patient/<int:patient_id>/problem-list-existing/<int:condition_id>", ProblemList_view.problem_list_existing, name="ProblemList_existing"),
     path("patient/<int:patient_id>/problem-list-new", ProblemList_view.problem_list_new, name="ProblemList_new"),
+
+    path("patient/<int:patient_id>/notes", Notes_view.notes_table, name="Notes_table"),
+    path("patient/<int:patient_id>/notes/new", Notes_view.notes_new, name="Notes_new"),
+    path("patient/<int:patient_id>/notes/<int:note_id>/edit", Notes_view.notes_existing_edit, name="Notes_edit"),
+    path("patient/<int:patient_id>/notes/<int:note_id>/cancel", Notes_view.notes_existing_cancel, name="Notes_cancel"),
 
 ]
 

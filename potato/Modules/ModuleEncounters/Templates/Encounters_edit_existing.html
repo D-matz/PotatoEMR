@@ -1,0 +1,19 @@
+{% extends "Encounters_edit.html" %}
+
+{% block formname %}
+    Edit Encounter {{ encounter }}
+{% endblock %}
+
+{% block buttons %}
+    <button class="btn btn-sm btn-primary m-1"
+        hx-post="{% url 'Encounters_edit' patient_id=patient.id encounter_id=encounter.id %}"
+        hx-include="#encounter-info"
+        hx-target="body">
+        Save
+    </button>
+    <button class="btn btn-sm btn-danger m-1"
+        hx-get="{% url 'Encounters_table' patient_id=patient.id %}"
+        hx-target="body">
+        Cancel
+    </button>
+{% endblock %}
