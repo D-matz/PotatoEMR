@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
 from potato.models import *
+import random
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -21,23 +22,11 @@ class Command(BaseCommand):
         condition_list = FHIR_List.objects.filter(title="Conditions").first()
         if not condition_list:
             condition_list = FHIR_List.objects.create(
-                title="My Patients"
+                title="Example list 2"
             )
             for patient in FHIR_Patient.objects.filter(Condition_subject__isnull=False).distinct():
-                FHIR_List_entry.objects.create(
-                    List=condition_list,
-                    item_Patient=patient
-                )
-
-        pediatric_list = FHIR_List.objects.filter(title="Pediatric Growth Observations List").first()
-        if not pediatric_list:
-            pediatric_list = FHIR_List.objects.create(
-                title="Pediatric Growth Observations List"
-            )
-            pedro_patient_model = FHIR_Patient.objects.filter(Patient_name__text="Pedro").first()
-            if pedro_patient_model:
-                FHIR_List_entry.objects.create(
-                    List=pediatric_list,
-                    item_Patient=pedro_patient_model
-                )
-
+                if random.random() < 0.5:
+                    FHIR_List_entry.objects.create(
+                        List=condition_list,
+                        item_Patient=patient
+                    )

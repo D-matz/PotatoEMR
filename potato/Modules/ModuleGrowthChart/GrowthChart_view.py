@@ -67,9 +67,17 @@ def GrowthChart_overview(request, patient_id):
                 cdc_boys_weight_age | {'patientData': weight_point_list}
             ]
     else:
-        percentiles_vs_patientData_list = ['cdc_girls_bmi_age', 'cdc_girls_head_age', 'cdc_girls_length_age', 'cdc_girls_stature_age', 'cdc_girls_weight_age', 'cdc_girls_weight_length', 'cdc_girls_weight_stature']
-
-    print(graph_list)
+        if patient_age_months > 20:
+            graph_list = [
+                cdc_girls_bmi_age | {'patientData': bmi_point_list},
+                cdc_girls_stature_age | {'patientData': height_point_list}
+            ]
+        if patient_age_months < 40:
+            graph_list = [
+                cdc_girls_head_age | {'patientData': head_point_list},
+                cdc_girls_length_age | {'patientData': height_point_list},
+                cdc_girls_weight_age | {'patientData': weight_point_list}
+            ]
 
     return render(request, 'GrowthChart_overview.html', {
         'patient': patient_model,
